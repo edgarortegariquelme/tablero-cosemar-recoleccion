@@ -1,0 +1,79 @@
+<meta name="dash-one-writer">
+<style>
+.va { font-family: var(--font-anthropic-sans); color: var(--color-fg); max-width: 920px; }
+.va h2 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.2; margin: var(--cds-gap-xs) 0 var(--cds-gap-md); text-wrap: balance; }
+.va h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-xl) 0 var(--cds-gap-xs); text-wrap: balance; }
+.va p { max-width: 68ch; margin: var(--cds-gap-xs) 0; line-height: 1.55; }
+.va-eyebrow { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); letter-spacing: .04em; text-transform: uppercase; }
+.va-meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); }
+.va-num, .va b { font-variant-numeric: tabular-nums; }
+.va-muted { color: var(--color-fg-muted); }
+.va-box { position: relative; min-height: 120px; }
+.va-box svg { display: block; }
+.va-scroll { overflow-x: auto; }
+.va-axis text, .va-axlab, .va-grid text { fill: var(--cds-text-secondary); font-size: 11px; }
+.va-axis path, .va-axis line { stroke: var(--cds-chart-axis); }
+.va-grid line { stroke: var(--cds-chart-grid); }
+.va-grid path { display: none; }
+.va-strong { font-weight: 600; fill: var(--color-fg); }
+.va-lab { fill: var(--color-fg); font-size: 11px; font-variant-numeric: tabular-nums; }
+.va-bad { fill: var(--color-bad); }
+.va-tip { position: absolute; z-index: 3; max-width: 240px; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: 6px 8px; font-size: var(--cds-font-size-caption); pointer-events: none; }
+.va-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: var(--cds-gap-xs); }
+.va-key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.va-k-line { height: 3px; background: var(--cds-chart-reference); vertical-align: 2px; }
+.va-k-ok { background: var(--color-ok); opacity: .8; }
+.va-k-warn { background: var(--color-warn); opacity: .55; }
+.va-k-none { background: var(--color-panel); border: 1px solid var(--color-border-line); }
+.va-k-crit { background: var(--cds-chart-status-critical); border-radius: 50%; }
+.va-ul { margin: var(--cds-gap-sm) 0; padding-left: 18px; display: grid; gap: 6px; font-size: var(--cds-font-size-body); max-width: 72ch; }
+.va-wrap { overflow-x: auto; }
+.va-tbl { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+.va-tbl th { text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; white-space: nowrap; }
+.va-tbl td { border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; vertical-align: top; }
+.va-tbl a { color: var(--color-fg); }
+.va details summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); margin-top: var(--cds-gap-xl); }
+</style>
+
+<article class="va" id="analisis">
+  <div class="va-eyebrow">DMAO · Contrato de recolección Cosemar · P.P. 060/2023 · ID 3447-86-LR23</div>
+  <h2 id="titular" data-draw="va_titular" data-source="c_portada c_pagos">—</h2>
+  <p>El libro de control registra <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio, de los cuales <b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> no tienen monto cargado. La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
+  <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
+
+  <h3 id="h-pagos">Lo tramitado cada mes frente al valor que fija el decreto vigente</h3>
+  <p class="va-muted">Barras: monto del memo de pago, o de la solicitud de OC si aún no hay memo. Raya: valor mensual bruto del decreto vigente en ese mes. Marco punteado: mes sin monto en el libro.</p>
+  <div id="graf-pagos" data-draw="va_pagos" data-source="c_pagos">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="va_k1"></span>Tramitado</span><span><span class="va-key va-k-line"></span>Esperado según decreto</span></div>
+
+  <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
+  <p class="va-muted">Ningún mes llega a «Pago efectivo» con comprobante, y la revisión de sanciones antes del pago no consta en ningún mes.</p>
+  <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-ok"></span>Acreditado</span><span><span class="va-key va-k-warn"></span>Por verificar</span><span><span class="va-key va-k-none"></span>Sin antecedentes</span></div>
+
+  <h3 id="h-sanciones">Hasta qué etapa llega cada proceso sancionatorio con respaldo</h3>
+  <p class="va-muted">El punto marca la etapa acreditada más avanzada. Ámbar: plazo por verificar; rojo: plazo vencido; verde: en plazo; gris: proceso cerrado.</p>
+  <div id="graf-sanciones" data-draw="va_sanciones" data-source="c_sanciones c_eventos">—</div>
+  <ul class="va-ul" id="faltas" data-draw="va_faltas" data-source="c_sanciones"></ul>
+
+  <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
+  <p class="va-muted">Hoy: <b data-draw="va_vence" data-source="c_portada" data-field="vencen30" data-row="0">—</b> vencen en 30 días y <b data-draw="va_atraso" data-source="c_portada" data-field="atrasados" data-row="0">—</b> están atrasados, contando los plazos sancionatorios vencidos. Las fechas de flota vienen de la planilla de vencimientos y se confirman contra el certificado de cada patente.</p>
+  <div id="graf-venc" data-draw="va_venc" data-source="c_vencimientos">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-crit"></span>Vencido</span><span><span class="va-key va-k-warn"></span>Vence en 30 días</span></div>
+
+  <h3 id="h-pend">Pendientes y diferencias, con su respaldo</h3>
+  <p class="va-muted">Para descargar esta lista, abra Fuentes y baje «Pendientes y diferencias» como CSV.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-pend" data-source="c_pendientes" data-row-key="clave">
+      <thead><tr><th data-field="tipo">Tipo</th><th data-field="entidad">Entidad</th><th data-field="descripcion">Qué falta</th><th data-field="plazo">Fecha o plazo</th><th data-field="unidad">A cargo</th><th data-field="enlace">Respaldo</th></tr></thead>
+      <tbody data-draw="va_pend"></tbody>
+    </table>
+  </div>
+
+  <details>
+    <summary>Cómo se leen estas cifras</summary>
+    <p class="va-muted">Todo sale del libro de control en Notion, que n8n actualiza cada hora. «Sin antecedentes» significa que el libro no tiene el documento, no que el hito no ocurrió. Un hito solo cuenta como acreditado si trae respaldo y no está «por verificar». Los plazos se calculan en días hábiles desde 24 horas después de una notificación con fecha cierta (bases, art. 7, 177 a 186). Las fechas del inventario del 22-09-2026 son fechas de archivo, no del acto.</p>
+  </details>
+</article>
+<script src="motor.js"></script>
+<script src="app.js"></script>

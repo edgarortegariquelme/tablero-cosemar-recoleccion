@@ -1,0 +1,19 @@
+/* Ejecuta el borrador de análisis visual en jsdom + d3 con el libro de la semilla. */
+const S = process.env.HARNESS_MODULES ? process.env.HARNESS_MODULES.replace(/\/?$/, '/') : '';
+const { JSDOM } = require(S + 'jsdom'), fs = require('fs'), path = require('path'), T = path.join(__dirname, '../tablero/draft/');
+const libro = require('../datos/semilla.js');
+const esc = s => typeof s === 'string' ? s.replace(/([_|$.\\])/g, '\\$1') : s;
+function fila(e) { const r = { 'Clave': esc(e.clave), 'Módulo': e.modulo, 'Entidad': e.entidad || '', 'Hito': esc(e.hito || ''), 'Tipo de fecha': e.fechaTipo, 'Verificación': e.verificacion, 'Documento': esc(e.documento || ''), 'Respaldo': e.respaldo || '', 'Obligación': e.obligacion || '', 'Detalle': esc(e.detalle || ''), 'Origen': '', 'N°': e.numero || '', 'Patente': e.patente || '', 'Sector': e.sector || '', 'Vigente': '__YES__', 'Versión': 1, url: 'x' }; if (e.fecha) r['date:Fecha:start'] = e.fecha; if (e.monto != null) { r['Monto'] = e.monto; r['Unidad'] = e.unidadMonto; } return r; }
+const G = { libro_san: ['Sanción', 'Hallazgo'], libro_pag: ['Pago', 'Reajuste'], libro_ven: ['Vencimiento'], libro_sis: ['Sistema', 'Control', 'Revisión', 'Error', 'Aviso'] };
+const dom = new JSDOM('<!doctype html><div id="dash-root">' + fs.readFileSync(T + 'index.html', 'utf8').replace(/<script src="[^"]+"><\/script>/g, '') + '</div>', { runScripts: 'outside-only', pretendToBeVisual: true });
+const w = dom.window; w.d3 = require(S + 'd3');
+const err = [], ds = {}, ld = {}, cc = {}, dr = {}, cache = {};
+Object.keys(G).forEach(k => ds[k] = { results: libro.filter(e => G[k].includes(e.modulo)).map(fila) }); ds.catalogo = JSON.parse(fs.readFileSync(path.join(__dirname, '../tablero/store/catalogo.json')));
+function data(id) { if (cache[id]) return cache[id]; try { if (cc[id]) { const ins = cc[id].inputs.map(data); cache[id] = { status: 'ok', data: cc[id].fn.apply(null, ins.map(x => x.data)) }; } else if (ld[id]) cache[id] = { status: 'ok', data: ld[id].fn({ answer: ds[id] }).rows }; else cache[id] = { status: 'ok', data: ds[id] }; } catch (e) { err.push(id + ': ' + e.message); cache[id] = { status: 'error', data: [] }; } return cache[id]; }
+w.dash = { data, loader: (i, o) => ld[i] = o, calc: (i, o) => cc[i] = o, draw: (n, f) => { if (f) dr[n] = f; }, params: () => ({}), setParams() {}, setLink() {}, colors: ['var(--c1)', 'var(--c2)'] };
+w.eval(fs.readFileSync(T + 'motor.js', 'utf8')); w.eval(fs.readFileSync(T + 'app.js', 'utf8'));
+const usados = new Set([...w.document.querySelectorAll('[data-draw]')].map(e => e.getAttribute('data-draw')));
+Object.keys(dr).forEach(n => w.document.querySelectorAll('[data-draw="' + n + '"]').forEach(el => { try { dr[n](el); } catch (e) { err.push('draw ' + n + ': ' + e.message); } }));
+const q = s => w.document.querySelector(s);
+console.log(JSON.stringify({ titular: q('#titular').textContent, parrafo: q('#analisis p').textContent.replace(/\s+/g, ' '), svgs: w.document.querySelectorAll('svg').length, barras: q('#graf-pagos').querySelectorAll('rect').length, difs: [...q('#graf-pagos').querySelectorAll('text.va-lab')].map(t => t.textContent), celdas: q('#graf-cadena').querySelectorAll('rect').length, acreditadas: [...q('#graf-cadena').querySelectorAll('rect')].filter(r => r.style.fill.includes('ok')).length, procesos: q('#graf-sanciones').querySelectorAll('circle').length, faltas: q('#faltas').children.length, venc: q('#graf-venc').querySelectorAll('circle').length, pend: q('[data-draw="va_pend"]').children.length, sinDibujo: [...usados].filter(n => !dr[n]), sinUso: Object.keys(dr).filter(n => !usados.has(n)), errores: err }, null, 1));
+process.exit(err.length ? 1 : 0);

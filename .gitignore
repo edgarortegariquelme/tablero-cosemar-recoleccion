@@ -3,3 +3,4 @@ node_modules/
 tablero/store/w_*.json
 datos/_*.json
 *.log
+tablero/draft/w_*.json
