@@ -193,15 +193,27 @@
       return orden.map(function (k) { return by[k]; }).concat([tot]);
     }
   });
-  dash.calc('c_deuda_resumen', {
-    inputs: ['c_deuda_mes'], title: 'Deuda con Cosemar a la fecha',
-    description: 'Último mes de servicio registrado, total tramitado, lo adeudado por decretos y según bases, lo que se suma cada mes sin regularizar y el retroactivo remitido a pago.',
+  dash.calc('c_proyeccion', {
+    inputs: ['c_deuda_mes'], title: 'Proyección de la deuda a junio de 2027',
+    description: 'Si nada se regulariza, repite cada mes desde el último registrado hasta junio de 2027 (cierre del segundo año del contrato) la diferencia mensual vigente por decretos y según bases, y acumula sobre la deuda actual. No incluye el reajuste IPC del tercer año (desde julio de 2027), aún sin calcular.',
     fn: function (meses) {
       if (!meses.length) return [];
-      var u = meses[meses.length - 1], s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); };
+      var HASTA = '2027-06', u = meses[meses.length - 1], dD = (u.debidoDecreto || 0) - u.tramitado, dB = u.deltaBases, accD = u.deudaVivaDecreto, accB = u.deudaVivaBases, out = [];
+      var y = +u.periodo.slice(0, 4), m = +u.periodo.slice(5, 7);
+      while (true) { m++; if (m > 12) { m = 1; y++; } var p = y + '-' + (m < 10 ? '0' : '') + m; if (p > HASTA) break; accD += dD; accB += dB; out.push({ periodo: p, deltaDecreto: dD, deltaBases: dB, deudaVivaDecreto: accD, deudaVivaBases: accB }); }
+      return out;
+    }
+  });
+  dash.calc('c_deuda_resumen', {
+    inputs: ['c_deuda_mes', 'c_proyeccion'], title: 'Deuda con Cosemar a la fecha',
+    description: 'Último mes de servicio registrado, total tramitado, lo adeudado por decretos y según bases, lo que se suma cada mes sin regularizar y el retroactivo remitido a pago.',
+    fn: function (meses, proy) {
+      if (!meses.length) return [];
+      var u = meses[meses.length - 1], f = proy[proy.length - 1], s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); };
       var dD = s('deltaDecreto'), dB = s('deltaBases');
       return [{ ultimoMes: u.periodo, tramitadoTotal: s('tramitado') + s('ajusteRetro'), deudaDecreto: dD, deudaBases: dB, deudaTotal: dD + dB,
-        mensualDecreto: (u.debidoDecreto || 0) - u.tramitado, mensualBases: u.deltaBases, retroTramitado: s('ajusteRetro'), multas: s('multa') }];
+        mensualDecreto: (u.debidoDecreto || 0) - u.tramitado, mensualBases: u.deltaBases, retroTramitado: s('ajusteRetro'), multas: s('multa'),
+        proyHasta: f ? f.periodo : u.periodo, proyMeses: proy.length, proyDecreto: f ? f.deudaVivaDecreto : dD, proyBases: f ? f.deudaVivaBases : dB, proyTotal: f ? f.deudaVivaDecreto + f.deudaVivaBases : dD + dB }];
     }
   });
 
@@ -210,7 +222,7 @@
   function R(id, f, fmt) { dash.draw(id, function (el) { if (!listo(el, ['c_deuda_resumen'])) return; var r = filas('c_deuda_resumen')[0]; el.textContent = r ? fmt(r[f]) : '—'; }); }
   R('vd_ultimo', 'ultimoMes', mesLargo); R('vd_tram', 'tramitadoTotal', clp); R('vd_dec', 'deudaDecreto', clp); R('vd_bases', 'deudaBases', clp);
   R('vd_mesdec', 'mensualDecreto', clp); R('vd_mesbases', 'mensualBases', clp); R('vd_dec2', 'deudaDecreto', clp); R('vd_bases2', 'deudaBases', clp);
-  R('vd_total', 'deudaTotal', clp); R('vd_retro', 'retroTramitado', clp);
+  R('vd_total', 'deudaTotal', clp); R('vd_proyhasta', 'proyHasta', mesLargo); R('vd_proymeses', 'proyMeses', String); R('vd_proydec', 'proyDecreto', clp); R('vd_proybases', 'proyBases', clp); R('vd_proytotal', 'proyTotal', clp); R('vd_retro', 'retroTramitado', clp);
   dash.draw('vd_k1', function (el) { el.style.background = dash.colors[0]; });
   function mill(v) { return '$' + (v / 1e6).toFixed(1).replace('.', ',') + ' M'; }
 
@@ -275,8 +287,9 @@
 
   // Deuda viva acumulada.
   dash.draw('vd_acum', function (el) {
-    if (!listo(el, ['c_deuda_mes'])) return;
-    var ms = filas('c_deuda_mes'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
+    if (!listo(el, ['c_deuda_mes', 'c_proyeccion'])) return;
+    var ms = filas('c_deuda_mes').map(function (p) { return Object.assign({ proy: false }, p); }).concat(filas('c_proyeccion').map(function (p) { return Object.assign({ proy: true }, p); }));
+    el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
     var w = Math.max(320, el.clientWidth || 720), H = 220, m = { l: 62, r: 14, t: 14, b: 30 };
     var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.15);
     var y = d3.scaleLinear().domain([0, d3.max(ms, function (p) { return Math.max(0, p.deudaVivaDecreto) + p.deudaVivaBases; }) * 1.1 || 1]).nice().range([H - m.b, m.t]);
@@ -287,17 +300,21 @@
     svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
     var dv = function (p) { return Math.max(0, p.deudaVivaDecreto); };
     svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
-      .attr('y', function (p) { return y(dv(p)); }).attr('height', function (p) { return H - m.b - y(dv(p)); }).style('fill', 'var(--color-bad)').style('opacity', 0.6);
+      .attr('y', function (p) { return y(dv(p)); }).attr('height', function (p) { return H - m.b - y(dv(p)); }).style('fill', 'var(--color-bad)').style('opacity', function (p) { return p.proy ? 0.22 : 0.6; });
     svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
-      .attr('y', function (p) { return y(dv(p) + p.deudaVivaBases); }).attr('height', function (p) { return y(dv(p)) - y(dv(p) + p.deudaVivaBases); }).style('fill', 'var(--color-warn)').style('opacity', 0.6);
-    var pico = ms.reduce(function (a, p) { return dv(p) > dv(a) ? p : a; }, ms[0]), ult = ms[ms.length - 1];
-    [pico, ult].filter(function (p, i, a) { return dv(p) + p.deudaVivaBases > 0 && a.indexOf(p) === i; }).forEach(function (p) {
+      .attr('y', function (p) { return y(dv(p) + p.deudaVivaBases); }).attr('height', function (p) { return y(dv(p)) - y(dv(p) + p.deudaVivaBases); }).style('fill', 'var(--color-warn)').style('opacity', function (p) { return p.proy ? 0.22 : 0.6; });
+    var p0 = ms.filter(function (p) { return p.proy; })[0];
+    if (p0) { svg.append('line').attr('x1', x(p0.periodo) - x.step() * 0.08).attr('x2', x(p0.periodo) - x.step() * 0.08).attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-reference)').style('stroke-dasharray', '4 3');
+      svg.append('text').attr('class', 'va-axlab').attr('x', x(p0.periodo) + 2).attr('y', m.t + 10).text('proyección'); }
+    var reales = ms.filter(function (p) { return !p.proy; });
+    var pico = reales.reduce(function (a, p) { return dv(p) > dv(a) ? p : a; }, reales[0]), hoyM = reales[reales.length - 1], ult = ms[ms.length - 1];
+    [pico, hoyM, ult].filter(function (p, i, a) { return dv(p) + p.deudaVivaBases > 0 && a.indexOf(p) === i; }).forEach(function (p) {
       var v = dv(p) + p.deudaVivaBases, xx = x(p.periodo) + x.bandwidth() / 2;
       svg.append('text').attr('class', 'va-lab').attr('x', xx).attr('y', y(v) - 4).attr('text-anchor', xx > w * 0.8 ? 'end' : 'middle').text(mill(v));
     });
     var t = tip(box);
     svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
-      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · por decretos ' + clp(dv(p)) + (p.deudaVivaBases ? ' · adicional según bases ' + clp(p.deudaVivaBases) : '')); })
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + (p.proy ? ' (proyección)' : '') + ' · por decretos ' + clp(dv(p)) + (p.deudaVivaBases ? ' · adicional según bases ' + clp(p.deudaVivaBases) : '')); })
       .on('pointerleave', function () { t.attr('hidden', ''); });
   });
 
