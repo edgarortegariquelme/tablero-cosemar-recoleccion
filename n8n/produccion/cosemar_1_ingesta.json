@@ -1,0 +1,500 @@
+{
+ "id": "cosemar1ingesta0000",
+ "name": "Cosemar 1 · Ingesta y validación",
+ "nodes": [
+  {
+   "id": "cos-cada-hora",
+   "name": "Cada hora",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    0,
+    0
+   ],
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "hours",
+       "hoursInterval": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "cos-webhook-evento",
+   "name": "Webhook evento",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    0,
+    200
+   ],
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "cosemar/evento",
+    "responseMode": "lastNode",
+    "options": {}
+   },
+   "webhookId": "cos-webhook-evento"
+  },
+  {
+   "id": "cos-config",
+   "name": "Config",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    220,
+    100
+   ],
+   "parameters": {
+    "mode": "raw",
+    "jsonOutput": "{\n  \"notionBase\": \"https://api.notion.com\",\n  \"driveBase\": \"https://www.googleapis.com\",\n  \"libroDb\": \"41a9e3e655c08141b986d51c9090c499\",\n  \"comunicacionesDb\": \"27091b1e60d74952939c54967147e178\",\n  \"contratoPagina\": \"4159e3e655c0810a974aec33d1bd63d4\",\n  \"carpetas\": {\n    \"11kjK9ibJ3DTL4CQU0tzBPuLHQD9zbOmm\": \"1. LICITACION RECOLECCION RSD 3447-86-LR23\",\n    \"1S6PzQeBg6BWSCQnIdfaokWU-9OXF3Fx-\": \"1. MULTAS (PROCESOS SANCIONATORIOS)\",\n    \"122zU1bsRlvC_jVNQFqdZMW2kVyYhXfzo\": \"2. PAGOS SERVICIOS 2026\",\n    \"1eJrvdI2lkm6YtU-eR4rvDV6ipN-_BfVH\": \"2. PAGOS SERVICIOS 2026/9. SEPTIEMBRE 2026\",\n    \"1204ZW0LRhGlJkoaRyah8wFf6u0UYuTtS\": \"2. PAGOS SERVICIOS 2026/10. OCTUBRE 2026\",\n    \"1new6tELuK_9HDRqRkvCQaXYunKtBB-zy\": \"3. POLIZAS\",\n    \"182QnsD9zNaSZkIz_5HPbTvRomvymlgE2\": \"6. FISCALIZACION AL CONTRATO\"\n  },\n  \"hoy\": null,\n  \"avisosPara\": \"eortega@maho.cl\",\n  \"tableroUrl\": \"https://claude.ai/artifact/FqSZ9xCaUeVFhjHQPZhtMG\",\n  \"ingestaUrl\": \"https://edgar-ortega.app.n8n.cloud/webhook/cosemar/evento\",\n  \"desdeInicial\": \"2026-11-10\"\n}",
+    "options": {}
+   },
+   "notes": "Único lugar para cambiar identificadores, carpetas, destinatarios y URL. «hoy» vacío = fecha de Chile."
+  },
+  {
+   "id": "cos-notion-leer-libro",
+   "name": "Notion: leer libro",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    440,
+    100
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "={{ $('Config').first().json.notionBase }}/v1/databases/{{ $('Config').first().json.libroDb }}/query",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "{\"page_size\": 100}",
+    "options": {
+     "pagination": {
+      "pagination": {
+       "paginationMode": "updateAParameterInEachRequest",
+       "parameters": {
+        "parameters": [
+         {
+          "type": "body",
+          "name": "start_cursor",
+          "value": "={{ $response.body.next_cursor }}"
+         }
+        ]
+       },
+       "paginationCompleteWhen": "other",
+       "completeExpression": "={{ !$response.body.has_more }}",
+       "limitPagesFetched": true,
+       "maxRequests": 100
+      }
+     }
+    },
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Notion-Version",
+       "value": "2022-06-28"
+      }
+     ]
+    },
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "notionApi"
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 2000
+  },
+  {
+   "id": "cos-cursor",
+   "name": "Cursor",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    660,
+    100
+   ],
+   "parameters": {
+    "jsCode": "/* Conversión entre filas de Notion (API) y registros del libro. Se inserta en los nodos Code y en el servidor de prueba. */\nfunction txt(p) { return p && (p.rich_text || p.title || []).map(function (t) { return t.plain_text || (t.text && t.text.content) || ''; }).join('') || null; }\nfunction aEvento(pg) {\n  var p = pg.properties || {};\n  return { id: pg.id, url: pg.url, clave: txt(p['Clave']), modulo: p['Módulo'] && p['Módulo'].select ? p['Módulo'].select.name : null, entidad: txt(p['Entidad']), hito: txt(p['Hito']),\n    fecha: p['Fecha'] && p['Fecha'].date ? p['Fecha'].date.start.slice(0, 10) : null, fechaTipo: p['Tipo de fecha'] && p['Tipo de fecha'].select ? p['Tipo de fecha'].select.name : null,\n    monto: p['Monto'] ? p['Monto'].number : null, unidadMonto: p['Unidad'] && p['Unidad'].select ? p['Unidad'].select.name : null,\n    verificacion: p['Verificación'] && p['Verificación'].select ? p['Verificación'].select.name : null, documento: txt(p['Documento']), respaldo: p['Respaldo'] ? p['Respaldo'].url : null,\n    obligacion: txt(p['Obligación']), detalle: txt(p['Detalle']) || '', origen: txt(p['Origen']), numero: txt(p['N°']), patente: txt(p['Patente']), sector: txt(p['Sector']), huellaGuardada: txt(p['Huella']),\n    vigente: p['Vigente'] ? !!p['Vigente'].checkbox : true, version: p['Versión'] && p['Versión'].number || 1, rectificaA: txt(p['Rectifica a']), registrado: pg.created_time || null };\n}\nfunction rt(s) { s = String(s == null ? '' : s); var out = []; for (var i = 0; i < s.length; i += 1900) out.push({ type: 'text', text: { content: s.slice(i, i + 1900) } }); return out; }\nfunction aPropiedades(e, contratoId) {\n  var p = { 'Clave': { title: rt(e.clave) }, 'Módulo': { select: { name: e.modulo } }, 'Entidad': { rich_text: rt(e.entidad) }, 'Hito': { rich_text: rt(e.hito) },\n    'Tipo de fecha': { select: { name: e.fechaTipo || (e.fecha ? 'Declarada' : 'Sin fecha') } }, 'Verificación': { select: { name: e.verificacion || 'Reportado' } },\n    'Vigente': { checkbox: e.vigente !== false }, 'Versión': { number: e.version || 1 }, 'Huella': { rich_text: rt(e.huella || '') }, 'Origen': { rich_text: rt(e.origen || 'n8n') } };\n  if (e.fecha) p['Fecha'] = { date: { start: e.fecha } };\n  if (e.monto != null) { p['Monto'] = { number: e.monto }; p['Unidad'] = { select: { name: e.unidadMonto } }; }\n  if (e.documento) p['Documento'] = { rich_text: rt(e.documento) };\n  if (e.respaldo) p['Respaldo'] = { url: e.respaldo };\n  if (e.obligacion) p['Obligación'] = { rich_text: rt(e.obligacion) };\n  if (e.detalle) p['Detalle'] = { rich_text: rt(e.detalle) };\n  if (e.numero) p['N°'] = { rich_text: rt(e.numero) };\n  if (e.patente) p['Patente'] = { rich_text: rt(e.patente) };\n  if (e.sector) p['Sector'] = { rich_text: rt(e.sector) };\n  if (e.rectificaA) p['Rectifica a'] = { rich_text: rt(e.rectificaA) };\n  if (contratoId) p['Contrato'] = { relation: [{ id: contratoId }] };\n  return p;\n}\nfunction hoyChile(cfg) { if (cfg && cfg.hoy) return cfg.hoy; return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date()); }\nfunction ahoraISO() { return new Date().toISOString(); }\n\nconst cfg = $('Config').first().json; const pgs = $input.all().flatMap(i => i.json.results || []).map(aEvento);\nconst sis = pgs.filter(e => e.modulo === 'Sistema' && e.fecha)[0]; let desde = cfg.desdeInicial;\nif (sis) { const d = new Date(sis.fecha + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() - 2); desde = d.toISOString().slice(0, 10); }\nconst padres = Object.keys(cfg.carpetas).map(k => \"'\" + k + \"' in parents\").join(' or ');\nreturn [{ json: { desde, q: \"modifiedTime > '\" + desde + \"T00:00:00' and trashed = false and ((\" + padres + \") or fullText contains 'Cosemar')\" } }];"
+   }
+  },
+  {
+   "id": "cos-drive-archivos-nuevos",
+   "name": "Drive: archivos nuevos",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    880,
+    100
+   ],
+   "parameters": {
+    "method": "GET",
+    "url": "={{ $('Config').first().json.driveBase }}/drive/v3/files",
+    "sendQuery": true,
+    "queryParameters": {
+     "parameters": [
+      {
+       "name": "q",
+       "value": "={{ $json.q }}"
+      },
+      {
+       "name": "fields",
+       "value": "files(id,name,mimeType,modifiedTime,webViewLink,parents)"
+      },
+      {
+       "name": "pageSize",
+       "value": "200"
+      },
+      {
+       "name": "orderBy",
+       "value": "modifiedTime"
+      },
+      {
+       "name": "supportsAllDrives",
+       "value": "true"
+      },
+      {
+       "name": "includeItemsFromAllDrives",
+       "value": "true"
+      }
+     ]
+    },
+    "options": {},
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "googleDriveOAuth2Api"
+   },
+   "retryOnFail": true,
+   "maxTries": 2,
+   "waitBetweenTries": 1000,
+   "onError": "continueRegularOutput",
+   "alwaysOutputData": true
+  },
+  {
+   "id": "cos-notion-comunicaciones",
+   "name": "Notion: comunicaciones",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1100,
+    100
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "={{ $('Config').first().json.notionBase }}/v1/databases/{{ $('Config').first().json.comunicacionesDb }}/query",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ page_size: 100, filter: { timestamp: 'last_edited_time', last_edited_time: { on_or_after: $('Cursor').first().json.desde } } }) }}",
+    "options": {},
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Notion-Version",
+       "value": "2022-06-28"
+      }
+     ]
+    },
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "notionApi"
+   },
+   "retryOnFail": true,
+   "maxTries": 2,
+   "waitBetweenTries": 1000,
+   "onError": "continueRegularOutput",
+   "alwaysOutputData": true
+  },
+  {
+   "id": "cos-motor-clasificar-y-decidir",
+   "name": "Motor: clasificar y decidir",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1320,
+    100
+   ],
+   "parameters": {
+    "jsCode": "const __m = { exports: {} };\n(function (module) {\n/* Motor de control contractual · Cosemar Recolección (P.P. 060/2023 · ID 3447-86-LR23)\n * Funciones puras, sin dependencias. El MISMO archivo se inserta en los nodos Code de n8n\n * y en el tablero, para que estados, plazos y cifras se calculen con una sola regla.\n */\n(function (root) {\n  'use strict';\n  var M = {};\n  M.VERSION = '1.0.0';\n\n  // ---------- Fechas y días hábiles (BA art. 7: inhábiles sábado, domingo y festivos) ----------\n  M.FERIADOS = ['2026-01-01','2026-04-03','2026-04-04','2026-05-01','2026-05-21','2026-06-21','2026-06-29','2026-07-16',\n    '2026-08-15','2026-09-18','2026-09-19','2026-10-12','2026-10-31','2026-11-01','2026-12-08','2026-12-25',\n    '2027-01-01','2027-03-26','2027-03-27','2027-05-01','2027-05-21','2027-06-21','2027-06-28','2027-07-16',\n    '2027-08-15','2027-09-17','2027-09-18','2027-09-19','2027-10-11','2027-10-31','2027-11-01','2027-12-08','2027-12-25'];\n  function d(s) { var p = String(s).slice(0, 10).split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }\n  function iso(dt) { return dt.toISOString().slice(0, 10); }\n  M.esFecha = function (s) { return typeof s === 'string' && /^\\d{4}-\\d{2}-\\d{2}/.test(s) && !isNaN(d(s).getTime()) && iso(d(s)) === s.slice(0, 10); };\n  M.esHabil = function (s) { var w = d(s).getUTCDay(); return w !== 0 && w !== 6 && M.FERIADOS.indexOf(s.slice(0, 10)) < 0; };\n  M.sumarDias = function (s, n) { var x = d(s); x.setUTCDate(x.getUTCDate() + n); return iso(x); };\n  M.sumarHabiles = function (s, n) { var x = s.slice(0, 10), c = 0; while (c < n) { x = M.sumarDias(x, 1); if (M.esHabil(x)) c++; } return x; };\n  M.diasCorridos = function (a, b) { return Math.round((d(b) - d(a)) / 86400000); };\n  M.diasHabilesEntre = function (a, b) { // hábiles desde a (excl.) hasta b (incl.); negativo si b<a\n    if (a === b) return 0; var s = a < b ? 1 : -1, x = a, c = 0, lim = 0;\n    while (x !== b && lim++ < 4000) { x = M.sumarDias(x, s); if (M.esHabil(s > 0 ? x : M.sumarDias(x, 1))) c += s; }\n    return c;\n  };\n  M.periodoDe = function (s) { return s ? s.slice(0, 7) : null; };\n\n  // ---------- Huella e identidad ----------\n  M.hash = function (str) { var h = 5381, i; str = String(str); for (i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0; return ('0000000' + h.toString(16)).slice(-8); };\n  M.huella = function (e) { return M.hash([e.clave, e.fecha || '', e.fechaTipo || '', e.monto == null ? '' : e.monto, e.unidadMonto || '', e.documento || '', e.respaldo || '', e.verificacion || '', String(e.detalle || '').replace(/\\s*·?\\s*https?:\\S+/g, '').trim()].join('|')); };\n  M.limpiar = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\\s+/g, ' ').trim(); };\n\n  // ---------- Catálogo de hitos ----------\n  // formal:true => el estado solo avanza si el hito trae respaldo (documento o enlace) y no está \"Por verificar\".\n  M.HITOS_SAN = [\n    ['manifold', 'Folio de manifold (hallazgo)', 'ITS (Hernán Gómez)', 'Comunicar el manifold foliado a Cosemar', true],\n    ['comunicacion_empresa', 'Comunicación a Cosemar', 'ITS (Hernán Gómez)', 'Esperar descargos de la empresa (5 días hábiles, BA 177)', true],\n    ['respuesta_empresa', 'Respuesta / descargos de Cosemar', 'ITS (Hernán Gómez)', 'Evaluar la respuesta e informar (20 días hábiles, BA 179)', true],\n    ['informe_evaluacion', 'Informe que evalúa la respuesta', 'Unidad Técnica (Edgar Ortega)', 'Decidir: cierre respaldado o propuesta de multa', true],\n    ['cierre_sin_multa', 'Cierre respaldado sin multa', 'Unidad Técnica (Edgar Ortega)', 'Sin acción: proceso cerrado', true],\n    ['informe_tecnico', 'Informe técnico propone multa', 'ITS (Hernán Gómez)', 'Revisión de forma y fondo por Edgar', true],\n    ['revision_edgar', 'Revisión y visado de Edgar', 'Unidad Técnica (Edgar Ortega)', 'Emitir memo a Secretaría Municipal proponiendo la multa', true],\n    ['memo_secmun', 'Memo que solicita decretar multa', 'Unidad Técnica (Edgar Ortega)', 'Obtener visado de Alcaldía', true],\n    ['visado_alcaldia', 'Visado de Alcaldía', 'Alcaldía', 'Remitir a Secretaría Municipal', true],\n    ['remision_secmun', 'Remisión a Secretaría Municipal', 'Secretaría Municipal', 'Borrador de decreto', true],\n    ['borrador_decreto', 'Borrador de decreto', 'Secretaría Municipal', 'Revisión de Control', true],\n    ['revision_control', 'Revisión de Control', 'Control', 'Emisión del decreto', true],\n    ['decreto_multa', 'Decreto alcaldicio que aplica multa', 'Secretaría Municipal', 'Publicar en Mercado Público y notificar a Cosemar', true],\n    ['publicacion_mp', 'Publicación en ficha de contrato (Mercado Público)', 'Secretaría Municipal', 'Notificar por oficio y correo', true],\n    ['notificacion', 'Notificación del decreto a Cosemar', 'Unidad Técnica (Edgar Ortega)', 'Esperar reposición (5 días hábiles, BA 184)', true],\n    ['reposicion_recibida', 'Recurso de reposición recibido', 'Unidad Técnica (Edgar Ortega)', 'Analizar el recurso (20 días hábiles, BA 186)', true],\n    ['analisis_reposicion', 'Informe de análisis de la reposición', 'Unidad Técnica (Edgar Ortega)', 'Memo con informe a visado de Jurídico', true],\n    ['memo_reposicion', 'Memo que propone resolver la reposición', 'Unidad Técnica (Edgar Ortega)', 'Visado de Jurídico', true],\n    ['visado_juridico', 'Visado de Jurídico', 'Jurídico', 'Visado de Alcaldía', true],\n    ['visado_alcaldia_rep', 'Visado de Alcaldía (reposición)', 'Alcaldía', 'Decreto final en Secretaría Municipal', true],\n    ['decreto_final', 'Decreto final del proceso', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],\n    ['rectificacion_decreto', 'Decreto que rectifica', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],\n    ['comunicacion_final', 'Comunicación de la decisión final', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro en el estado de pago más próximo (BA 188)', true],\n    ['sin_reposicion', 'Constancia de que no hubo reposición', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro (multa firme, BA 187)', true],\n    ['derivacion_cobro', 'Derivación a cobro (instrucción de descuento)', 'Unidad Técnica (Edgar Ortega)', 'Verificar descuento efectivo en el estado de pago', true],\n    ['cobro_efectivo', 'Cobro o descuento efectivo', 'DAF', 'Sin acción: multa cobrada', true]\n  ].map(function (a, i) { return { id: a[0], nombre: a[1], unidad: a[2], siguiente: a[3], formal: a[4], orden: i }; });\n  M.HITOS_PAGO = [\n    ['memo_oc', 'Memo correlativo solicita OC', 'Unidad Técnica (Edgar Ortega)'], ['vb_daf', 'Visto bueno y derivación a DAF', 'DAF'],\n    ['oc_emitida', 'OC emitida', 'DAF'], ['oc_aceptada', 'OC recibida y aceptada por Cosemar', 'Empresa'],\n    ['factura', 'Factura y carpeta de antecedentes', 'Empresa'], ['informe_gps', 'Informe GPS (Hernán)', 'ITS (Hernán Gómez)'],\n    ['informe_trabajos', 'Informe de trabajos con fotografías (Hernán)', 'ITS (Hernán Gómez)'],\n    ['recepcion_conforme', 'Certificado de recepción conforme', 'Unidad Técnica (Edgar Ortega)'],\n    ['revision_sanciones', 'Revisión de procesos sancionatorios antes de pago', 'Unidad Técnica (Edgar Ortega)'],\n    ['memo_pago', 'Memo solicita pago de factura', 'Unidad Técnica (Edgar Ortega)'], ['pago', 'Pago efectivo (comprobante)', 'DAF']\n  ].map(function (a, i) { return { id: a[0], nombre: a[1], unidad: a[2], orden: i }; });\n  function idx(list) { var o = {}; list.forEach(function (h) { o[h.id] = h; }); return o; }\n  M.H_SAN = idx(M.HITOS_SAN); M.H_PAGO = idx(M.HITOS_PAGO);\n\n  M.MODULOS = ['Sanción', 'Pago', 'Vencimiento', 'Hallazgo', 'Reajuste', 'Control', 'Aviso', 'Revisión', 'Error', 'Sistema'];\n  M.VERIF = ['Acreditado', 'Reportado', 'Por verificar', 'En revisión'];\n  M.FECHA_TIPO = ['Acto acreditado', 'Fecha de archivo', 'Declarada', 'Sin fecha'];\n\n  // ---------- Validación ----------\n  M.validar = function (e) {\n    var err = [], amb = [];\n    if (!e || typeof e !== 'object') return { ok: false, errores: ['registro vacío'], ambiguo: [] };\n    if (!e.clave) err.push('falta clave');\n    if (M.MODULOS.indexOf(e.modulo) < 0) err.push('módulo inválido: ' + e.modulo);\n    if (!e.entidad) amb.push('no se pudo determinar la entidad (proceso, período o patente)');\n    if (!e.hito) amb.push('no se pudo determinar el hito');\n    if (e.fecha && !M.esFecha(e.fecha)) err.push('fecha inválida: ' + e.fecha);\n    if (e.monto != null && (typeof e.monto !== 'number' || !isFinite(e.monto) || e.monto < 0)) err.push('monto inválido: ' + e.monto);\n    if (e.monto != null && ['CLP', 'UTM', 'UF'].indexOf(e.unidadMonto) < 0) err.push('monto sin unidad (CLP/UTM/UF)');\n    if (e.modulo === 'Pago' && e.entidad && !/^\\d{4}-\\d{2}$|^AJUSTE-/.test(e.entidad)) err.push('período de servicio inválido: ' + e.entidad);\n    if (e.modulo === 'Sanción' && e.hito && !M.H_SAN[e.hito]) amb.push('hito sancionatorio desconocido: ' + e.hito);\n    if (e.modulo === 'Pago' && e.hito && !M.H_PAGO[e.hito] && ['descuento_multa', 'ajuste', 'diferencia'].indexOf(e.hito) < 0) amb.push('hito de pago desconocido: ' + e.hito);\n    return { ok: err.length === 0, errores: err, ambiguo: amb };\n  };\n\n  // ---------- Aplicar un candidato al libro: evita duplicados, conserva rectificaciones ----------\n  // libro: registros existentes [{clave, huella, version, vigente, ...}]\n  M.aplicar = function (libro, cand, ahora) {\n    var v = M.validar(cand), res = { candidato: cand };\n    if (!v.ok) { res.accion = 'error'; res.motivo = v.errores.join('; '); return res; }\n    if (v.ambiguo.length) {\n      res.accion = 'revision'; res.motivo = v.ambiguo.join('; ');\n      res.registro = Object.assign({}, cand, { modulo: 'Revisión', hito: cand.hito || 'por_clasificar', entidad: cand.entidad || 'por_clasificar', verificacion: 'En revisión', vigente: true, version: 1, detalle: (cand.detalle ? cand.detalle + ' · ' : '') + 'Motivo: ' + res.motivo + (cand.modulo ? ' · Módulo sugerido: ' + cand.modulo : '') });\n      res.registro.clave = 'REV|' + cand.clave; res.registro.huella = M.huella(res.registro);\n      var ya = libro.filter(function (r) { return r.clave === res.registro.clave && r.vigente !== false; })[0];\n      if (ya) { res.accion = 'duplicado'; res.motivo = 'ya está en la cola de revisión'; res.existente = ya; }\n      return res;\n    }\n    var h = M.huella(cand);\n    var mismos = libro.filter(function (r) { return r.clave === cand.clave; });\n    var vig = mismos.filter(function (r) { return r.vigente !== false; })[0];\n    if (mismos.some(function (r) { return r.huella === h && r.vigente !== false; })) { res.accion = 'duplicado'; res.motivo = 'misma clave y mismo contenido'; res.existente = vig; return res; }\n    var maxV = mismos.reduce(function (m, r) { return Math.max(m, r.version || 1); }, 0);\n    res.registro = Object.assign({ verificacion: 'Reportado', fechaTipo: cand.fecha ? 'Declarada' : 'Sin fecha' }, cand, { huella: h, vigente: true, version: maxV + 1 });\n    // un hito formal sin respaldo no avanza estados\n    if (!res.registro.respaldo && !res.registro.documento && res.registro.verificacion !== 'Por verificar') { res.registro.verificacion = 'Por verificar'; res.registro.huella = h; }\n    if (vig) { res.accion = 'rectificar'; res.reemplaza = vig; res.registro.rectificaA = vig.clave + ' v' + (vig.version || 1); res.motivo = 'misma clave con contenido distinto: se conserva la versión anterior como historial'; }\n    else res.accion = 'crear';\n    return res;\n  };\n\n  // ---------- Clasificación de documentos detectados (Drive / Comunicaciones de Notion) ----------\n  var MESES = { ENERO: '01', FEBRERO: '02', MARZO: '03', ABRIL: '04', MAYO: '05', JUNIO: '06', JULIO: '07', AGOSTO: '08', SEPTIEMBRE: '09', SETIEMBRE: '09', OCTUBRE: '10', NOVIEMBRE: '11', DICIEMBRE: '12' };\n  M.periodoEnTexto = function (t) {\n    var m = M.limpiar(t).match(/(ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|SEPTIEMBRE|SETIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE)\\s*(?:DE\\s*)?(20\\d\\d)?/);\n    return m ? { mes: MESES[m[1]], anio: m[2] || null } : null;\n  };\n  M.clasificar = function (doc) { // doc: {id, nombre, ruta, fecha (modificación), enlace, origen, resumen}\n    var n = M.limpiar(doc.nombre), ruta = M.limpiar(doc.ruta || ''), todo = n + ' ' + ruta + ' ' + M.limpiar(doc.resumen || '');\n    var e = { documento: doc.nombre, respaldo: doc.enlace || null, origen: doc.origen || 'n8n', fecha: doc.fechaActo || doc.fecha || null,\n      fechaTipo: doc.fechaActo ? 'Acto acreditado' : (doc.fecha ? 'Fecha de archivo' : 'Sin fecha'), verificacion: 'Reportado', idFuente: doc.id || null };\n    if (/DISPOSICION FINAL|3447-187-LR24|SANTA INES/.test(todo)) { e.modulo = 'Revisión'; e.clave = 'DOC|' + (doc.id || M.hash(n)); e.detalle = 'Documento del contrato de disposición final (3447-187-LR24): fuera del alcance de este tablero'; e.entidad = null; return e; }\n    var num = (n.match(/(?:MEMO(?:RANDUM)?|OFICIO|DECRETO(?: ALC)?|D\\.?A\\.?)\\s*(?:N[°ºO]?\\.?\\s*)?(\\d{1,2}\\.?\\d{3}|\\d{1,4})/) || n.match(/^(\\d{3,4})[\\. ]+20\\d\\d/) || [])[1];\n    if (num) num = num.replace('.', '');\n    var per = M.periodoEnTexto(n) || M.periodoEnTexto(ruta), anio = (n.match(/20\\d\\d/) || ruta.match(/20\\d\\d/) || [(doc.fecha || '').slice(0, 4)])[0];\n    var periodo = per ? ((per.anio || anio) + '-' + per.mes) : null;\n    var ps = (todo.match(/PROCESO(?: SANCIONATORIO)?\\s*N?[°º]?\\s*(\\d{1,2})\\b/) || todo.match(/MULTA\\s*N?[°º]?\\s*(\\d{1,2})\\b(?! UTM)/) || ruta.match(/SANCIONATORIOS\\)?[\\\\\\/ ]+(\\d{1,2})\\./) || [])[1];\n    var san = /SANCIONATORI|MULTA|MANIFOLD|REPOSICION|APELACION|DESCARGOS/.test(todo);\n    if (san) {\n      e.modulo = 'Sanción'; e.entidad = ps ? 'PS' + ('0' + ps).slice(-2) : null;\n      var utm = n.match(/(\\d{1,3})\\s*UTM/); if (utm) { e.monto = +utm[1]; e.unidadMonto = 'UTM'; }\n      if (/MANTENGASE FIRME|MANTIENE FIRME|RESUELVE REPOSICION/.test(n) && /DECRETO|D\\.?A\\.?/.test(n)) e.hito = 'decreto_final';\n      else if (/RECTIFI/.test(n)) e.hito = 'rectificacion_decreto';\n      else if (/DECRETO|^\\d{4} - MULTA/.test(n)) e.hito = 'decreto_multa';\n      else if (/REPOSICION|APELACION|DESCARGOS/.test(n) && !/INFORME|MEMO/.test(n)) e.hito = /REPOSICION/.test(n) ? 'reposicion_recibida' : 'respuesta_empresa';\n      else if (/MEMO/.test(n) && /MANTENER FIRME|REPOSICION/.test(n)) e.hito = 'memo_reposicion';\n      else if (/MEMO/.test(n) && /DECRETAR/.test(n)) e.hito = 'memo_secmun';\n      else if (/INFORME/.test(n) && /MANTENER FIRME|REPOSICION/.test(n)) e.hito = 'analisis_reposicion';\n      else if (/INFORME/.test(n) && /CIERRE|SIN EFECTO|CONFORMIDAD/.test(n)) e.hito = 'cierre_sin_multa';\n      else if (/INFORME/.test(n) && /DESCARGOS|ACOGE/.test(n)) e.hito = 'informe_evaluacion';\n      else if (/INFORME/.test(n)) e.hito = 'informe_tecnico';\n      else if (/OFICIO/.test(n) && /MULTA|DECRETO/.test(n)) e.hito = 'notificacion';\n      else if (/MANIFOLD/.test(n) && /DECRETO/.test(n)) e.hito = 'notificacion';\n      else if (/MANIFOLD/.test(n)) e.hito = 'manifold';\n      else if (/OFICIO|GMAIL|MAIL/.test(n)) e.hito = 'comunicacion_empresa';\n      else e.hito = null;\n    } else if (/PIDE OC|SOLICITA OC|SOLICITUD DE OC/.test(n)) { e.modulo = 'Pago'; e.hito = 'memo_oc'; e.entidad = periodo; }\n    else if (/SOLICITA PAGO|PIDE PAGO|SOLICITUD DE PAGO/.test(n)) { e.modulo = 'Pago'; e.hito = 'memo_pago'; e.entidad = periodo; }\n    else if (/\\bOC\\b.*3447-\\d+-SE\\d\\d|ORDEN DE COMPRA/.test(n)) { e.modulo = 'Pago'; e.hito = 'oc_emitida'; e.entidad = periodo; num = (n.match(/3447-\\d+-SE\\d\\d/) || [num])[0]; }\n    else if (/FACTURA/.test(n) && !/MEMO/.test(n)) { e.modulo = 'Pago'; e.hito = 'factura'; e.entidad = periodo; num = (n.match(/FACTURA\\s*(?:N[°º]?\\s*)?([\\d\\.]+)/) || [0, num])[1]; }\n    else if (/GPS/.test(n)) { e.modulo = 'Pago'; e.hito = 'informe_gps'; e.entidad = periodo; }\n    else if (/RECEP(?:CION)? CONFORME/.test(n)) { e.modulo = 'Pago'; e.hito = 'recepcion_conforme'; e.entidad = periodo; }\n    else if (/COMPROBANTE|DECRETO DE PAGO|EGRESO/.test(n)) { e.modulo = 'Pago'; e.hito = 'pago'; e.entidad = periodo; }\n    else if (/ENDOSO|POLIZA|GARANTIA|RESPONSABILIDAD CIVIL/.test(n)) { e.modulo = 'Vencimiento'; e.hito = 'documento'; e.entidad = /RESPONSABILIDAD CIVIL|\\bRC\\b/.test(n) ? 'SEG-RC' : 'GAR-FC'; num = (n.match(/\\b(22\\d{7})\\b/) || [0, num])[1]; }\n    else if (/REVISION TECNICA|PERMISO DE CIRCULACION|SOAP|SEGURO OBLIGATORIO/.test(n)) { e.modulo = 'Vencimiento'; e.hito = /REVISION/.test(n) ? 'revision_tecnica' : /PERMISO/.test(n) ? 'permiso_circulacion' : 'soap'; var mv = n.match(/\\bM-?\\s?(\\d{3})\\b/) || n.match(/MOVIL\\s*(\\d{3})/); e.entidad = mv ? 'M-' + mv[1] : null; }\n    else { e.modulo = 'Revisión'; e.entidad = null; e.hito = null; }\n    e.numero = num || null;\n    e.clave = (e.modulo === 'Sanción' ? 'SAN' : e.modulo === 'Pago' ? 'PAG' : e.modulo === 'Vencimiento' ? 'VEN' : 'DOC') + '|' + (e.entidad || '?') + '|' + (e.hito || '?') + '|' + (num || M.hash(n));\n    e.detalle = (num ? 'N° ' + num + ' · ' : '') + (doc.ruta ? 'Ruta: ' + doc.ruta : '');\n    return e;\n  };\n\n  // ---------- Lectura del libro: si quedaron dos versiones vigentes de una clave, manda la de mayor versión ----------\n  M.normalizarLibro = function (evs) {\n    var max = {};\n    evs.forEach(function (e) { if (e.vigente !== false) max[e.clave] = Math.max(max[e.clave] || 0, e.version || 1); });\n    return evs.map(function (e) { var o = Object.assign({}, e); if (o.vigente !== false && (o.version || 1) < max[o.clave]) o.vigente = false; if (!o.huella) o.huella = M.huella(o); return o; });\n  };\n\n  // ---------- Derivación: sanciones ----------\n  function vig(evs, mod) { return evs.filter(function (e) { return e.modulo === mod && e.vigente !== false; }); }\n  function acredita(e) { return e.verificacion === 'Acreditado' || e.verificacion === 'Reportado'; }\n  function tieneRespaldo(e) { return !!(e.respaldo || e.documento); }\n  function porFecha(a, b) { return (a.fecha || '9999') < (b.fecha || '9999') ? -1 : (a.fecha || '9999') > (b.fecha || '9999') ? 1 : 0; }\n  M.derivarSanciones = function (eventos, hoy, meta) {\n    var g = {}; meta = meta || {};\n    vig(eventos, 'Sanción').forEach(function (e) { (g[e.entidad] = g[e.entidad] || []).push(e); });\n    return Object.keys(g).sort().map(function (id) {\n      var evs = g[id].slice().sort(function (a, b) { return porFecha(a, b) || (M.H_SAN[a.hito] ? M.H_SAN[a.hito].orden : 0) - (M.H_SAN[b.hito] ? M.H_SAN[b.hito].orden : 0); });\n      var val = evs.filter(function (e) { return M.H_SAN[e.hito] && acredita(e) && tieneRespaldo(e); });\n      // Último estado acreditado: el hito más reciente por fecha (a igual fecha, el de mayor orden). Un cierre o cobro es terminal.\n      var ult = val.slice().sort(function (a, b) { return porFecha(a, b) || M.H_SAN[a.hito].orden - M.H_SAN[b.hito].orden; }).pop() || null;\n      var term = val.filter(function (e) { return e.hito === 'cobro_efectivo' || e.hito === 'cierre_sin_multa'; }).sort(porFecha).pop(); if (term) ult = term;\n      function ultimo(h) { return val.filter(function (e) { return e.hito === h; }).sort(porFecha).pop() || null; }\n      function monto(hs) { var x = null; hs.forEach(function (h) { var e = val.filter(function (z) { return z.hito === h && z.monto != null; }).sort(porFecha).pop(); if (e) x = e; }); return x ? { valor: x.monto, unidad: x.unidadMonto, clave: x.clave, documento: x.documento, respaldo: x.respaldo } : null; }\n      var s = { id: id, meta: meta[id] || {}, eventos: evs, ultimo: ult, pendientesDeRespaldo: evs.filter(function (e) { return !acredita(e) || !tieneRespaldo(e); }) };\n      s.estado = ult ? M.H_SAN[ult.hito].nombre : 'Sin hito acreditado';\n      s.cerrada = !!ult && (ult.hito === 'cierre_sin_multa' || ult.hito === 'cobro_efectivo');\n      s.siguiente = ult ? M.H_SAN[ult.hito].siguiente : 'Acreditar el hallazgo (folio de manifold)';\n      s.unidad = ult ? unidadSiguiente(ult.hito) : 'ITS (Hernán Gómez)';\n      s.montos = { propuesto: monto(['informe_tecnico', 'memo_secmun']), decretado: monto(['decreto_multa', 'decreto_final', 'rectificacion_decreto']), cobrado: monto(['cobro_efectivo']), derivado: monto(['derivacion_cobro']) };\n      var notif = ultimo('notificacion') || ultimo('publicacion_mp'); s.notificacion = notif ? { fecha: notif.fecha, fechaTipo: notif.fechaTipo, documento: notif.documento, respaldo: notif.respaldo } : null;\n      s.plazo = plazoSancion(s, ult, ultimo, hoy);\n      return s;\n    });\n  };\n  function unidadSiguiente(h) {\n    var o = M.H_SAN[h].orden, nx = M.HITOS_SAN[o + 1];\n    if (h === 'cierre_sin_multa' || h === 'cobro_efectivo') return '—';\n    if (h === 'respuesta_empresa') return 'ITS (Hernán Gómez) / Unidad Técnica';\n    if (h === 'informe_evaluacion') return 'Unidad Técnica (Edgar Ortega)';\n    if (h === 'notificacion') return 'Empresa (plazo de reposición) → Unidad Técnica';\n    if (h === 'decreto_final' || h === 'rectificacion_decreto' || h === 'comunicacion_final' || h === 'sin_reposicion') return 'Unidad Técnica (Edgar Ortega) → DAF';\n    if (h === 'derivacion_cobro') return 'DAF';\n    return nx ? nx.unidad : '—';\n  }\n  function plazoSancion(s, ult, ultimo, hoy) {\n    function p(regla, base, n, quien) {\n      if (!base || !base.fecha) return { estado: 'por verificar', regla: regla, falta: 'Falta la fecha de ' + (base ? M.H_SAN[base.hito].nombre.toLowerCase() : 'inicio del cómputo') };\n      if (base.fechaTipo !== 'Acto acreditado') return { estado: 'por verificar', regla: regla, falta: 'La fecha disponible (' + base.fecha + ') es ' + (base.fechaTipo || 'no acreditada').toLowerCase() + ': falta la constancia de ' + M.H_SAN[base.hito].nombre.toLowerCase() + ' con fecha cierta', referencia: base.fecha };\n      var ini = M.sumarDias(base.fecha, 1); // BA 180 y 182: se entiende practicada 24 horas después\n      var vence = M.sumarHabiles(ini, n), dias = M.diasHabilesEntre(hoy, vence);\n      return { estado: dias < 0 ? 'vencido' : 'en plazo', regla: regla, inicio: ini, vence: vence, diasHabiles: dias, quien: quien, base: base.clave };\n    }\n    if (!ult) return { estado: 'por verificar', regla: '—', falta: 'No hay hito acreditado con respaldo' };\n    if (s.cerrada) return { estado: 'no aplica', regla: 'Proceso cerrado' };\n    switch (ult.hito) {\n      case 'manifold': return { estado: 'por verificar', regla: 'BA 176–177', falta: 'Falta la constancia de comunicación del manifold a Cosemar (inicio de los 5 días hábiles de descargos)' };\n      case 'comunicacion_empresa': return p('BA 177 · 5 días hábiles para descargos', ult, 5, 'Empresa');\n      case 'respuesta_empresa': return p('BA 179 · 20 días hábiles para resolver los descargos', ult, 20, 'Unidad Técnica');\n      case 'informe_evaluacion': case 'informe_tecnico': case 'revision_edgar': case 'memo_secmun': case 'visado_alcaldia': case 'remision_secmun': case 'borrador_decreto': case 'revision_control':\n        return p('BA 179 · 20 días hábiles desde la recepción de los descargos', ultimo('respuesta_empresa') || { hito: 'respuesta_empresa' }, 20, 'Unidad Técnica / Secretaría Municipal');\n      case 'decreto_multa': return { estado: 'por verificar', regla: 'BA 184', falta: 'Falta la constancia de publicación en la ficha de contrato de Mercado Público o de notificación del decreto (inicio de los 5 días hábiles de reposición)' };\n      case 'publicacion_mp': case 'notificacion': return p('BA 184 · 5 días hábiles para reposición', ult, 5, 'Empresa');\n      case 'reposicion_recibida': case 'analisis_reposicion': case 'memo_reposicion': case 'visado_juridico': case 'visado_alcaldia_rep':\n        return p('BA 186 · 20 días hábiles para resolver la reposición', ultimo('reposicion_recibida') || { hito: 'reposicion_recibida' }, 20, 'Unidad Técnica / Secretaría Municipal');\n      case 'decreto_final': case 'rectificacion_decreto': case 'comunicacion_final': case 'sin_reposicion':\n        return { estado: 'por verificar', regla: 'BA 187–188 · descuento en el estado de pago más próximo', falta: 'Falta la instrucción de descuento (derivación a cobro) con el estado de pago al que se imputa' };\n      case 'derivacion_cobro': return { estado: 'por verificar', regla: 'BA 188 a)', falta: 'Falta el comprobante del estado de pago que acredite el descuento efectivo' };\n    }\n    return { estado: 'por verificar', regla: '—', falta: 'Regla no configurada para este hito' };\n  }\n\n  // ---------- Derivación: pagos ----------\n  M.precioVigente = function (precios, periodo) { // precios: [{desde:'YYYY-MM', neto, bruto, acto, ejecutado}]\n    var r = null; precios.forEach(function (p) { if (p.desde <= periodo) r = p; }); return r;\n  };\n  M.derivarPagos = function (eventos, catalogo, hoy) {\n    var g = {};\n    vig(eventos, 'Pago').forEach(function (e) { (g[e.entidad] = g[e.entidad] || []).push(e); });\n    return Object.keys(g).sort().map(function (per) {\n      var evs = g[per].slice().sort(porFecha), val = evs.filter(function (e) { return acredita(e) && tieneRespaldo(e); });\n      function h(id) { return val.filter(function (e) { return e.hito === id; }); }\n      function uno(id) { return h(id).sort(porFecha).pop() || null; }\n      function sumUnico(id) { var seen = {}, t = null; h(id).forEach(function (e) { if (e.monto == null || e.unidadMonto !== 'CLP') return; var k = e.numero || e.clave; if (seen[k]) return; seen[k] = 1; t = (t || 0) + e.monto; }); return t; }\n      var ajuste = /^AJUSTE-/.test(per), precio = ajuste ? null : M.precioVigente(catalogo.precios, per), enEjec = ajuste ? null : M.precioVigente(catalogo.precios.filter(function (p) { return p.ejecutado; }), per);\n      var p = { periodo: per, ajuste: ajuste, eventos: evs, hitos: {} };\n      M.HITOS_PAGO.forEach(function (x) { p.hitos[x.id] = uno(x.id); });\n      var ult = null; M.HITOS_PAGO.forEach(function (x) { if (p.hitos[x.id]) ult = x; });\n      p.ultimo = ult ? { hito: ult, evento: p.hitos[ult.id] } : null;\n      p.siguiente = ult ? (M.HITOS_PAGO[ult.orden + 1] || { nombre: 'Sin acción: pago acreditado', unidad: '—' }) : M.HITOS_PAGO[0];\n      p.esperado = precio ? { valor: precio.bruto, acto: precio.acto, respaldo: precio.respaldo, nota: precio.nota || null } : (ajuste ? null : { valor: null, estado: 'sin antecedentes' });\n      p.enEjecucion = enEjec ? enEjec.bruto : null;\n      p.facturado = sumUnico('factura'); p.remitido = sumUnico('memo_pago'); p.pagado = sumUnico('pago'); p.solicitadoOC = sumUnico('memo_oc');\n      p.descuentos = val.filter(function (e) { return e.hito === 'descuento_multa'; });\n      p.diferencias = [];\n      var ref = p.remitido != null ? p.remitido : p.facturado != null ? p.facturado : p.solicitadoOC;\n      if (p.esperado && p.esperado.valor != null && ref != null && ref !== p.esperado.valor) p.diferencias.push({ tipo: 'monto', texto: 'Tramitado $' + M.fmt(ref) + ' ≠ esperado $' + M.fmt(p.esperado.valor) + ' (' + p.esperado.acto + ')', monto: p.esperado.valor - ref });\n      var oc = p.hitos.oc_emitida, fa = p.hitos.factura;\n      if (oc && fa && oc.fecha && fa.fecha && fa.fecha < oc.fecha) p.diferencias.push({ tipo: 'orden', texto: 'Factura (' + fa.fecha + ') anterior a la OC (' + oc.fecha + ')' });\n      if (h('oc_emitida').length > 1) p.diferencias.push({ tipo: 'duplicado', texto: h('oc_emitida').length + ' OC registradas para el período: se contabiliza una sola; verificar cuál quedó vigente' });\n      evs.filter(function (e) { return e.hito === 'diferencia'; }).forEach(function (e) { p.diferencias.push({ tipo: 'documental', texto: e.detalle || e.documento, clave: e.clave, respaldo: e.respaldo }); });\n      p.estado = p.hitos.pago ? 'Pagado' : p.hitos.memo_pago ? 'Remitido a pago' : p.hitos.factura ? 'Facturado' : p.hitos.oc_aceptada ? 'OC aceptada' : p.hitos.oc_emitida ? 'OC emitida' : p.hitos.memo_oc ? 'OC solicitada' : 'Sin hito acreditado';\n      // Montos: null = sin antecedentes (el hito existe pero el documento cargado no trae monto)\n      p.pendiente = p.hitos.pago ? 0 : (p.hitos.memo_pago ? p.remitido : null);\n      return p;\n    });\n  };\n\n  // ---------- Derivación: vencimientos ----------\n  M.derivarVencimientos = function (eventos, hoy, umbral) {\n    umbral = umbral || 30;\n    return vig(eventos, 'Vencimiento').map(function (e) {\n      var o = { clave: e.clave, entidad: e.entidad, tipo: e.hito, documento: e.documento, vence: e.fecha, respaldo: e.respaldo, verificacion: e.verificacion, detalle: e.detalle, patente: e.patente || null, monto: e.monto, unidadMonto: e.unidadMonto, origen: e.origen };\n      if (!e.fecha) { o.estado = 'sin antecedentes'; o.dias = null; }\n      else { o.dias = M.diasCorridos(hoy, e.fecha); o.estado = o.dias < 0 ? 'vencido' : o.dias <= umbral ? 'por vencer' : 'vigente'; }\n      return o;\n    }).sort(function (a, b) { return (a.dias == null ? 99999 : a.dias) - (b.dias == null ? 99999 : b.dias); });\n  };\n\n  // ---------- Avisos: una sola vez por evento (clave determinista) ----------\n  M.avisos = function (eventos, catalogo, hoy) {\n    var out = [], ya = {};\n    vig(eventos, 'Aviso').forEach(function (e) { ya[e.clave] = 1; });\n    function add(k, tipo, texto, ref) { k = 'AVI|' + k; if (!ya[k]) { ya[k] = 1; out.push({ clave: k, modulo: 'Aviso', entidad: ref, hito: tipo, fecha: hoy, fechaTipo: 'Acto acreditado', verificacion: 'Acreditado', documento: texto, detalle: texto, origen: 'n8n · avisos', vigente: true, version: 1 }); } }\n    M.derivarVencimientos(eventos, hoy).forEach(function (v) {\n      if (v.estado === 'vencido') add('VENCIDO|' + v.clave + '|' + v.vence, 'vencido', 'VENCIDO: ' + v.documento + ' (' + v.entidad + ') venció el ' + v.vence, v.entidad);\n      else if (v.estado === 'por vencer') add('PORVENCER|' + v.clave + '|' + v.vence + '|' + (v.dias <= 7 ? '7' : '30'), 'por_vencer', 'Vence en ' + v.dias + ' días: ' + v.documento + ' (' + v.entidad + ') el ' + v.vence, v.entidad);\n    });\n    M.derivarSanciones(eventos, hoy).forEach(function (s) {\n      if (s.plazo.estado === 'vencido') add('PLAZO|' + s.id + '|' + s.plazo.base + '|' + s.plazo.vence, 'plazo_vencido', s.id + ': plazo vencido el ' + s.plazo.vence + ' (' + s.plazo.regla + ')', s.id);\n      else if (s.plazo.estado === 'en plazo' && s.plazo.diasHabiles <= 2) add('PLAZO2|' + s.id + '|' + s.plazo.base + '|' + s.plazo.vence, 'plazo_proximo', s.id + ': quedan ' + s.plazo.diasHabiles + ' días hábiles (' + s.plazo.regla + ')', s.id);\n    });\n    eventos.filter(function (e) { return e.vigente !== false && e.modulo === 'Hallazgo'; }).forEach(function (e) { add('HALLAZGO|' + e.clave, 'hallazgo_nuevo', 'Hallazgo nuevo: ' + (e.documento || e.detalle) + ' (' + e.entidad + ')', e.entidad); });\n    eventos.filter(function (e) { return e.vigente !== false && e.rectificaA; }).forEach(function (e) { add('CAMBIO|' + e.clave + '|v' + e.version, 'cambio_relevante', 'Rectificación en ' + e.entidad + ' · ' + e.hito + ' (versión ' + e.version + ')', e.entidad); });\n    return out;\n  };\n\n  // ---------- Portada ----------\n  M.fmt = function (n) { return n == null ? '—' : String(Math.round(n)).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.'); };\n  M.portada = function (eventos, catalogo, hoy) {\n    var san = M.derivarSanciones(eventos, hoy, catalogo.sanciones), pag = M.derivarPagos(eventos, catalogo, hoy), ven = M.derivarVencimientos(eventos, hoy);\n    var abiertas = san.filter(function (s) { return !s.cerrada; });\n    var pendPago = pag.filter(function (p) { return !p.hitos.pago && p.hitos.memo_pago; });\n    var difAjuste = pag.reduce(function (t, p) { return t + p.diferencias.filter(function (x) { return x.tipo === 'monto' && x.monto > 0; }).reduce(function (a, x) { return a + x.monto; }, 0); }, 0);\n    return {\n      vence: ven.filter(function (v) { return v.estado === 'por vencer'; }), atrasado: ven.filter(function (v) { return v.estado === 'vencido'; })\n        .concat(san.filter(function (s) { return s.plazo.estado === 'vencido'; }).map(function (s) { return { entidad: s.id, documento: s.plazo.regla, vence: s.plazo.vence, estado: 'vencido', sancion: true }; })),\n      decision: abiertas, montoPendiente: { remitidoSinPago: pendPago.reduce(function (t, p) { return t + (p.pendiente || 0); }, 0), periodos: pendPago.map(function (p) { return p.periodo; }), sinMonto: pendPago.filter(function (p) { return p.pendiente == null; }).map(function (p) { return p.periodo; }), diferenciaPorAjustar: difAjuste, periodosDiferencia: pag.filter(function (p) { return p.diferencias.some(function (x) { return x.tipo === 'monto'; }); }).map(function (p) { return p.periodo; }) },\n      revision: vig(eventos, 'Revisión').length, errores: vig(eventos, 'Error').filter(function (e) { return e.verificacion !== 'Acreditado'; }).length,\n      sanciones: san, pagos: pag, vencimientos: ven\n    };\n  };\n\n  // ---------- Cobertura de la matriz de obligaciones ----------\n  M.cobertura = function (catalogo, eventos) {\n    var conDato = {};\n    var HO = { manifold: 'OB-35', comunicacion_empresa: 'OB-35', respuesta_empresa: 'OB-36', informe_evaluacion: 'OB-37', cierre_sin_multa: 'OB-37', decreto_multa: 'OB-37', publicacion_mp: 'OB-37', notificacion: 'OB-37',\n      reposicion_recibida: 'OB-38', sin_reposicion: 'OB-38', analisis_reposicion: 'OB-39', memo_reposicion: 'OB-39', decreto_final: 'OB-39', rectificacion_decreto: 'OB-39', derivacion_cobro: 'OB-40', cobro_efectivo: 'OB-40',\n      oc_aceptada: 'OB-02', revision_sanciones: 'OB-11', descuento_multa: 'OB-11' };\n    eventos.forEach(function (e) {\n      if (e.vigente === false) return;\n      var os = e.obligacion ? String(e.obligacion).split(',').map(function (o) { return o.trim(); }) : [];\n      if (HO[e.hito] && (e.modulo === 'Sanción' || e.modulo === 'Pago') && e.verificacion !== 'Por verificar' && os.indexOf(HO[e.hito]) < 0) os.push(HO[e.hito]);\n      os.forEach(function (o) { conDato[o] = (conDato[o] || 0) + 1; });\n    });\n    return catalogo.obligaciones.map(function (o) {\n      var n = conDato[o.id] || 0;\n      return { id: o.id, registros: n, estado: o.cobertura === 'pendiente_configurar' ? 'Pendiente de configurar' : n > 0 ? 'Fiscalizable desde el tablero' : 'Pendiente de respaldo' };\n    });\n  };\n\n  if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.Motor = M;\n})(typeof window !== 'undefined' ? window : this);\n\n})(__m);\nconst M = __m.exports;\n/* Conversión entre filas de Notion (API) y registros del libro. Se inserta en los nodos Code y en el servidor de prueba. */\nfunction txt(p) { return p && (p.rich_text || p.title || []).map(function (t) { return t.plain_text || (t.text && t.text.content) || ''; }).join('') || null; }\nfunction aEvento(pg) {\n  var p = pg.properties || {};\n  return { id: pg.id, url: pg.url, clave: txt(p['Clave']), modulo: p['Módulo'] && p['Módulo'].select ? p['Módulo'].select.name : null, entidad: txt(p['Entidad']), hito: txt(p['Hito']),\n    fecha: p['Fecha'] && p['Fecha'].date ? p['Fecha'].date.start.slice(0, 10) : null, fechaTipo: p['Tipo de fecha'] && p['Tipo de fecha'].select ? p['Tipo de fecha'].select.name : null,\n    monto: p['Monto'] ? p['Monto'].number : null, unidadMonto: p['Unidad'] && p['Unidad'].select ? p['Unidad'].select.name : null,\n    verificacion: p['Verificación'] && p['Verificación'].select ? p['Verificación'].select.name : null, documento: txt(p['Documento']), respaldo: p['Respaldo'] ? p['Respaldo'].url : null,\n    obligacion: txt(p['Obligación']), detalle: txt(p['Detalle']) || '', origen: txt(p['Origen']), numero: txt(p['N°']), patente: txt(p['Patente']), sector: txt(p['Sector']), huellaGuardada: txt(p['Huella']),\n    vigente: p['Vigente'] ? !!p['Vigente'].checkbox : true, version: p['Versión'] && p['Versión'].number || 1, rectificaA: txt(p['Rectifica a']), registrado: pg.created_time || null };\n}\nfunction rt(s) { s = String(s == null ? '' : s); var out = []; for (var i = 0; i < s.length; i += 1900) out.push({ type: 'text', text: { content: s.slice(i, i + 1900) } }); return out; }\nfunction aPropiedades(e, contratoId) {\n  var p = { 'Clave': { title: rt(e.clave) }, 'Módulo': { select: { name: e.modulo } }, 'Entidad': { rich_text: rt(e.entidad) }, 'Hito': { rich_text: rt(e.hito) },\n    'Tipo de fecha': { select: { name: e.fechaTipo || (e.fecha ? 'Declarada' : 'Sin fecha') } }, 'Verificación': { select: { name: e.verificacion || 'Reportado' } },\n    'Vigente': { checkbox: e.vigente !== false }, 'Versión': { number: e.version || 1 }, 'Huella': { rich_text: rt(e.huella || '') }, 'Origen': { rich_text: rt(e.origen || 'n8n') } };\n  if (e.fecha) p['Fecha'] = { date: { start: e.fecha } };\n  if (e.monto != null) { p['Monto'] = { number: e.monto }; p['Unidad'] = { select: { name: e.unidadMonto } }; }\n  if (e.documento) p['Documento'] = { rich_text: rt(e.documento) };\n  if (e.respaldo) p['Respaldo'] = { url: e.respaldo };\n  if (e.obligacion) p['Obligación'] = { rich_text: rt(e.obligacion) };\n  if (e.detalle) p['Detalle'] = { rich_text: rt(e.detalle) };\n  if (e.numero) p['N°'] = { rich_text: rt(e.numero) };\n  if (e.patente) p['Patente'] = { rich_text: rt(e.patente) };\n  if (e.sector) p['Sector'] = { rich_text: rt(e.sector) };\n  if (e.rectificaA) p['Rectifica a'] = { rich_text: rt(e.rectificaA) };\n  if (contratoId) p['Contrato'] = { relation: [{ id: contratoId }] };\n  return p;\n}\nfunction hoyChile(cfg) { if (cfg && cfg.hoy) return cfg.hoy; return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date()); }\nfunction ahoraISO() { return new Date().toISOString(); }\n\n// ===== Cosemar 1 · Motor: clasificar, validar, deduplicar y decidir =====\nconst cfg = $('Config').first().json;\nconst hoy = hoyChile(cfg);\nconst paginas = $('Notion: leer libro').all().flatMap(i => i.json.results || []);\nconst libro = M.normalizarLibro(paginas.map(aEvento));\nconst porFuente = {};\nlibro.forEach(e => { const m = /(drive|notion-com):([\\w-]+)(?: · mod:(\\S+))?/.exec(e.origen || ''); if (m) porFuente[m[1] + ':' + m[2]] = m[3] || '1'; });\nlet candidatos = [], omitidos = 0, fuentes = { drive: 0, comunicaciones: 0, webhook: 0 }, fallasFuente = [];\nfunction intentar(nombre, fn) { try { fn(); } catch (e) { fallasFuente.push(nombre + ': ' + e.message); } }\n// 1) Eventos directos (webhook o reproceso)\nlet cuerpo = null; try { cuerpo = $('Webhook evento').first().json.body; } catch (e) {}\nif (cuerpo && Array.isArray(cuerpo.eventos)) cuerpo.eventos.forEach(e => { fuentes.webhook++; candidatos.push(Object.assign({ origen: 'n8n · webhook' + (cuerpo.reproceso ? ' · reproceso de ' + cuerpo.reproceso : '') }, e)); });\nif (cuerpo && Array.isArray(cuerpo.documentos)) cuerpo.documentos.forEach(d => { fuentes.webhook++; candidatos.push(M.clasificar(Object.assign({ origen: 'n8n · webhook' }, d))); });\n// 2) Archivos nuevos o modificados en las carpetas del expediente (Drive)\nintentar('Drive', () => {\n  $('Drive: archivos nuevos').all().forEach(i => {\n    if (i.json.error) throw new Error((i.json.error.message || JSON.stringify(i.json.error)).slice(0, 200));\n    (i.json.files || []).forEach(f => {\n      if (f.mimeType === 'application/vnd.google-apps.folder') return;\n      if (porFuente['drive:' + f.id] === f.modifiedTime) { omitidos++; return; }\n      fuentes.drive++;\n      const cd = M.clasificar({ id: f.id, nombre: f.name, ruta: (cfg.carpetas[(f.parents || [])[0]] || ''), fecha: (f.modifiedTime || '').slice(0, 10), enlace: f.webViewLink, origen: 'n8n · drive:' + f.id + ' · mod:' + f.modifiedTime });\n      if (/fuera del alcance/.test(cd.detalle || '')) { omitidos++; fuentes.drive--; return; }\n      candidatos.push(cd);\n    });\n  });\n});\n// 3) Comunicaciones ya registradas en Notion (base existente «Comunicaciones» de Trazabilidad DMAO)\nintentar('Notion Comunicaciones', () => {\n  $('Notion: comunicaciones').all().forEach(i => {\n    if (i.json.error) throw new Error((i.json.error.message || JSON.stringify(i.json.error)).slice(0, 200));\n    (i.json.results || []).forEach(pg => {\n      const p = pg.properties || {}, titulo = txt(p['Documento']) || '', resumen = txt(p['Resumen']) || '';\n      if (!/cosemar/i.test(titulo + ' ' + resumen)) return;\n      if (porFuente['notion-com:' + pg.id] === pg.last_edited_time) { omitidos++; return; }\n      fuentes.comunicaciones++;\n      const c = M.clasificar({ id: pg.id, nombre: titulo, resumen: resumen, fechaActo: p['Fecha'] && p['Fecha'].date ? p['Fecha'].date.start.slice(0, 10) : null, enlace: (p['Archivo Drive'] && p['Archivo Drive'].url) || pg.url, origen: 'n8n · notion-com:' + pg.id + ' · mod:' + pg.last_edited_time });\n      if (p['Envío'] && p['Envío'].select && p['Envío'].select.name === 'Por confirmar') c.verificacion = 'Por verificar';\n      candidatos.push(c);\n    });\n  });\n});\n// Decisión por candidato\nconst trabajo = libro.slice(), ops = [], resumen = { crear: 0, rectificar: 0, duplicado: 0, revision: 0, error: 0 };\nconst base = cfg.notionBase + '/v1';\nfunction crear(reg) { return { method: 'POST', url: base + '/pages', body: { parent: { database_id: cfg.libroDb }, properties: aPropiedades(reg, cfg.contratoPagina) } }; }\ncandidatos.forEach(c => {\n  const r = M.aplicar(trabajo, c, hoy); resumen[r.accion]++;\n  if (r.accion === 'duplicado') return;\n  if (r.accion === 'error') {\n    const reg = { clave: 'ERR|valid|' + M.hash(JSON.stringify(c)), modulo: 'Error', entidad: c.entidad || 'sin entidad', hito: 'validacion', fecha: hoy, fechaTipo: 'Acto acreditado', verificacion: 'En revisión', documento: c.documento || c.clave || 'registro inválido', respaldo: c.respaldo || null, detalle: 'Rechazado por validación: ' + r.motivo + ' · Corregir la fuente y reenviar · carga: ' + JSON.stringify(c).slice(0, 1200), origen: c.origen || 'n8n', vigente: true, version: 1 };\n    if (!trabajo.some(x => x.clave === reg.clave)) { trabajo.push(reg); ops.push(Object.assign(crear(reg), { accion: 'error', clave: reg.clave, carga: null })); }\n    return;\n  }\n  trabajo.push(r.registro);\n  ops.push(Object.assign(crear(r.registro), { accion: r.accion, clave: r.registro.clave, carga: c }));\n  if (r.accion === 'rectificar') {\n    trabajo.forEach(x => { if (x === r.reemplaza) x.vigente = false; });\n    ops.push({ method: 'PATCH', url: base + '/pages/' + r.reemplaza.id, body: { properties: { 'Vigente': { checkbox: false } } }, accion: 'cerrar_version', clave: r.reemplaza.clave, carga: null });\n  }\n});\nconst meta = { hoy, leidos: libro.length, candidatos: candidatos.length, omitidos, fuentes, fallasFuente, resumen, sis: (libro.filter(e => e.modulo === 'Sistema' && e.vigente !== false)[0] || {}).id || null };\nreturn ops.length ? ops.map(o => ({ json: Object.assign(o, { meta }) })) : [{ json: { noop: true, meta } }];\n"
+   }
+  },
+  {
+   "id": "cos--sin-cambios-",
+   "name": "¿Sin cambios?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    1540,
+    100
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "loose",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "cos--sin-cambios--c",
+       "leftValue": "={{ $json.noop }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "looseTypeValidation": true,
+    "options": {}
+   }
+  },
+  {
+   "id": "cos-notion-escribir",
+   "name": "Notion: escribir",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1760,
+    200
+   ],
+   "parameters": {
+    "method": "={{ $json.method }}",
+    "url": "={{ $json.url }}",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.body) }}",
+    "options": {},
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Notion-Version",
+       "value": "2022-06-28"
+      }
+     ]
+    },
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "notionApi"
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 1500,
+   "onError": "continueRegularOutput"
+  },
+  {
+   "id": "cos-cierre-errores-y-marca-de-sincronizaci-n",
+   "name": "Cierre: errores y marca de sincronización",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1980,
+    100
+   ],
+   "parameters": {
+    "jsCode": "const __m = { exports: {} };\n(function (module) {\n/* Motor de control contractual · Cosemar Recolección (P.P. 060/2023 · ID 3447-86-LR23)\n * Funciones puras, sin dependencias. El MISMO archivo se inserta en los nodos Code de n8n\n * y en el tablero, para que estados, plazos y cifras se calculen con una sola regla.\n */\n(function (root) {\n  'use strict';\n  var M = {};\n  M.VERSION = '1.0.0';\n\n  // ---------- Fechas y días hábiles (BA art. 7: inhábiles sábado, domingo y festivos) ----------\n  M.FERIADOS = ['2026-01-01','2026-04-03','2026-04-04','2026-05-01','2026-05-21','2026-06-21','2026-06-29','2026-07-16',\n    '2026-08-15','2026-09-18','2026-09-19','2026-10-12','2026-10-31','2026-11-01','2026-12-08','2026-12-25',\n    '2027-01-01','2027-03-26','2027-03-27','2027-05-01','2027-05-21','2027-06-21','2027-06-28','2027-07-16',\n    '2027-08-15','2027-09-17','2027-09-18','2027-09-19','2027-10-11','2027-10-31','2027-11-01','2027-12-08','2027-12-25'];\n  function d(s) { var p = String(s).slice(0, 10).split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }\n  function iso(dt) { return dt.toISOString().slice(0, 10); }\n  M.esFecha = function (s) { return typeof s === 'string' && /^\\d{4}-\\d{2}-\\d{2}/.test(s) && !isNaN(d(s).getTime()) && iso(d(s)) === s.slice(0, 10); };\n  M.esHabil = function (s) { var w = d(s).getUTCDay(); return w !== 0 && w !== 6 && M.FERIADOS.indexOf(s.slice(0, 10)) < 0; };\n  M.sumarDias = function (s, n) { var x = d(s); x.setUTCDate(x.getUTCDate() + n); return iso(x); };\n  M.sumarHabiles = function (s, n) { var x = s.slice(0, 10), c = 0; while (c < n) { x = M.sumarDias(x, 1); if (M.esHabil(x)) c++; } return x; };\n  M.diasCorridos = function (a, b) { return Math.round((d(b) - d(a)) / 86400000); };\n  M.diasHabilesEntre = function (a, b) { // hábiles desde a (excl.) hasta b (incl.); negativo si b<a\n    if (a === b) return 0; var s = a < b ? 1 : -1, x = a, c = 0, lim = 0;\n    while (x !== b && lim++ < 4000) { x = M.sumarDias(x, s); if (M.esHabil(s > 0 ? x : M.sumarDias(x, 1))) c += s; }\n    return c;\n  };\n  M.periodoDe = function (s) { return s ? s.slice(0, 7) : null; };\n\n  // ---------- Huella e identidad ----------\n  M.hash = function (str) { var h = 5381, i; str = String(str); for (i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0; return ('0000000' + h.toString(16)).slice(-8); };\n  M.huella = function (e) { return M.hash([e.clave, e.fecha || '', e.fechaTipo || '', e.monto == null ? '' : e.monto, e.unidadMonto || '', e.documento || '', e.respaldo || '', e.verificacion || '', String(e.detalle || '').replace(/\\s*·?\\s*https?:\\S+/g, '').trim()].join('|')); };\n  M.limpiar = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\\s+/g, ' ').trim(); };\n\n  // ---------- Catálogo de hitos ----------\n  // formal:true => el estado solo avanza si el hito trae respaldo (documento o enlace) y no está \"Por verificar\".\n  M.HITOS_SAN = [\n    ['manifold', 'Folio de manifold (hallazgo)', 'ITS (Hernán Gómez)', 'Comunicar el manifold foliado a Cosemar', true],\n    ['comunicacion_empresa', 'Comunicación a Cosemar', 'ITS (Hernán Gómez)', 'Esperar descargos de la empresa (5 días hábiles, BA 177)', true],\n    ['respuesta_empresa', 'Respuesta / descargos de Cosemar', 'ITS (Hernán Gómez)', 'Evaluar la respuesta e informar (20 días hábiles, BA 179)', true],\n    ['informe_evaluacion', 'Informe que evalúa la respuesta', 'Unidad Técnica (Edgar Ortega)', 'Decidir: cierre respaldado o propuesta de multa', true],\n    ['cierre_sin_multa', 'Cierre respaldado sin multa', 'Unidad Técnica (Edgar Ortega)', 'Sin acción: proceso cerrado', true],\n    ['informe_tecnico', 'Informe técnico propone multa', 'ITS (Hernán Gómez)', 'Revisión de forma y fondo por Edgar', true],\n    ['revision_edgar', 'Revisión y visado de Edgar', 'Unidad Técnica (Edgar Ortega)', 'Emitir memo a Secretaría Municipal proponiendo la multa', true],\n    ['memo_secmun', 'Memo que solicita decretar multa', 'Unidad Técnica (Edgar Ortega)', 'Obtener visado de Alcaldía', true],\n    ['visado_alcaldia', 'Visado de Alcaldía', 'Alcaldía', 'Remitir a Secretaría Municipal', true],\n    ['remision_secmun', 'Remisión a Secretaría Municipal', 'Secretaría Municipal', 'Borrador de decreto', true],\n    ['borrador_decreto', 'Borrador de decreto', 'Secretaría Municipal', 'Revisión de Control', true],\n    ['revision_control', 'Revisión de Control', 'Control', 'Emisión del decreto', true],\n    ['decreto_multa', 'Decreto alcaldicio que aplica multa', 'Secretaría Municipal', 'Publicar en Mercado Público y notificar a Cosemar', true],\n    ['publicacion_mp', 'Publicación en ficha de contrato (Mercado Público)', 'Secretaría Municipal', 'Notificar por oficio y correo', true],\n    ['notificacion', 'Notificación del decreto a Cosemar', 'Unidad Técnica (Edgar Ortega)', 'Esperar reposición (5 días hábiles, BA 184)', true],\n    ['reposicion_recibida', 'Recurso de reposición recibido', 'Unidad Técnica (Edgar Ortega)', 'Analizar el recurso (20 días hábiles, BA 186)', true],\n    ['analisis_reposicion', 'Informe de análisis de la reposición', 'Unidad Técnica (Edgar Ortega)', 'Memo con informe a visado de Jurídico', true],\n    ['memo_reposicion', 'Memo que propone resolver la reposición', 'Unidad Técnica (Edgar Ortega)', 'Visado de Jurídico', true],\n    ['visado_juridico', 'Visado de Jurídico', 'Jurídico', 'Visado de Alcaldía', true],\n    ['visado_alcaldia_rep', 'Visado de Alcaldía (reposición)', 'Alcaldía', 'Decreto final en Secretaría Municipal', true],\n    ['decreto_final', 'Decreto final del proceso', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],\n    ['rectificacion_decreto', 'Decreto que rectifica', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],\n    ['comunicacion_final', 'Comunicación de la decisión final', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro en el estado de pago más próximo (BA 188)', true],\n    ['sin_reposicion', 'Constancia de que no hubo reposición', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro (multa firme, BA 187)', true],\n    ['derivacion_cobro', 'Derivación a cobro (instrucción de descuento)', 'Unidad Técnica (Edgar Ortega)', 'Verificar descuento efectivo en el estado de pago', true],\n    ['cobro_efectivo', 'Cobro o descuento efectivo', 'DAF', 'Sin acción: multa cobrada', true]\n  ].map(function (a, i) { return { id: a[0], nombre: a[1], unidad: a[2], siguiente: a[3], formal: a[4], orden: i }; });\n  M.HITOS_PAGO = [\n    ['memo_oc', 'Memo correlativo solicita OC', 'Unidad Técnica (Edgar Ortega)'], ['vb_daf', 'Visto bueno y derivación a DAF', 'DAF'],\n    ['oc_emitida', 'OC emitida', 'DAF'], ['oc_aceptada', 'OC recibida y aceptada por Cosemar', 'Empresa'],\n    ['factura', 'Factura y carpeta de antecedentes', 'Empresa'], ['informe_gps', 'Informe GPS (Hernán)', 'ITS (Hernán Gómez)'],\n    ['informe_trabajos', 'Informe de trabajos con fotografías (Hernán)', 'ITS (Hernán Gómez)'],\n    ['recepcion_conforme', 'Certificado de recepción conforme', 'Unidad Técnica (Edgar Ortega)'],\n    ['revision_sanciones', 'Revisión de procesos sancionatorios antes de pago', 'Unidad Técnica (Edgar Ortega)'],\n    ['memo_pago', 'Memo solicita pago de factura', 'Unidad Técnica (Edgar Ortega)'], ['pago', 'Pago efectivo (comprobante)', 'DAF']\n  ].map(function (a, i) { return { id: a[0], nombre: a[1], unidad: a[2], orden: i }; });\n  function idx(list) { var o = {}; list.forEach(function (h) { o[h.id] = h; }); return o; }\n  M.H_SAN = idx(M.HITOS_SAN); M.H_PAGO = idx(M.HITOS_PAGO);\n\n  M.MODULOS = ['Sanción', 'Pago', 'Vencimiento', 'Hallazgo', 'Reajuste', 'Control', 'Aviso', 'Revisión', 'Error', 'Sistema'];\n  M.VERIF = ['Acreditado', 'Reportado', 'Por verificar', 'En revisión'];\n  M.FECHA_TIPO = ['Acto acreditado', 'Fecha de archivo', 'Declarada', 'Sin fecha'];\n\n  // ---------- Validación ----------\n  M.validar = function (e) {\n    var err = [], amb = [];\n    if (!e || typeof e !== 'object') return { ok: false, errores: ['registro vacío'], ambiguo: [] };\n    if (!e.clave) err.push('falta clave');\n    if (M.MODULOS.indexOf(e.modulo) < 0) err.push('módulo inválido: ' + e.modulo);\n    if (!e.entidad) amb.push('no se pudo determinar la entidad (proceso, período o patente)');\n    if (!e.hito) amb.push('no se pudo determinar el hito');\n    if (e.fecha && !M.esFecha(e.fecha)) err.push('fecha inválida: ' + e.fecha);\n    if (e.monto != null && (typeof e.monto !== 'number' || !isFinite(e.monto) || e.monto < 0)) err.push('monto inválido: ' + e.monto);\n    if (e.monto != null && ['CLP', 'UTM', 'UF'].indexOf(e.unidadMonto) < 0) err.push('monto sin unidad (CLP/UTM/UF)');\n    if (e.modulo === 'Pago' && e.entidad && !/^\\d{4}-\\d{2}$|^AJUSTE-/.test(e.entidad)) err.push('período de servicio inválido: ' + e.entidad);\n    if (e.modulo === 'Sanción' && e.hito && !M.H_SAN[e.hito]) amb.push('hito sancionatorio desconocido: ' + e.hito);\n    if (e.modulo === 'Pago' && e.hito && !M.H_PAGO[e.hito] && ['descuento_multa', 'ajuste', 'diferencia'].indexOf(e.hito) < 0) amb.push('hito de pago desconocido: ' + e.hito);\n    return { ok: err.length === 0, errores: err, ambiguo: amb };\n  };\n\n  // ---------- Aplicar un candidato al libro: evita duplicados, conserva rectificaciones ----------\n  // libro: registros existentes [{clave, huella, version, vigente, ...}]\n  M.aplicar = function (libro, cand, ahora) {\n    var v = M.validar(cand), res = { candidato: cand };\n    if (!v.ok) { res.accion = 'error'; res.motivo = v.errores.join('; '); return res; }\n    if (v.ambiguo.length) {\n      res.accion = 'revision'; res.motivo = v.ambiguo.join('; ');\n      res.registro = Object.assign({}, cand, { modulo: 'Revisión', hito: cand.hito || 'por_clasificar', entidad: cand.entidad || 'por_clasificar', verificacion: 'En revisión', vigente: true, version: 1, detalle: (cand.detalle ? cand.detalle + ' · ' : '') + 'Motivo: ' + res.motivo + (cand.modulo ? ' · Módulo sugerido: ' + cand.modulo : '') });\n      res.registro.clave = 'REV|' + cand.clave; res.registro.huella = M.huella(res.registro);\n      var ya = libro.filter(function (r) { return r.clave === res.registro.clave && r.vigente !== false; })[0];\n      if (ya) { res.accion = 'duplicado'; res.motivo = 'ya está en la cola de revisión'; res.existente = ya; }\n      return res;\n    }\n    var h = M.huella(cand);\n    var mismos = libro.filter(function (r) { return r.clave === cand.clave; });\n    var vig = mismos.filter(function (r) { return r.vigente !== false; })[0];\n    if (mismos.some(function (r) { return r.huella === h && r.vigente !== false; })) { res.accion = 'duplicado'; res.motivo = 'misma clave y mismo contenido'; res.existente = vig; return res; }\n    var maxV = mismos.reduce(function (m, r) { return Math.max(m, r.version || 1); }, 0);\n    res.registro = Object.assign({ verificacion: 'Reportado', fechaTipo: cand.fecha ? 'Declarada' : 'Sin fecha' }, cand, { huella: h, vigente: true, version: maxV + 1 });\n    // un hito formal sin respaldo no avanza estados\n    if (!res.registro.respaldo && !res.registro.documento && res.registro.verificacion !== 'Por verificar') { res.registro.verificacion = 'Por verificar'; res.registro.huella = h; }\n    if (vig) { res.accion = 'rectificar'; res.reemplaza = vig; res.registro.rectificaA = vig.clave + ' v' + (vig.version || 1); res.motivo = 'misma clave con contenido distinto: se conserva la versión anterior como historial'; }\n    else res.accion = 'crear';\n    return res;\n  };\n\n  // ---------- Clasificación de documentos detectados (Drive / Comunicaciones de Notion) ----------\n  var MESES = { ENERO: '01', FEBRERO: '02', MARZO: '03', ABRIL: '04', MAYO: '05', JUNIO: '06', JULIO: '07', AGOSTO: '08', SEPTIEMBRE: '09', SETIEMBRE: '09', OCTUBRE: '10', NOVIEMBRE: '11', DICIEMBRE: '12' };\n  M.periodoEnTexto = function (t) {\n    var m = M.limpiar(t).match(/(ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|SEPTIEMBRE|SETIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE)\\s*(?:DE\\s*)?(20\\d\\d)?/);\n    return m ? { mes: MESES[m[1]], anio: m[2] || null } : null;\n  };\n  M.clasificar = function (doc) { // doc: {id, nombre, ruta, fecha (modificación), enlace, origen, resumen}\n    var n = M.limpiar(doc.nombre), ruta = M.limpiar(doc.ruta || ''), todo = n + ' ' + ruta + ' ' + M.limpiar(doc.resumen || '');\n    var e = { documento: doc.nombre, respaldo: doc.enlace || null, origen: doc.origen || 'n8n', fecha: doc.fechaActo || doc.fecha || null,\n      fechaTipo: doc.fechaActo ? 'Acto acreditado' : (doc.fecha ? 'Fecha de archivo' : 'Sin fecha'), verificacion: 'Reportado', idFuente: doc.id || null };\n    if (/DISPOSICION FINAL|3447-187-LR24|SANTA INES/.test(todo)) { e.modulo = 'Revisión'; e.clave = 'DOC|' + (doc.id || M.hash(n)); e.detalle = 'Documento del contrato de disposición final (3447-187-LR24): fuera del alcance de este tablero'; e.entidad = null; return e; }\n    var num = (n.match(/(?:MEMO(?:RANDUM)?|OFICIO|DECRETO(?: ALC)?|D\\.?A\\.?)\\s*(?:N[°ºO]?\\.?\\s*)?(\\d{1,2}\\.?\\d{3}|\\d{1,4})/) || n.match(/^(\\d{3,4})[\\. ]+20\\d\\d/) || [])[1];\n    if (num) num = num.replace('.', '');\n    var per = M.periodoEnTexto(n) || M.periodoEnTexto(ruta), anio = (n.match(/20\\d\\d/) || ruta.match(/20\\d\\d/) || [(doc.fecha || '').slice(0, 4)])[0];\n    var periodo = per ? ((per.anio || anio) + '-' + per.mes) : null;\n    var ps = (todo.match(/PROCESO(?: SANCIONATORIO)?\\s*N?[°º]?\\s*(\\d{1,2})\\b/) || todo.match(/MULTA\\s*N?[°º]?\\s*(\\d{1,2})\\b(?! UTM)/) || ruta.match(/SANCIONATORIOS\\)?[\\\\\\/ ]+(\\d{1,2})\\./) || [])[1];\n    var san = /SANCIONATORI|MULTA|MANIFOLD|REPOSICION|APELACION|DESCARGOS/.test(todo);\n    if (san) {\n      e.modulo = 'Sanción'; e.entidad = ps ? 'PS' + ('0' + ps).slice(-2) : null;\n      var utm = n.match(/(\\d{1,3})\\s*UTM/); if (utm) { e.monto = +utm[1]; e.unidadMonto = 'UTM'; }\n      if (/MANTENGASE FIRME|MANTIENE FIRME|RESUELVE REPOSICION/.test(n) && /DECRETO|D\\.?A\\.?/.test(n)) e.hito = 'decreto_final';\n      else if (/RECTIFI/.test(n)) e.hito = 'rectificacion_decreto';\n      else if (/DECRETO|^\\d{4} - MULTA/.test(n)) e.hito = 'decreto_multa';\n      else if (/REPOSICION|APELACION|DESCARGOS/.test(n) && !/INFORME|MEMO/.test(n)) e.hito = /REPOSICION/.test(n) ? 'reposicion_recibida' : 'respuesta_empresa';\n      else if (/MEMO/.test(n) && /MANTENER FIRME|REPOSICION/.test(n)) e.hito = 'memo_reposicion';\n      else if (/MEMO/.test(n) && /DECRETAR/.test(n)) e.hito = 'memo_secmun';\n      else if (/INFORME/.test(n) && /MANTENER FIRME|REPOSICION/.test(n)) e.hito = 'analisis_reposicion';\n      else if (/INFORME/.test(n) && /CIERRE|SIN EFECTO|CONFORMIDAD/.test(n)) e.hito = 'cierre_sin_multa';\n      else if (/INFORME/.test(n) && /DESCARGOS|ACOGE/.test(n)) e.hito = 'informe_evaluacion';\n      else if (/INFORME/.test(n)) e.hito = 'informe_tecnico';\n      else if (/OFICIO/.test(n) && /MULTA|DECRETO/.test(n)) e.hito = 'notificacion';\n      else if (/MANIFOLD/.test(n) && /DECRETO/.test(n)) e.hito = 'notificacion';\n      else if (/MANIFOLD/.test(n)) e.hito = 'manifold';\n      else if (/OFICIO|GMAIL|MAIL/.test(n)) e.hito = 'comunicacion_empresa';\n      else e.hito = null;\n    } else if (/PIDE OC|SOLICITA OC|SOLICITUD DE OC/.test(n)) { e.modulo = 'Pago'; e.hito = 'memo_oc'; e.entidad = periodo; }\n    else if (/SOLICITA PAGO|PIDE PAGO|SOLICITUD DE PAGO/.test(n)) { e.modulo = 'Pago'; e.hito = 'memo_pago'; e.entidad = periodo; }\n    else if (/\\bOC\\b.*3447-\\d+-SE\\d\\d|ORDEN DE COMPRA/.test(n)) { e.modulo = 'Pago'; e.hito = 'oc_emitida'; e.entidad = periodo; num = (n.match(/3447-\\d+-SE\\d\\d/) || [num])[0]; }\n    else if (/FACTURA/.test(n) && !/MEMO/.test(n)) { e.modulo = 'Pago'; e.hito = 'factura'; e.entidad = periodo; num = (n.match(/FACTURA\\s*(?:N[°º]?\\s*)?([\\d\\.]+)/) || [0, num])[1]; }\n    else if (/GPS/.test(n)) { e.modulo = 'Pago'; e.hito = 'informe_gps'; e.entidad = periodo; }\n    else if (/RECEP(?:CION)? CONFORME/.test(n)) { e.modulo = 'Pago'; e.hito = 'recepcion_conforme'; e.entidad = periodo; }\n    else if (/COMPROBANTE|DECRETO DE PAGO|EGRESO/.test(n)) { e.modulo = 'Pago'; e.hito = 'pago'; e.entidad = periodo; }\n    else if (/ENDOSO|POLIZA|GARANTIA|RESPONSABILIDAD CIVIL/.test(n)) { e.modulo = 'Vencimiento'; e.hito = 'documento'; e.entidad = /RESPONSABILIDAD CIVIL|\\bRC\\b/.test(n) ? 'SEG-RC' : 'GAR-FC'; num = (n.match(/\\b(22\\d{7})\\b/) || [0, num])[1]; }\n    else if (/REVISION TECNICA|PERMISO DE CIRCULACION|SOAP|SEGURO OBLIGATORIO/.test(n)) { e.modulo = 'Vencimiento'; e.hito = /REVISION/.test(n) ? 'revision_tecnica' : /PERMISO/.test(n) ? 'permiso_circulacion' : 'soap'; var mv = n.match(/\\bM-?\\s?(\\d{3})\\b/) || n.match(/MOVIL\\s*(\\d{3})/); e.entidad = mv ? 'M-' + mv[1] : null; }\n    else { e.modulo = 'Revisión'; e.entidad = null; e.hito = null; }\n    e.numero = num || null;\n    e.clave = (e.modulo === 'Sanción' ? 'SAN' : e.modulo === 'Pago' ? 'PAG' : e.modulo === 'Vencimiento' ? 'VEN' : 'DOC') + '|' + (e.entidad || '?') + '|' + (e.hito || '?') + '|' + (num || M.hash(n));\n    e.detalle = (num ? 'N° ' + num + ' · ' : '') + (doc.ruta ? 'Ruta: ' + doc.ruta : '');\n    return e;\n  };\n\n  // ---------- Lectura del libro: si quedaron dos versiones vigentes de una clave, manda la de mayor versión ----------\n  M.normalizarLibro = function (evs) {\n    var max = {};\n    evs.forEach(function (e) { if (e.vigente !== false) max[e.clave] = Math.max(max[e.clave] || 0, e.version || 1); });\n    return evs.map(function (e) { var o = Object.assign({}, e); if (o.vigente !== false && (o.version || 1) < max[o.clave]) o.vigente = false; if (!o.huella) o.huella = M.huella(o); return o; });\n  };\n\n  // ---------- Derivación: sanciones ----------\n  function vig(evs, mod) { return evs.filter(function (e) { return e.modulo === mod && e.vigente !== false; }); }\n  function acredita(e) { return e.verificacion === 'Acreditado' || e.verificacion === 'Reportado'; }\n  function tieneRespaldo(e) { return !!(e.respaldo || e.documento); }\n  function porFecha(a, b) { return (a.fecha || '9999') < (b.fecha || '9999') ? -1 : (a.fecha || '9999') > (b.fecha || '9999') ? 1 : 0; }\n  M.derivarSanciones = function (eventos, hoy, meta) {\n    var g = {}; meta = meta || {};\n    vig(eventos, 'Sanción').forEach(function (e) { (g[e.entidad] = g[e.entidad] || []).push(e); });\n    return Object.keys(g).sort().map(function (id) {\n      var evs = g[id].slice().sort(function (a, b) { return porFecha(a, b) || (M.H_SAN[a.hito] ? M.H_SAN[a.hito].orden : 0) - (M.H_SAN[b.hito] ? M.H_SAN[b.hito].orden : 0); });\n      var val = evs.filter(function (e) { return M.H_SAN[e.hito] && acredita(e) && tieneRespaldo(e); });\n      // Último estado acreditado: el hito más reciente por fecha (a igual fecha, el de mayor orden). Un cierre o cobro es terminal.\n      var ult = val.slice().sort(function (a, b) { return porFecha(a, b) || M.H_SAN[a.hito].orden - M.H_SAN[b.hito].orden; }).pop() || null;\n      var term = val.filter(function (e) { return e.hito === 'cobro_efectivo' || e.hito === 'cierre_sin_multa'; }).sort(porFecha).pop(); if (term) ult = term;\n      function ultimo(h) { return val.filter(function (e) { return e.hito === h; }).sort(porFecha).pop() || null; }\n      function monto(hs) { var x = null; hs.forEach(function (h) { var e = val.filter(function (z) { return z.hito === h && z.monto != null; }).sort(porFecha).pop(); if (e) x = e; }); return x ? { valor: x.monto, unidad: x.unidadMonto, clave: x.clave, documento: x.documento, respaldo: x.respaldo } : null; }\n      var s = { id: id, meta: meta[id] || {}, eventos: evs, ultimo: ult, pendientesDeRespaldo: evs.filter(function (e) { return !acredita(e) || !tieneRespaldo(e); }) };\n      s.estado = ult ? M.H_SAN[ult.hito].nombre : 'Sin hito acreditado';\n      s.cerrada = !!ult && (ult.hito === 'cierre_sin_multa' || ult.hito === 'cobro_efectivo');\n      s.siguiente = ult ? M.H_SAN[ult.hito].siguiente : 'Acreditar el hallazgo (folio de manifold)';\n      s.unidad = ult ? unidadSiguiente(ult.hito) : 'ITS (Hernán Gómez)';\n      s.montos = { propuesto: monto(['informe_tecnico', 'memo_secmun']), decretado: monto(['decreto_multa', 'decreto_final', 'rectificacion_decreto']), cobrado: monto(['cobro_efectivo']), derivado: monto(['derivacion_cobro']) };\n      var notif = ultimo('notificacion') || ultimo('publicacion_mp'); s.notificacion = notif ? { fecha: notif.fecha, fechaTipo: notif.fechaTipo, documento: notif.documento, respaldo: notif.respaldo } : null;\n      s.plazo = plazoSancion(s, ult, ultimo, hoy);\n      return s;\n    });\n  };\n  function unidadSiguiente(h) {\n    var o = M.H_SAN[h].orden, nx = M.HITOS_SAN[o + 1];\n    if (h === 'cierre_sin_multa' || h === 'cobro_efectivo') return '—';\n    if (h === 'respuesta_empresa') return 'ITS (Hernán Gómez) / Unidad Técnica';\n    if (h === 'informe_evaluacion') return 'Unidad Técnica (Edgar Ortega)';\n    if (h === 'notificacion') return 'Empresa (plazo de reposición) → Unidad Técnica';\n    if (h === 'decreto_final' || h === 'rectificacion_decreto' || h === 'comunicacion_final' || h === 'sin_reposicion') return 'Unidad Técnica (Edgar Ortega) → DAF';\n    if (h === 'derivacion_cobro') return 'DAF';\n    return nx ? nx.unidad : '—';\n  }\n  function plazoSancion(s, ult, ultimo, hoy) {\n    function p(regla, base, n, quien) {\n      if (!base || !base.fecha) return { estado: 'por verificar', regla: regla, falta: 'Falta la fecha de ' + (base ? M.H_SAN[base.hito].nombre.toLowerCase() : 'inicio del cómputo') };\n      if (base.fechaTipo !== 'Acto acreditado') return { estado: 'por verificar', regla: regla, falta: 'La fecha disponible (' + base.fecha + ') es ' + (base.fechaTipo || 'no acreditada').toLowerCase() + ': falta la constancia de ' + M.H_SAN[base.hito].nombre.toLowerCase() + ' con fecha cierta', referencia: base.fecha };\n      var ini = M.sumarDias(base.fecha, 1); // BA 180 y 182: se entiende practicada 24 horas después\n      var vence = M.sumarHabiles(ini, n), dias = M.diasHabilesEntre(hoy, vence);\n      return { estado: dias < 0 ? 'vencido' : 'en plazo', regla: regla, inicio: ini, vence: vence, diasHabiles: dias, quien: quien, base: base.clave };\n    }\n    if (!ult) return { estado: 'por verificar', regla: '—', falta: 'No hay hito acreditado con respaldo' };\n    if (s.cerrada) return { estado: 'no aplica', regla: 'Proceso cerrado' };\n    switch (ult.hito) {\n      case 'manifold': return { estado: 'por verificar', regla: 'BA 176–177', falta: 'Falta la constancia de comunicación del manifold a Cosemar (inicio de los 5 días hábiles de descargos)' };\n      case 'comunicacion_empresa': return p('BA 177 · 5 días hábiles para descargos', ult, 5, 'Empresa');\n      case 'respuesta_empresa': return p('BA 179 · 20 días hábiles para resolver los descargos', ult, 20, 'Unidad Técnica');\n      case 'informe_evaluacion': case 'informe_tecnico': case 'revision_edgar': case 'memo_secmun': case 'visado_alcaldia': case 'remision_secmun': case 'borrador_decreto': case 'revision_control':\n        return p('BA 179 · 20 días hábiles desde la recepción de los descargos', ultimo('respuesta_empresa') || { hito: 'respuesta_empresa' }, 20, 'Unidad Técnica / Secretaría Municipal');\n      case 'decreto_multa': return { estado: 'por verificar', regla: 'BA 184', falta: 'Falta la constancia de publicación en la ficha de contrato de Mercado Público o de notificación del decreto (inicio de los 5 días hábiles de reposición)' };\n      case 'publicacion_mp': case 'notificacion': return p('BA 184 · 5 días hábiles para reposición', ult, 5, 'Empresa');\n      case 'reposicion_recibida': case 'analisis_reposicion': case 'memo_reposicion': case 'visado_juridico': case 'visado_alcaldia_rep':\n        return p('BA 186 · 20 días hábiles para resolver la reposición', ultimo('reposicion_recibida') || { hito: 'reposicion_recibida' }, 20, 'Unidad Técnica / Secretaría Municipal');\n      case 'decreto_final': case 'rectificacion_decreto': case 'comunicacion_final': case 'sin_reposicion':\n        return { estado: 'por verificar', regla: 'BA 187–188 · descuento en el estado de pago más próximo', falta: 'Falta la instrucción de descuento (derivación a cobro) con el estado de pago al que se imputa' };\n      case 'derivacion_cobro': return { estado: 'por verificar', regla: 'BA 188 a)', falta: 'Falta el comprobante del estado de pago que acredite el descuento efectivo' };\n    }\n    return { estado: 'por verificar', regla: '—', falta: 'Regla no configurada para este hito' };\n  }\n\n  // ---------- Derivación: pagos ----------\n  M.precioVigente = function (precios, periodo) { // precios: [{desde:'YYYY-MM', neto, bruto, acto, ejecutado}]\n    var r = null; precios.forEach(function (p) { if (p.desde <= periodo) r = p; }); return r;\n  };\n  M.derivarPagos = function (eventos, catalogo, hoy) {\n    var g = {};\n    vig(eventos, 'Pago').forEach(function (e) { (g[e.entidad] = g[e.entidad] || []).push(e); });\n    return Object.keys(g).sort().map(function (per) {\n      var evs = g[per].slice().sort(porFecha), val = evs.filter(function (e) { return acredita(e) && tieneRespaldo(e); });\n      function h(id) { return val.filter(function (e) { return e.hito === id; }); }\n      function uno(id) { return h(id).sort(porFecha).pop() || null; }\n      function sumUnico(id) { var seen = {}, t = null; h(id).forEach(function (e) { if (e.monto == null || e.unidadMonto !== 'CLP') return; var k = e.numero || e.clave; if (seen[k]) return; seen[k] = 1; t = (t || 0) + e.monto; }); return t; }\n      var ajuste = /^AJUSTE-/.test(per), precio = ajuste ? null : M.precioVigente(catalogo.precios, per), enEjec = ajuste ? null : M.precioVigente(catalogo.precios.filter(function (p) { return p.ejecutado; }), per);\n      var p = { periodo: per, ajuste: ajuste, eventos: evs, hitos: {} };\n      M.HITOS_PAGO.forEach(function (x) { p.hitos[x.id] = uno(x.id); });\n      var ult = null; M.HITOS_PAGO.forEach(function (x) { if (p.hitos[x.id]) ult = x; });\n      p.ultimo = ult ? { hito: ult, evento: p.hitos[ult.id] } : null;\n      p.siguiente = ult ? (M.HITOS_PAGO[ult.orden + 1] || { nombre: 'Sin acción: pago acreditado', unidad: '—' }) : M.HITOS_PAGO[0];\n      p.esperado = precio ? { valor: precio.bruto, acto: precio.acto, respaldo: precio.respaldo, nota: precio.nota || null } : (ajuste ? null : { valor: null, estado: 'sin antecedentes' });\n      p.enEjecucion = enEjec ? enEjec.bruto : null;\n      p.facturado = sumUnico('factura'); p.remitido = sumUnico('memo_pago'); p.pagado = sumUnico('pago'); p.solicitadoOC = sumUnico('memo_oc');\n      p.descuentos = val.filter(function (e) { return e.hito === 'descuento_multa'; });\n      p.diferencias = [];\n      var ref = p.remitido != null ? p.remitido : p.facturado != null ? p.facturado : p.solicitadoOC;\n      if (p.esperado && p.esperado.valor != null && ref != null && ref !== p.esperado.valor) p.diferencias.push({ tipo: 'monto', texto: 'Tramitado $' + M.fmt(ref) + ' ≠ esperado $' + M.fmt(p.esperado.valor) + ' (' + p.esperado.acto + ')', monto: p.esperado.valor - ref });\n      var oc = p.hitos.oc_emitida, fa = p.hitos.factura;\n      if (oc && fa && oc.fecha && fa.fecha && fa.fecha < oc.fecha) p.diferencias.push({ tipo: 'orden', texto: 'Factura (' + fa.fecha + ') anterior a la OC (' + oc.fecha + ')' });\n      if (h('oc_emitida').length > 1) p.diferencias.push({ tipo: 'duplicado', texto: h('oc_emitida').length + ' OC registradas para el período: se contabiliza una sola; verificar cuál quedó vigente' });\n      evs.filter(function (e) { return e.hito === 'diferencia'; }).forEach(function (e) { p.diferencias.push({ tipo: 'documental', texto: e.detalle || e.documento, clave: e.clave, respaldo: e.respaldo }); });\n      p.estado = p.hitos.pago ? 'Pagado' : p.hitos.memo_pago ? 'Remitido a pago' : p.hitos.factura ? 'Facturado' : p.hitos.oc_aceptada ? 'OC aceptada' : p.hitos.oc_emitida ? 'OC emitida' : p.hitos.memo_oc ? 'OC solicitada' : 'Sin hito acreditado';\n      // Montos: null = sin antecedentes (el hito existe pero el documento cargado no trae monto)\n      p.pendiente = p.hitos.pago ? 0 : (p.hitos.memo_pago ? p.remitido : null);\n      return p;\n    });\n  };\n\n  // ---------- Derivación: vencimientos ----------\n  M.derivarVencimientos = function (eventos, hoy, umbral) {\n    umbral = umbral || 30;\n    return vig(eventos, 'Vencimiento').map(function (e) {\n      var o = { clave: e.clave, entidad: e.entidad, tipo: e.hito, documento: e.documento, vence: e.fecha, respaldo: e.respaldo, verificacion: e.verificacion, detalle: e.detalle, patente: e.patente || null, monto: e.monto, unidadMonto: e.unidadMonto, origen: e.origen };\n      if (!e.fecha) { o.estado = 'sin antecedentes'; o.dias = null; }\n      else { o.dias = M.diasCorridos(hoy, e.fecha); o.estado = o.dias < 0 ? 'vencido' : o.dias <= umbral ? 'por vencer' : 'vigente'; }\n      return o;\n    }).sort(function (a, b) { return (a.dias == null ? 99999 : a.dias) - (b.dias == null ? 99999 : b.dias); });\n  };\n\n  // ---------- Avisos: una sola vez por evento (clave determinista) ----------\n  M.avisos = function (eventos, catalogo, hoy) {\n    var out = [], ya = {};\n    vig(eventos, 'Aviso').forEach(function (e) { ya[e.clave] = 1; });\n    function add(k, tipo, texto, ref) { k = 'AVI|' + k; if (!ya[k]) { ya[k] = 1; out.push({ clave: k, modulo: 'Aviso', entidad: ref, hito: tipo, fecha: hoy, fechaTipo: 'Acto acreditado', verificacion: 'Acreditado', documento: texto, detalle: texto, origen: 'n8n · avisos', vigente: true, version: 1 }); } }\n    M.derivarVencimientos(eventos, hoy).forEach(function (v) {\n      if (v.estado === 'vencido') add('VENCIDO|' + v.clave + '|' + v.vence, 'vencido', 'VENCIDO: ' + v.documento + ' (' + v.entidad + ') venció el ' + v.vence, v.entidad);\n      else if (v.estado === 'por vencer') add('PORVENCER|' + v.clave + '|' + v.vence + '|' + (v.dias <= 7 ? '7' : '30'), 'por_vencer', 'Vence en ' + v.dias + ' días: ' + v.documento + ' (' + v.entidad + ') el ' + v.vence, v.entidad);\n    });\n    M.derivarSanciones(eventos, hoy).forEach(function (s) {\n      if (s.plazo.estado === 'vencido') add('PLAZO|' + s.id + '|' + s.plazo.base + '|' + s.plazo.vence, 'plazo_vencido', s.id + ': plazo vencido el ' + s.plazo.vence + ' (' + s.plazo.regla + ')', s.id);\n      else if (s.plazo.estado === 'en plazo' && s.plazo.diasHabiles <= 2) add('PLAZO2|' + s.id + '|' + s.plazo.base + '|' + s.plazo.vence, 'plazo_proximo', s.id + ': quedan ' + s.plazo.diasHabiles + ' días hábiles (' + s.plazo.regla + ')', s.id);\n    });\n    eventos.filter(function (e) { return e.vigente !== false && e.modulo === 'Hallazgo'; }).forEach(function (e) { add('HALLAZGO|' + e.clave, 'hallazgo_nuevo', 'Hallazgo nuevo: ' + (e.documento || e.detalle) + ' (' + e.entidad + ')', e.entidad); });\n    eventos.filter(function (e) { return e.vigente !== false && e.rectificaA; }).forEach(function (e) { add('CAMBIO|' + e.clave + '|v' + e.version, 'cambio_relevante', 'Rectificación en ' + e.entidad + ' · ' + e.hito + ' (versión ' + e.version + ')', e.entidad); });\n    return out;\n  };\n\n  // ---------- Portada ----------\n  M.fmt = function (n) { return n == null ? '—' : String(Math.round(n)).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.'); };\n  M.portada = function (eventos, catalogo, hoy) {\n    var san = M.derivarSanciones(eventos, hoy, catalogo.sanciones), pag = M.derivarPagos(eventos, catalogo, hoy), ven = M.derivarVencimientos(eventos, hoy);\n    var abiertas = san.filter(function (s) { return !s.cerrada; });\n    var pendPago = pag.filter(function (p) { return !p.hitos.pago && p.hitos.memo_pago; });\n    var difAjuste = pag.reduce(function (t, p) { return t + p.diferencias.filter(function (x) { return x.tipo === 'monto' && x.monto > 0; }).reduce(function (a, x) { return a + x.monto; }, 0); }, 0);\n    return {\n      vence: ven.filter(function (v) { return v.estado === 'por vencer'; }), atrasado: ven.filter(function (v) { return v.estado === 'vencido'; })\n        .concat(san.filter(function (s) { return s.plazo.estado === 'vencido'; }).map(function (s) { return { entidad: s.id, documento: s.plazo.regla, vence: s.plazo.vence, estado: 'vencido', sancion: true }; })),\n      decision: abiertas, montoPendiente: { remitidoSinPago: pendPago.reduce(function (t, p) { return t + (p.pendiente || 0); }, 0), periodos: pendPago.map(function (p) { return p.periodo; }), sinMonto: pendPago.filter(function (p) { return p.pendiente == null; }).map(function (p) { return p.periodo; }), diferenciaPorAjustar: difAjuste, periodosDiferencia: pag.filter(function (p) { return p.diferencias.some(function (x) { return x.tipo === 'monto'; }); }).map(function (p) { return p.periodo; }) },\n      revision: vig(eventos, 'Revisión').length, errores: vig(eventos, 'Error').filter(function (e) { return e.verificacion !== 'Acreditado'; }).length,\n      sanciones: san, pagos: pag, vencimientos: ven\n    };\n  };\n\n  // ---------- Cobertura de la matriz de obligaciones ----------\n  M.cobertura = function (catalogo, eventos) {\n    var conDato = {};\n    var HO = { manifold: 'OB-35', comunicacion_empresa: 'OB-35', respuesta_empresa: 'OB-36', informe_evaluacion: 'OB-37', cierre_sin_multa: 'OB-37', decreto_multa: 'OB-37', publicacion_mp: 'OB-37', notificacion: 'OB-37',\n      reposicion_recibida: 'OB-38', sin_reposicion: 'OB-38', analisis_reposicion: 'OB-39', memo_reposicion: 'OB-39', decreto_final: 'OB-39', rectificacion_decreto: 'OB-39', derivacion_cobro: 'OB-40', cobro_efectivo: 'OB-40',\n      oc_aceptada: 'OB-02', revision_sanciones: 'OB-11', descuento_multa: 'OB-11' };\n    eventos.forEach(function (e) {\n      if (e.vigente === false) return;\n      var os = e.obligacion ? String(e.obligacion).split(',').map(function (o) { return o.trim(); }) : [];\n      if (HO[e.hito] && (e.modulo === 'Sanción' || e.modulo === 'Pago') && e.verificacion !== 'Por verificar' && os.indexOf(HO[e.hito]) < 0) os.push(HO[e.hito]);\n      os.forEach(function (o) { conDato[o] = (conDato[o] || 0) + 1; });\n    });\n    return catalogo.obligaciones.map(function (o) {\n      var n = conDato[o.id] || 0;\n      return { id: o.id, registros: n, estado: o.cobertura === 'pendiente_configurar' ? 'Pendiente de configurar' : n > 0 ? 'Fiscalizable desde el tablero' : 'Pendiente de respaldo' };\n    });\n  };\n\n  if (typeof module !== 'undefined' && module.exports) module.exports = M; else root.Motor = M;\n})(typeof window !== 'undefined' ? window : this);\n\n})(__m);\nconst M = __m.exports;\n/* Conversión entre filas de Notion (API) y registros del libro. Se inserta en los nodos Code y en el servidor de prueba. */\nfunction txt(p) { return p && (p.rich_text || p.title || []).map(function (t) { return t.plain_text || (t.text && t.text.content) || ''; }).join('') || null; }\nfunction aEvento(pg) {\n  var p = pg.properties || {};\n  return { id: pg.id, url: pg.url, clave: txt(p['Clave']), modulo: p['Módulo'] && p['Módulo'].select ? p['Módulo'].select.name : null, entidad: txt(p['Entidad']), hito: txt(p['Hito']),\n    fecha: p['Fecha'] && p['Fecha'].date ? p['Fecha'].date.start.slice(0, 10) : null, fechaTipo: p['Tipo de fecha'] && p['Tipo de fecha'].select ? p['Tipo de fecha'].select.name : null,\n    monto: p['Monto'] ? p['Monto'].number : null, unidadMonto: p['Unidad'] && p['Unidad'].select ? p['Unidad'].select.name : null,\n    verificacion: p['Verificación'] && p['Verificación'].select ? p['Verificación'].select.name : null, documento: txt(p['Documento']), respaldo: p['Respaldo'] ? p['Respaldo'].url : null,\n    obligacion: txt(p['Obligación']), detalle: txt(p['Detalle']) || '', origen: txt(p['Origen']), numero: txt(p['N°']), patente: txt(p['Patente']), sector: txt(p['Sector']), huellaGuardada: txt(p['Huella']),\n    vigente: p['Vigente'] ? !!p['Vigente'].checkbox : true, version: p['Versión'] && p['Versión'].number || 1, rectificaA: txt(p['Rectifica a']), registrado: pg.created_time || null };\n}\nfunction rt(s) { s = String(s == null ? '' : s); var out = []; for (var i = 0; i < s.length; i += 1900) out.push({ type: 'text', text: { content: s.slice(i, i + 1900) } }); return out; }\nfunction aPropiedades(e, contratoId) {\n  var p = { 'Clave': { title: rt(e.clave) }, 'Módulo': { select: { name: e.modulo } }, 'Entidad': { rich_text: rt(e.entidad) }, 'Hito': { rich_text: rt(e.hito) },\n    'Tipo de fecha': { select: { name: e.fechaTipo || (e.fecha ? 'Declarada' : 'Sin fecha') } }, 'Verificación': { select: { name: e.verificacion || 'Reportado' } },\n    'Vigente': { checkbox: e.vigente !== false }, 'Versión': { number: e.version || 1 }, 'Huella': { rich_text: rt(e.huella || '') }, 'Origen': { rich_text: rt(e.origen || 'n8n') } };\n  if (e.fecha) p['Fecha'] = { date: { start: e.fecha } };\n  if (e.monto != null) { p['Monto'] = { number: e.monto }; p['Unidad'] = { select: { name: e.unidadMonto } }; }\n  if (e.documento) p['Documento'] = { rich_text: rt(e.documento) };\n  if (e.respaldo) p['Respaldo'] = { url: e.respaldo };\n  if (e.obligacion) p['Obligación'] = { rich_text: rt(e.obligacion) };\n  if (e.detalle) p['Detalle'] = { rich_text: rt(e.detalle) };\n  if (e.numero) p['N°'] = { rich_text: rt(e.numero) };\n  if (e.patente) p['Patente'] = { rich_text: rt(e.patente) };\n  if (e.sector) p['Sector'] = { rich_text: rt(e.sector) };\n  if (e.rectificaA) p['Rectifica a'] = { rich_text: rt(e.rectificaA) };\n  if (contratoId) p['Contrato'] = { relation: [{ id: contratoId }] };\n  return p;\n}\nfunction hoyChile(cfg) { if (cfg && cfg.hoy) return cfg.hoy; return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date()); }\nfunction ahoraISO() { return new Date().toISOString(); }\n\n// ===== Cosemar 1 · Cierre: registra fallas para reproceso y marca la última actualización exitosa =====\nconst cfg = $('Config').first().json, base = cfg.notionBase + '/v1';\nconst ops = $('Motor: clasificar y decidir').all().map(i => i.json), meta = ops[0].meta, salida = [];\nlet resultados = []; try { resultados = $('Notion: escribir').all(); } catch (e) {}\nlet ok = 0, fallas = [];\nif (!ops[0].noop) ops.forEach((o, i) => { const r = resultados[i] && resultados[i].json; if (!r || r.error) fallas.push({ o, error: r ? (r.error.message || JSON.stringify(r.error)).slice(0, 300) : 'sin respuesta' }); else ok++; });\nfallas.forEach(f => {\n  const reg = { clave: 'ERR|escritura|' + M.hash(f.o.clave + '|' + f.o.method + '|' + Date.now()), modulo: 'Error', entidad: f.o.clave, hito: 'escritura_fallida', fecha: meta.hoy, fechaTipo: 'Acto acreditado', verificacion: 'Por verificar', documento: 'Falla temporal al escribir ' + f.o.clave, detalle: 'REPROCESABLE · ' + f.error + ' · carga: ' + JSON.stringify(f.o.carga ? { eventos: [f.o.carga] } : { peticion: { method: f.o.method, url: f.o.url, body: f.o.body } }).slice(0, 1500), origen: 'n8n · ingesta', vigente: true, version: 1 };\n  reg.huella = M.huella(reg);\n  salida.push({ method: 'POST', url: base + '/pages', body: { parent: { database_id: cfg.libroDb }, properties: aPropiedades(reg, cfg.contratoPagina) }, tipo: 'error' });\n});\n(meta.fallasFuente || []).forEach(t => {\n  const reg = { clave: 'ERR|fuente|' + M.hash(t + meta.hoy), modulo: 'Error', entidad: 'fuente', hito: 'fuente_no_disponible', fecha: meta.hoy, fechaTipo: 'Acto acreditado', verificacion: 'Por verificar', documento: 'Fuente no disponible: ' + t, detalle: 'REPROCESABLE · se reintenta sola en la próxima corrida', origen: 'n8n · ingesta', vigente: true, version: 1 };\n  reg.huella = M.huella(reg);\n  salida.push({ method: 'POST', url: base + '/pages', body: { parent: { database_id: cfg.libroDb }, properties: aPropiedades(reg, cfg.contratoPagina) }, tipo: 'error' });\n});\nconst exito = fallas.length === 0 && (meta.fallasFuente || []).length === 0;\nconst texto = (exito ? 'Última actualización exitosa: ' : 'Último intento con errores: ') + ahoraISO() + ' · leídos ' + meta.leidos + ' · nuevos ' + meta.resumen.crear + ' · rectificados ' + meta.resumen.rectificar + ' · duplicados omitidos ' + (meta.resumen.duplicado + meta.omitidos) + ' · a revisión ' + meta.resumen.revision + ' · errores ' + (meta.resumen.error + fallas.length + (meta.fallasFuente || []).length);\nconst props = { 'Detalle': { rich_text: rt(texto) }, 'Documento': { rich_text: rt(exito ? 'Sincronización n8n correcta' : 'Sincronización n8n con errores') } };\nif (exito) props['Fecha'] = { date: { start: ahoraISO() } };\nif (meta.sis) salida.push({ method: 'PATCH', url: base + '/pages/' + meta.sis, body: { properties: props }, tipo: 'sync' });\nelse salida.push({ method: 'POST', url: base + '/pages', body: { parent: { database_id: cfg.libroDb }, properties: Object.assign(aPropiedades({ clave: 'SIS|carga', modulo: 'Sistema', entidad: 'sincronizacion', hito: 'ultima_exitosa', fechaTipo: 'Acto acreditado', verificacion: 'Acreditado', origen: 'n8n', vigente: true, version: 1 }, cfg.contratoPagina), props) }, tipo: 'sync' });\nconst informe = { exito, escritos: ok, fallas: fallas.length, resumen: meta.resumen, fuentes: meta.fuentes, omitidos: meta.omitidos, fallasFuente: meta.fallasFuente, hoy: meta.hoy };\nreturn salida.map(s => ({ json: Object.assign(s, { informe }) }));\n"
+   }
+  },
+  {
+   "id": "cos-notion-cierre",
+   "name": "Notion: cierre",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    2200,
+    100
+   ],
+   "parameters": {
+    "method": "={{ $json.method }}",
+    "url": "={{ $json.url }}",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.body) }}",
+    "options": {},
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Notion-Version",
+       "value": "2022-06-28"
+      }
+     ]
+    },
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "notionApi"
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 1500,
+   "onError": "continueRegularOutput"
+  },
+  {
+   "id": "cos-informe",
+   "name": "Informe",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2420,
+    100
+   ],
+   "parameters": {
+    "jsCode": "const c = $('Cierre: errores y marca de sincronización').all(); const r = $input.all(); const inf = Object.assign({}, c[0].json.informe);\ninf.cierreFallido = r.filter(x => x.json.error).length; if (inf.cierreFallido) inf.exito = false; return [{ json: inf }];"
+   }
+  }
+ ],
+ "connections": {
+  "Cada hora": {
+   "main": [
+    [
+     {
+      "node": "Config",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Webhook evento": {
+   "main": [
+    [
+     {
+      "node": "Config",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Config": {
+   "main": [
+    [
+     {
+      "node": "Notion: leer libro",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Notion: leer libro": {
+   "main": [
+    [
+     {
+      "node": "Cursor",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cursor": {
+   "main": [
+    [
+     {
+      "node": "Drive: archivos nuevos",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Drive: archivos nuevos": {
+   "main": [
+    [
+     {
+      "node": "Notion: comunicaciones",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Notion: comunicaciones": {
+   "main": [
+    [
+     {
+      "node": "Motor: clasificar y decidir",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Motor: clasificar y decidir": {
+   "main": [
+    [
+     {
+      "node": "¿Sin cambios?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "¿Sin cambios?": {
+   "main": [
+    [
+     {
+      "node": "Cierre: errores y marca de sincronización",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Notion: escribir",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Notion: escribir": {
+   "main": [
+    [
+     {
+      "node": "Cierre: errores y marca de sincronización",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Cierre: errores y marca de sincronización": {
+   "main": [
+    [
+     {
+      "node": "Notion: cierre",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Notion: cierre": {
+   "main": [
+    [
+     {
+      "node": "Informe",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "America/Santiago",
+  "saveManualExecutions": true
+ },
+ "pinData": {},
+ "versionId": "cosemar1ingesta0000-v1",
+ "meta": {
+  "templateCredsSetupCompleted": true
+ }
+}

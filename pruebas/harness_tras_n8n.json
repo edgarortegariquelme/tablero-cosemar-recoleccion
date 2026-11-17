@@ -1,0 +1,49 @@
+{
+ "portada": {
+  "resumen": "4 procesos sancionatorios abiertos, 3 con plazo por verificar por falta de notificación acreditada; 10 meses remitidos a pago sin pago acreditado y $18.517.749 de diferencia entre lo tramitado y el valor decretado.",
+  "kpi": "k_vence=2 | k_atraso=2 | k_decision=4 | k_porverificar=3 | k_monto=$1.570.604.538 | k_meses=10 | k_sinmonto=4 | k_dif=$18.517.749 | k_sync=17-11-2026",
+  "plazos": 4,
+  "timeline": "130",
+  "svg": true
+ },
+ "filtroOctubre": "12",
+ "filtroPatente": "2 · PS03:Gmail - manifold 11-02-2026 camión con R / PS03:Camión con documentación vencida (móvil ",
+ "filtroSector": "27",
+ "sancionDesdePortada": {
+  "visible": true,
+  "ficha": "PS06 · Camión no informado en el plan de trabajo (móvil 1473)AbiertoPlazo en plazoFlotaÚltimo estado acreditadoNotificación del decreto a Cosemar12-11-2026 · Acto acreditado · EvidenciaNotificación12-11-2026Acto acreditadoPlazo20-11-2026 · 3 días hábiles restantesBA 184 · 5 días hábiles para reposiciónSiguiente acciónEsperar reposición (5 días hábiles, BA 184)A cargo: Empresa (plazo de reposición) → Unidad TécnicaPropuestoSin antecedentesDecretado10 UTMDerivado a cobroSin antecedentesCobrado o descontadoSin antecedentesObligación: OB-25 · Flota informada en el plan de trabajo; reemplazos autorizados · BA 124 a) · BT 30, p. 44Línea de tiempo del proceso (7 hitos)14-04-2026 · DeclaradaFolio de manifold (hallazgo)1. Gmail - Manifold 14-04-2026 equipo no asociado a contrato_.pdf · Abrir respaldo · Fila en NotionFecha según el nombre del documento14-04-2026 · Fecha de archivoInforme técnico p"
+ },
+ "fichaPS05": "PS05 · Modificación unilateral del plan de trabajo (inicio domingo 5 de abril)CerradoPlazo no aplicaRutas de recolecciónÚltimo estado acreditadoCobro o descuento efectivo03-09-2026 · Acto acreditado · EvidenciaNotificación19-05-2026Fecha de archivoPlazoNo aplicaProceso cerradoSiguiente acciónSin acción: multa cobradaA cargo: —Propuesto60 UTMDecretado60 UTMDerivado a cobro$4.193.340Cobrado o descontado$4.193.340Estado de pagoObligación: OB-28 · No modificar unilateralmente el servicio ni el plan de trabajo · BA 124 a), p. 44Línea de tiempo del proceso (15 hitos)06-04-2026 · Fecha de archivoFolio de manifold (hallazgo)1. manifold 4 inicia proceso sancionatorio n°5.2026.pdf · Abrir respaldo · Fila en Notion06-04-2026 · Fecha de archivoInforme técnico propone multa5. informe tecnico proceso N°5.pdf · Abrir respaldo · Fila en Notion06-04-2026 · Fecha de archivoComunicación a Cosemar6.oficio N°5 informa inicio proceso n5.pdf · Abrir respaldo · Fila en Notion22-04-2026 · Fecha de archivoRespuesta / descargos de Cosemar7. APELACIÓN PROCESO SANCIONATORIO - CAMBIO EN PLAN DE TRABAJO.pdf · Abrir respaldo · Fila en Notion13-05-2026 · Fecha de archivoMemo que solicita decretar multa · 60 UTM849.2026 MEMO SOLICITA DECRETAR MULTA PROCESO 5.docx · Abrir respaldo · Fila en Notion18-05-2026 · Fecha de archivoDecreto alcaldicio que aplica multa · 60 UTM10. DECRETO ALC N 2463 - 2026.pdf · Abrir re",
+ "pago09": {
+  "esperado": "$267.940.006",
+  "acto": "Valor del D.A. 3.957/2026; en ejecución: $261.767.423",
+  "oc": "Sin antecedentes",
+  "fact": "$261.767.423",
+  "rem": "$261.767.423",
+  "pag": "Sin pago acreditado",
+  "obs": "Tramitado $261.767.423 ≠ esperado $267.940.006 (D.A. 3.957/2026) · Último hito: Memo solicita pago de factura · Siguiente: Pago efectivo (comprobante) (DAF)",
+  "cadena": "Memo correlativo solicita OC sin antecedentes | Visto bueno y derivación a DAF sin antecedentes | OC emitida sin antecedentes | OC recibida y aceptada por Cosemar sin antecedentes | Factura y carpeta de antecedentes acreditado | Informe GPS (Hernán) sin antecedentes | Informe de trabajos con fotografías (Hernán) sin antecedentes | Certificado de recepción conforme sin antecedentes | Revisión de procesos sancionatorios antes de pago sin antecedentes | Memo solicita pago de factura acreditado | Pago efectivo (comprobante) sin antecedentes"
+ },
+ "pago05": "2 OC registradas para el período: se contabiliza una sola; verificar cuál quedó vigente · Último hito: Memo solicita pago de factura · Siguiente: Pago efectivo (comprobante) (DAF)",
+ "garantia": [
+  "GAR-FCPóliza Continental 224103598 · fiel cumplimiento28-10-2029vigente · faltan 1076 díasUF 19605AcreditadoEmitida 04-06-2024 · vigencia 01-07-2024 a",
+  "GAR-FCEndoso 225146034 · +UF 355 · total UF 19.96028-10-2029vigente · faltan 1076 díasUF 19960AcreditadoEmitido 16-12-2025 · vigencia 09-12-2025 a 28-",
+  "GAR-FCEndoso 226139451 · +UF 419,57 · total UF 20.379,5728-10-2029vigente · faltan 1076 díasUF 20379,57ReportadoEmitido 26-10-2026 · rige desde 19-10-"
+ ],
+ "flota": [
+  "M-921SZZJ80-4Revisión técnica16-11-2026vencido · 1 día de atrasoReportadoAbrir respaldo",
+  "M-921SZZJ80-4Permiso de circulación 202630-09-2027vigente · faltan 317 díasReportadoAbrir respaldo",
+  "M-921SZZJ80-4SOAP 2026-2027 (Seguros Sura)30-09-2027vigente · faltan 317 díasReportadoAbrir respaldo"
+ ],
+ "obligacion": "OB-28 · No modificar unilateralmente el servicio ni el plan de trabajoCláusula y páginaBA 124 a), p. 44 · Bases administrativas y técnicas P.P. 060/2023 (versión legible, 127 pp.)FrecuenciaPermanentePlazo—Evidencia exigidaPlan de trabajo aprobado y comunicacionesCriterio de cumplimientoTodo cambio cuenta con autorización de la UTAcción ante una observaciónManifold (caso PS05)Nota—Abrir Bases administrativas y técnicas P.P. 060/2023 (versión legible, 127 pp.)Exigencia aplicable por períodoDesdeHastaExigenciaActo01-07-2024vigenteTexto de bases sin modificación identificada—Controles (0)Sin antecedentesHallazgos (1)Sin fecha · PS05 · Modificación unilateral del plan de trabajo (inicio domingo 5 de abril) · Abrir respaldoSanciones (1)PS05 · Cobro o descuento efectivoVer en la línea de tiempo",
+ "matriz": 40,
+ "flujos": {
+  "n": 3,
+  "pasos": 50,
+  "hechos": 15,
+  "activos": 3
+ },
+ "flujoPagoNavega": true,
+ "pendientes": "28 filas · tipos: Sanción, Pago, Vencimiento, Antecedente por verificar, Revisión, Error",
+ "errores": []
+}
