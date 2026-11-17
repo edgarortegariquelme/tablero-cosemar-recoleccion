@@ -10,7 +10,7 @@ const grupos = { libro_san: ['Sanción', 'Hallazgo'], libro_pag: ['Pago', 'Reaju
 const html = fs.readFileSync(T + 'index.html', 'utf8').replace(/<script src="[^"]+"><\/script>/g, '');
 const dom = new JSDOM('<!doctype html><div id="dash-root">' + html + '</div>', { runScripts: 'outside-only', pretendToBeVisual: true });
 const w = dom.window; w.d3 = require(S + 'd3');
-const errores = [], datasets = {}, loaders = {}, calcs = {}, draws = {}; let params = JSON.parse(fs.readFileSync(T + 'w_dash_params.json'));
+const errores = [], datasets = {}, loaders = {}, calcs = {}, draws = {}; let params = { historial: 'si' };
 Object.keys(grupos).forEach(k => { datasets[k] = { results: libro.filter(e => grupos[k].indexOf(e.modulo) >= 0).map(fila), has_more: false }; });
 datasets.catalogo = JSON.parse(fs.readFileSync(T + 'catalogo.json'));
 const cache = {};
