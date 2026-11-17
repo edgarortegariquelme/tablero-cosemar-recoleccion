@@ -154,32 +154,171 @@
   dash.draw('va_sync', function (el) { if (!listo(el, ['c_portada'])) return; var v = filas('c_portada')[0].ultimaSync; el.textContent = v ? fechaCL(v) : 'sin registro'; });
   dash.draw('va_hoy', function (el) { el.textContent = fechaCL(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date())); });
 
-  // ---------- 1 · esperado frente a tramitado por mes ----------
-  dash.draw('va_pagos', function (el) {
-    if (!listo(el, ['c_pagos'])) return;
-    var ps = filas('c_pagos').filter(function (p) { return !p.ajuste && p.periodo >= '2026-01'; });
-    el.replaceChildren(); if (!ps.length) { el.textContent = 'Sin meses de servicio en el libro'; return; }
-    var w = Math.max(320, el.clientWidth || 640), H = 260, m = { l: 64, r: 12, t: 16, b: 34 };
-    var x = d3.scaleBand().domain(ps.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.28);
-    var vals = []; ps.forEach(function (p) { [p.esperado, p.remitido, p.solicitadoOC].forEach(function (v) { if (v != null) vals.push(v); }); });
-    var lo = d3.min(vals) * 0.97, hi = d3.max(vals) * 1.01;
-    var y = d3.scaleLinear().domain([lo, hi]).nice().range([H - m.b, m.t]);
+  // ---------- alzas y deuda con Cosemar (pagos_contrato + alzas) ----------
+  dash.calc('c_deuda_mes', {
+    inputs: ['pagos_contrato', 'alzas'], title: 'Debido y tramitado por mes de servicio',
+    description: 'Para cada mes toma el valor bruto del último acto que rige (contrato y decretos; y aparte, contrato, decretos y bases sin decreto), lo compara con lo tramitado más el retroactivo asignado a ese mes y acumula lo que falta, descontando el retroactivo en el mes en que se remitió a pago.',
+    fn: function (pagos, alzas) {
+      function rige(p, capas) {
+        var a = alzas.filter(function (x) { return capas.indexOf(x.capa) >= 0 && x.rigeDesde && x.rigeDesde <= p && x.bruto != null; })
+          .sort(function (x, y) { return x.rigeDesde < y.rigeDesde ? -1 : x.rigeDesde > y.rigeDesde ? 1 : 0; });
+        return a[a.length - 1] || null;
+      }
+      var ps = pagos.slice().sort(function (x, y) { return x.periodo < y.periodo ? -1 : 1; });
+      var retroPagos = {}; ps.forEach(function (p) { if (p.ajusteRetro && p.ajusteRetroPagadoEn) retroPagos[p.ajusteRetroPagadoEn] = (retroPagos[p.ajusteRetroPagadoEn] || 0) + Number(p.ajusteRetro); });
+      var accD = 0, accB = 0;
+      return ps.map(function (p) {
+        var d = rige(p.periodo, ['Contrato', 'Decreto']), b = rige(p.periodo, ['Contrato', 'Decreto', 'Bases sin decreto']);
+        var tram = Number(p.tramitado) || 0, retro = Number(p.ajusteRetro) || 0, multa = Number(p.multa) || 0;
+        var dD = d ? d.bruto : null, dB = b ? b.bruto : null;
+        accD += (dD || 0) - tram; accD -= retroPagos[p.periodo] || 0; accB += (dB || 0) - (dD || 0);
+        return { periodo: p.periodo, anio: p.anio, estado: p.estado, debidoDecreto: dD, actoDecreto: d ? d.acto : null, debidoBases: dB, actoBases: b ? b.acto : null,
+          tramitado: tram, ajusteRetro: retro, multa: multa, pagoNeto: tram - multa,
+          deltaDecreto: (dD || 0) - tram - retro, deltaBases: (dB || 0) - (dD || 0),
+          deudaVivaDecreto: accD, deudaVivaBases: accB, memo: p.memo, factura: p.factura, oc: p.oc, respaldo: p.respaldo, nota: p.nota };
+      });
+    }
+  });
+  dash.calc('c_deuda_anual', {
+    inputs: ['c_deuda_mes'], title: 'Resumen de deuda por año',
+    description: 'Suma por año de servicio lo debido según decretos, lo tramitado con el retroactivo asignado, las multas descontadas y lo adeudado por decretos y adicional según bases; agrega una fila Total.',
+    fn: function (meses) {
+      var by = {}, orden = [];
+      function fila(k) { return { clave: k, meses: 0, debidoDecreto: 0, tramitado: 0, multa: 0, deudaDecreto: 0, deudaBases: 0, deudaTotal: 0 }; }
+      var tot = fila('Total');
+      meses.forEach(function (m) {
+        var k = String(m.anio); if (!by[k]) { by[k] = fila(k); orden.push(k); }
+        [by[k], tot].forEach(function (r) { r.meses++; r.debidoDecreto += m.debidoDecreto || 0; r.tramitado += m.tramitado + m.ajusteRetro; r.multa += m.multa; r.deudaDecreto += m.deltaDecreto; r.deudaBases += m.deltaBases; r.deudaTotal += m.deltaDecreto + m.deltaBases; });
+      });
+      return orden.map(function (k) { return by[k]; }).concat([tot]);
+    }
+  });
+  dash.calc('c_deuda_resumen', {
+    inputs: ['c_deuda_mes'], title: 'Deuda con Cosemar a la fecha',
+    description: 'Último mes de servicio registrado, total tramitado, lo adeudado por decretos y según bases, lo que se suma cada mes sin regularizar y el retroactivo remitido a pago.',
+    fn: function (meses) {
+      if (!meses.length) return [];
+      var u = meses[meses.length - 1], s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); };
+      var dD = s('deltaDecreto'), dB = s('deltaBases');
+      return [{ ultimoMes: u.periodo, tramitadoTotal: s('tramitado') + s('ajusteRetro'), deudaDecreto: dD, deudaBases: dB, deudaTotal: dD + dB,
+        mensualDecreto: (u.debidoDecreto || 0) - u.tramitado, mensualBases: u.deltaBases, retroTramitado: s('ajusteRetro'), multas: s('multa') }];
+    }
+  });
+
+  var MESL = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  function mesLargo(p) { var x = String(p).split('-'); return MESL[+x[1] - 1] + ' de ' + x[0]; }
+  function R(id, f, fmt) { dash.draw(id, function (el) { if (!listo(el, ['c_deuda_resumen'])) return; var r = filas('c_deuda_resumen')[0]; el.textContent = r ? fmt(r[f]) : '—'; }); }
+  R('vd_ultimo', 'ultimoMes', mesLargo); R('vd_tram', 'tramitadoTotal', clp); R('vd_dec', 'deudaDecreto', clp); R('vd_bases', 'deudaBases', clp);
+  R('vd_mesdec', 'mensualDecreto', clp); R('vd_mesbases', 'mensualBases', clp); R('vd_dec2', 'deudaDecreto', clp); R('vd_bases2', 'deudaBases', clp);
+  R('vd_total', 'deudaTotal', clp); R('vd_retro', 'retroTramitado', clp);
+  dash.draw('vd_k1', function (el) { el.style.background = dash.colors[0]; });
+  function mill(v) { return '$' + (v / 1e6).toFixed(1).replace('.', ',') + ' M'; }
+
+  // Escalera de precios: debido por decreto, según bases y tramitado.
+  dash.draw('vd_escalera', function (el) {
+    if (!listo(el, ['c_deuda_mes', 'alzas'])) return;
+    var ms = filas('c_deuda_mes'), al = filas('alzas');
+    el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = w < 520 ? 300 : 340, m = { l: 62, r: 14, t: 40, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).paddingInner(0);
+    var vals = []; ms.forEach(function (p) { vals.push(p.debidoDecreto, p.debidoBases, p.tramitado); });
+    var y = d3.scaleLinear().domain([d3.min(vals) * 0.985, d3.max(vals) * 1.012]).range([H - m.b, m.t]);
     var box = d3.select(el).append('div').attr('class', 'va-box');
-    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Valor esperado según decreto y monto tramitado por mes de servicio');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img')
+      .attr('aria-label', 'Valor mensual bruto debido según decretos y según bases, y monto tramitado, por mes de servicio desde julio de 2024');
     svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(5).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
-    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickFormat(mesTxt));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')')
+      .call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    var x0 = function (p) { return x(p.periodo); }, x1 = function (p) { return x(p.periodo) + x.bandwidth(); };
+    // Franjas de diferencia
+    svg.append('g').selectAll('rect').data(ms.filter(function (p) { return p.debidoDecreto > p.tramitado; })).join('rect')
+      .attr('x', x0).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.debidoDecreto); }).attr('height', function (p) { return y(p.tramitado) - y(p.debidoDecreto); })
+      .style('fill', function (p) { return p.deltaDecreto > 1000 ? 'var(--color-bad)' : 'var(--cds-chart-muted)'; }).style('opacity', 0.28);
+    svg.append('g').selectAll('rect').data(ms.filter(function (p) { return p.deltaBases > 0; })).join('rect')
+      .attr('x', x0).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.debidoBases); }).attr('height', function (p) { return y(p.debidoDecreto) - y(p.debidoBases); })
+      .style('fill', 'var(--color-warn)').style('opacity', 0.3);
+    // Escalones
+    function escalon(f) { var pts = []; ms.forEach(function (p) { pts.push([x0(p), y(p[f])], [x1(p), y(p[f])]); }); return d3.line()(pts); }
+    svg.append('path').attr('d', escalon('debidoBases')).style('fill', 'none').style('stroke', 'var(--color-warn)').style('stroke-width', 2).style('stroke-dasharray', '5 4');
+    svg.append('path').attr('d', escalon('debidoDecreto')).style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 2.5);
+    // Tramitado
+    var cx = function (p) { return x(p.periodo) + x.bandwidth() / 2; };
+    svg.append('path').attr('d', d3.line().x(cx).y(function (p) { return y(p.tramitado); })(ms)).style('fill', 'none').style('stroke', dash.colors[0]).style('stroke-width', 1.5);
+    svg.append('g').selectAll('circle.r').data(ms.filter(function (p) { return p.ajusteRetro > 0; })).join('circle').attr('cx', cx).attr('cy', function (p) { return y(p.tramitado + p.ajusteRetro); }).attr('r', 4)
+      .style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 1.5);
+    svg.append('g').selectAll('circle.t').data(ms).join('circle').attr('cx', cx).attr('cy', function (p) { return y(p.tramitado); }).attr('r', 3.5)
+      .style('fill', function (p) { return p.estado === 'OC solicitada' ? 'var(--color-bg)' : dash.colors[0]; }).style('stroke', dash.colors[0]).style('stroke-width', 1.5);
+    // Rótulos de cada alza (donde cambia un escalón)
+    var marcas = [];
+    ms.forEach(function (p, i) {
+      var prev = ms[i - 1];
+      if (prev && p.debidoDecreto !== prev.debidoDecreto) marcas.push({ p: p, v: p.debidoDecreto, d: p.debidoDecreto - prev.debidoDecreto, acto: p.actoDecreto, tono: 'var(--color-fg)' });
+      if (prev && p.debidoBases !== prev.debidoBases && p.debidoBases !== p.debidoDecreto) marcas.push({ p: p, v: p.debidoBases, d: p.debidoBases - p.debidoDecreto, acto: 'IPC 4,3% sin decreto', tono: 'var(--color-warn)' });
+    });
+    var lab = svg.append('g').selectAll('g').data(marcas).join('g');
+    lab.append('line').attr('x1', function (k) { return x0(k.p); }).attr('x2', function (k) { return x0(k.p); }).attr('y1', function (k) { return y(k.v); }).attr('y2', function (k, i) { return 12 + (i % 3) * 12; })
+      .style('stroke', 'var(--cds-chart-grid)');
+    lab.append('text').attr('class', 'va-lab').attr('x', function (k) { return x0(k.p) + 3; }).attr('y', function (k, i) { return 12 + (i % 3) * 12; }).style('fill', function (k) { return k.tono; })
+      .attr('text-anchor', function (k) { return x0(k.p) > w * 0.62 ? 'end' : 'start'; }).attr('dx', function (k) { return x0(k.p) > w * 0.62 ? -6 : 0; })
+      .text(function (k) { return k.acto.replace('/2026', '') + ' +' + mill(k.d); });
+    // Tooltip
     var t = tip(box);
-    var tram = function (p) { return p.remitido != null ? p.remitido : p.solicitadoOC; };
-    svg.append('g').selectAll('rect').data(ps).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
-      .attr('y', function (p) { return tram(p) == null ? m.t : y(tram(p)); }).attr('height', function (p) { return tram(p) == null ? H - m.b - m.t : H - m.b - y(tram(p)); })
-      .style('fill', function (p) { return tram(p) == null ? 'none' : dash.colors[0]; }).style('stroke', function (p) { return tram(p) == null ? 'var(--cds-chart-muted)' : 'none'; }).style('stroke-dasharray', '3 3')
-      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesTxt(p.periodo) + ' · tramitado ' + (tram(p) == null ? 'sin monto en el libro' : clp(tram(p))) + ' · esperado ' + (p.esperado == null ? 'sin decreto cargado' : clp(p.esperado) + ' (' + p.actoEsperado + ')') + ' · ' + p.estado); })
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', x0).attr('width', x.bandwidth()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) {
+        showTip(t, el, ev, mesLargo(p.periodo) + ' · tramitado ' + clp(p.tramitado) + (p.estado === 'OC solicitada' ? ' (OC pedida)' : '') + (p.ajusteRetro ? ' + retroactivo ' + clp(p.ajusteRetro) : '') +
+          ' · debido ' + clp(p.debidoDecreto) + ' (' + p.actoDecreto + ')' + (p.deltaBases ? ' · según bases ' + clp(p.debidoBases) : '') +
+          (p.deltaDecreto > 0 ? ' · adeudado ' + clp(p.deltaDecreto) : '') + (p.multa ? ' · multa descontada ' + clp(p.multa) : '') + ' · ' + p.memo + (p.nota ? ' · ' + p.nota : ''));
+      })
       .on('pointerleave', function () { t.attr('hidden', ''); });
-    var esp = ps.filter(function (p) { return p.esperado != null; });
-    svg.append('g').selectAll('line').data(esp).join('line').attr('x1', function (p) { return x(p.periodo) - x.step() * 0.12; }).attr('x2', function (p) { return x(p.periodo) + x.bandwidth() + x.step() * 0.12; })
-      .attr('y1', function (p) { return y(p.esperado); }).attr('y2', function (p) { return y(p.esperado); }).style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 2.5);
-    svg.append('g').selectAll('text').data(ps.filter(function (p) { return p.diferencia > 0; })).join('text').attr('class', 'va-lab va-bad')
-      .attr('x', function (p) { return x(p.periodo) + x.bandwidth() / 2; }).attr('y', function (p) { return y(p.esperado) - 6; }).attr('text-anchor', 'middle').text(function (p) { return '−' + (p.diferencia / 1e6).toFixed(1).replace('.', ',') + ' M'; });
+  });
+
+  // Deuda viva acumulada.
+  dash.draw('vd_acum', function (el) {
+    if (!listo(el, ['c_deuda_mes'])) return;
+    var ms = filas('c_deuda_mes'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = 220, m = { l: 62, r: 14, t: 14, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.15);
+    var y = d3.scaleLinear().domain([0, d3.max(ms, function (p) { return Math.max(0, p.deudaVivaDecreto) + p.deudaVivaBases; }) * 1.1 || 1]).nice().range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Deuda acumulada con Cosemar por decretos y adicional según bases, a cada mes');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    var dv = function (p) { return Math.max(0, p.deudaVivaDecreto); };
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
+      .attr('y', function (p) { return y(dv(p)); }).attr('height', function (p) { return H - m.b - y(dv(p)); }).style('fill', 'var(--color-bad)').style('opacity', 0.6);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
+      .attr('y', function (p) { return y(dv(p) + p.deudaVivaBases); }).attr('height', function (p) { return y(dv(p)) - y(dv(p) + p.deudaVivaBases); }).style('fill', 'var(--color-warn)').style('opacity', 0.6);
+    var pico = ms.reduce(function (a, p) { return dv(p) > dv(a) ? p : a; }, ms[0]), ult = ms[ms.length - 1];
+    [pico, ult].filter(function (p, i, a) { return dv(p) + p.deudaVivaBases > 0 && a.indexOf(p) === i; }).forEach(function (p) {
+      var v = dv(p) + p.deudaVivaBases, xx = x(p.periodo) + x.bandwidth() / 2;
+      svg.append('text').attr('class', 'va-lab').attr('x', xx).attr('y', y(v) - 4).attr('text-anchor', xx > w * 0.8 ? 'end' : 'middle').text(mill(v));
+    });
+    var t = tip(box);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · por decretos ' + clp(dv(p)) + (p.deudaVivaBases ? ' · adicional según bases ' + clp(p.deudaVivaBases) : '')); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  dash.draw('vd_anual', function (el) {
+    if (!listo(el, ['c_deuda_anual'])) return;
+    el.replaceChildren.apply(el, filas('c_deuda_anual').map(function (r) {
+      var tot = r.clave === 'Total', c = function (v, cls) { return h('td', { cls: 'va-num va-r' + (cls ? ' ' + cls : ''), text: clp(v) }); };
+      return h('tr', { 'data-key': encodeURIComponent(r.clave), style: tot ? 'font-weight:600' : null }, [h('td', { text: r.clave === 'Total' ? 'Total a la fecha' : r.clave }), h('td', { cls: 'va-num va-r', text: String(r.meses) }),
+        c(r.debidoDecreto), c(r.tramitado), c(r.multa), c(r.deudaDecreto, r.deudaDecreto > 1000 ? 'va-deuda' : ''), c(r.deudaBases, r.deudaBases > 0 ? 'va-ipc' : ''), c(r.deudaTotal)]);
+    }));
+  });
+
+  dash.draw('vd_alzas', function (el) {
+    if (!listo(el, ['alzas'])) return;
+    var tono = function (e) { return /Ejecutado|Vigente/.test(e) ? 'ok' : /no aplicado|sin decreto|Sin decreto|suspendido|Sin firmas|Sin respuesta/i.test(e) ? 'bad' : /Concordada|Devengado|Remitido/.test(e) ? 'warn' : ''; };
+    el.replaceChildren.apply(el, filas('alzas').map(function (a) {
+      return h('tr', { 'data-key': encodeURIComponent(a.id) }, [h('td', { cls: 'va-num', text: fechaCL(a.fecha) }), h('td', { text: a.tipo }), h('td', null, [h('b', { text: a.acto })]), h('td', { text: a.efecto }),
+        h('td', { cls: 'va-num va-r', text: a.bruto == null ? '—' : clp(a.bruto) }), h('td', { cls: 'va-num', text: a.rigeDesde ? mesTxt(a.rigeDesde) : '—' }),
+        h('td', null, [h('span', { cls: 'va-chip' + (tono(a.estado) ? ' va-chip-' + tono(a.estado) : ''), text: a.estado })]),
+        h('td', null, [a.respaldo ? h('a', { href: a.respaldo, target: '_blank', rel: 'noopener', text: 'Abrir' }) : h('span', { cls: 'va-muted', text: 'Sin respaldo' })])]);
+    }));
   });
 
   // ---------- 2 · dónde está detenido cada pago ----------
@@ -263,7 +402,6 @@
     var actos = ps.map(function (p) { return p.actoEsperado; }).filter(function (a, i, x) { return a && x.indexOf(a) === i; });
     el.textContent = ' Corresponde a ' + ps.map(function (p) { return mesTxt(p.periodo); }).join(', ') + ', meses en que rige el ' + actos.join(' y ') + ' pero se tramitó un valor menor.';
   });
-  dash.draw('va_k1', function (el) { el.style.background = dash.colors[0]; });
 
   // ---------- al pie: pendientes ----------
   dash.draw('va_pend', function (el) {
