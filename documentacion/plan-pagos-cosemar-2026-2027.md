@@ -1,5 +1,32 @@
 # Plan de pago COSEMAR — diciembre 2026 a marzo 2027
 
+## Actualización vigente del flujo de caja · 17-11-2026
+
+Recuperada de Notion («Plan de pago COSEMAR · diciembre 2026 a marzo 2027», editada el 17-11-2026). **Sustituye el calendario anterior**, que se conserva más abajo solo como historial y no debe usarse para programar desembolsos. Respecto del calendario diciembre 2026–diciembre 2027 anterior, el único cambio es trasladar el IPC acumulado de marzo a febrero de 2027.
+
+| Mes de pago | Servicio o concepto pagado | Total bruto |
+| --- | --- | ---: |
+| Diciembre 2026 | Aumento poblacional 2026 (jul–dic, D.A. 3.957) | $37.035.498 |
+| Enero 2027 | Sin desembolso programado | $0 |
+| Febrero 2027 | Octubre 2026 + IPC acumulado julio–diciembre 2026 | $329.303.417 |
+| Marzo 2027 | Noviembre y diciembre 2026 | $523.534.846 |
+| Abril 2027 | Enero y febrero 2027 | $558.392.010 |
+| Mayo 2027 | Marzo 2027 | $279.196.005 |
+| Junio 2027 | Abril 2027 | $279.196.005 |
+| Julio 2027 | Mayo y junio 2027 | $558.392.010 |
+| Agosto 2027 | Julio 2027 | $279.196.005 |
+| Septiembre 2027 | Agosto 2027 | $279.196.005 |
+| Octubre 2027 | Septiembre 2027 | $279.196.005 |
+| Noviembre 2027 | Octubre 2027 | $279.196.005 |
+| Diciembre 2027 | Noviembre 2027 | $279.196.005 |
+| **TOTAL** | | **$3.961.029.816** |
+
+**Conciliación:** 3 mensualidades 2026 × $261.767.423 = $785.302.269; 11 mensualidades 2027 × $279.196.005 = $3.071.156.055; aumento poblacional $37.035.498; IPC histórico $67.535.994. Total $3.961.029.816 (el total de $3.560.029.816 comunicado antes era un error de suma). La mensualidad de diciembre 2027 no está incluida. Montos sujetos a conciliación documental, disponibilidad presupuestaria y formalización del reajuste.
+
+---
+
+## Historial: calendario anterior (no vigente)
+
 **Contrato:** Recolección RSD P.P. 060/2023, ID 3447-86-LR23. **Estado:** programación financiera propuesta; no constituye acreditación de pago ni aprobación presupuestaria o contractual. **Registro:** 17-11-2026.
 
 ## Criterio acordado
