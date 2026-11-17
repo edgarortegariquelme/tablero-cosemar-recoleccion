@@ -70,8 +70,9 @@
   <div id="graf-escalera" data-draw="vd_escalera" data-source="c_deuda_mes alzas">—</div>
   <div class="va-legend"><span><span class="va-key va-k-line"></span>Debido según decretos</span><span><span class="va-key va-k-dash"></span>Debido según bases</span><span><span class="va-key va-k-dot" data-draw="vd_k1"></span>Tramitado</span><span><span class="va-key va-k-ring"></span>Retroactivo pagado después</span><span><span class="va-key va-k-deuda"></span>Adeudado por decreto</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
 
-  <h4 id="h-acumulado">Deuda acumulada con Cosemar a cada fecha</h4>
-  <p class="va-muted">Suma de lo que faltó pagar mes a mes. La deuda del primer reajuste creció de julio de 2025 a marzo de 2026 y se saldó con el retroactivo remitido en junio de 2026; desde julio de 2026 vuelve a crecer.</p>
+  <h4 id="h-acumulado">Deuda acumulada con Cosemar a cada fecha, y hasta junio de 2027 si no se regulariza</h4>
+  <p class="va-muted">Suma de lo que faltó pagar mes a mes. La deuda del primer reajuste creció de julio de 2025 a marzo de 2026 y se saldó con el retroactivo remitido en junio de 2026; desde julio de 2026 vuelve a crecer. Las barras claras proyectan la diferencia mensual de hoy hasta el cierre del segundo año del contrato.</p>
+  <p>Si nada cambia, a <b data-draw="vd_proyhasta" data-source="c_deuda_resumen" data-field="proyHasta" data-row="0">—</b> (<span data-draw="vd_proymeses" data-source="c_deuda_resumen" data-field="proyMeses" data-row="0">—</span> meses más) la deuda llegaría a <b class="va-deuda" data-draw="vd_proydec" data-source="c_deuda_resumen" data-field="proyDecreto" data-row="0">—</b> por decretos y <b class="va-ipc" data-draw="vd_proybases" data-source="c_deuda_resumen" data-field="proyBases" data-row="0">—</b> según bases: <b data-draw="vd_proytotal" data-source="c_deuda_resumen" data-field="proyTotal" data-row="0">—</b> en total, sin contar el reajuste del tercer año que rige desde julio de 2027.</p>
   <div id="graf-acumulado" data-draw="vd_acum" data-source="c_deuda_mes">—</div>
   <div class="va-legend"><span><span class="va-key va-k-deuda"></span>Por decretos</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
 
