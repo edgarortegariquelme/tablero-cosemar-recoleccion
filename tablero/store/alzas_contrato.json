@@ -1,0 +1,213 @@
+{
+ "rows": [
+  {
+   "id": "A01",
+   "fecha": "2023-09-05",
+   "tipo": "Bases",
+   "acto": "D.A. 6.424/2023 · Bases art. 9 BA y art. 64 BT",
+   "efecto": "Reajuste anual por IPC sobre sueldos y combustible (art. 9 BA) y aumento por viviendas nuevas, 0,065 UTM por vivienda (art. 64 BT).",
+   "neto": null,
+   "bruto": null,
+   "rigeDesde": null,
+   "estado": "Vigente",
+   "capa": "Mecanismo",
+   "respaldo": "https://drive.google.com/file/d/1J4Lv8tlB89BBV4zbpJRV_vY77kzpmyg4/view"
+  },
+  {
+   "id": "A02",
+   "fecha": "2024-06-28",
+   "tipo": "Contrato",
+   "acto": "D.A. 5.665/2024 · contrato",
+   "efecto": "Valor mensual original desde el 01-07-2024.",
+   "neto": 205561744,
+   "bruto": 244618475,
+   "rigeDesde": "2024-07",
+   "estado": "Vigente hasta mar-2026",
+   "capa": "Contrato",
+   "respaldo": "https://drive.google.com/file/d/1FbmAP0IpXkvuVtxjyAaSsYGKmltIKTCa/view"
+  },
+  {
+   "id": "A03",
+   "fecha": "2025-07-22",
+   "tipo": "Carta Cosemar",
+   "acto": "Carta Cosemar 22-07-2025",
+   "efecto": "Pide IPC 4,1% (jun-24 a jun-25) según art. 9.",
+   "neto": 213989776,
+   "bruto": 254647833,
+   "rigeDesde": "2025-07",
+   "estado": "Superada por el D.A. 2.459",
+   "capa": "Solicitud",
+   "respaldo": "https://drive.google.com/file/d/1KF2tno9T3kaK7NrnMC4roXbPb5lJ_hL-/view"
+  },
+  {
+   "id": "A04",
+   "fecha": "2025-10-09",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 1799/2025",
+   "efecto": "Pide decreto por IPC 4,3% más 1.100 viviendas. No prosperó: saldo presupuestario negativo 2025.",
+   "neto": 219033587,
+   "bruto": 260649966,
+   "rigeDesde": null,
+   "estado": "No prosperó",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1KF2tno9T3kaK7NrnMC4roXbPb5lJ_hL-/view"
+  },
+  {
+   "id": "A05",
+   "fecha": "2025-12-31",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 2245/2025",
+   "efecto": "Pide decreto por IPC 4,3% más 1.533 viviendas y pago de diferencias ago–dic 2025. Superado.",
+   "neto": 221364988,
+   "bruto": 263424336,
+   "rigeDesde": null,
+   "estado": "No prosperó",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/16pLkdeWAAIwTzLhL6lyGh_9Ptfcjb91u/view"
+  },
+  {
+   "id": "A06",
+   "fecha": "2026-04-24",
+   "tipo": "Decreto",
+   "acto": "D.A. 2.459/2026",
+   "efecto": "IPC 4,1% más 1.317 viviendas ($5.982.849 neto). Rige desde jul-2025: autoriza pagar 9 meses de diferencia (jul-25 a mar-26) y fija el valor desde abr-2026.",
+   "neto": 219972624,
+   "bruto": 261767423,
+   "rigeDesde": "2025-07",
+   "estado": "Ejecutado",
+   "capa": "Decreto",
+   "respaldo": "https://drive.google.com/drive/folders/122zU1bsRlvC_jVNQFqdZMW2kVyYhXfzo"
+  },
+  {
+   "id": "A07",
+   "fecha": "2026-06-18",
+   "tipo": "Pago",
+   "acto": "Memo 1300/2026 · factura 50.836",
+   "efecto": "Pide pagar $154.340.525 por las diferencias jul-2025 a mar-2026 (OC 3447-1654-SE26).",
+   "neto": null,
+   "bruto": 154340525,
+   "rigeDesde": null,
+   "estado": "Remitido a pago",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1EaEx2N4cNVFjM3SbbiqUPY8IoaIu_x2p/view"
+  },
+  {
+   "id": "A08",
+   "fecha": "2026-07-02",
+   "tipo": "Decreto",
+   "acto": "D.A. 3.957/2026",
+   "efecto": "1.116 viviendas nuevas (72,54 UTM = $5.187.045 neto) desde el 01-07-2026. Decretado; OC y facturas siguen al valor anterior.",
+   "neto": 225159669,
+   "bruto": 267940006,
+   "rigeDesde": "2026-07",
+   "estado": "Decretado, no aplicado",
+   "capa": "Decreto",
+   "respaldo": "https://drive.google.com/file/d/1FZho0ukoYZ65ogCziTYOub3AJS7EAj4n/view"
+  },
+  {
+   "id": "A09",
+   "fecha": "2026-07-10",
+   "tipo": "Carta Cosemar",
+   "acto": "Carta Cosemar 10-07-2026",
+   "efecto": "Pide IPC 4,3% (jun-25 a jun-26) por art. 9. Calculó sobre $213.989.776; corrigió el 14-07-2026 a la base decretada y coincide con DMAO.",
+   "neto": 229431447,
+   "bruto": 273023422,
+   "rigeDesde": "2026-07",
+   "estado": "Concordada, sin decreto",
+   "capa": "Solicitud",
+   "respaldo": "https://drive.google.com/file/d/1g3l6kVOd8r6gtrjAn9YMx1DK1nEfGdDM/view"
+  },
+  {
+   "id": "A10",
+   "fecha": "2026-07-15",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 1490/2026",
+   "efecto": "Pide al Secretario Municipal decretar el IPC 4,3%.",
+   "neto": 229431447,
+   "bruto": 273023422,
+   "rigeDesde": null,
+   "estado": "Sin decreto",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1Da-AjzMRSSdZ0e4KAbyGGCvpaz8tgTbr/view"
+  },
+  {
+   "id": "A11",
+   "fecha": "2026-07-27",
+   "tipo": "Anexo",
+   "acto": "Anexo de contrato de reajuste (sin firmas)",
+   "efecto": "Borrador del anexo que formaliza los reajustes; sin firmas. El PDF es imagen: montos por verificar.",
+   "neto": null,
+   "bruto": null,
+   "rigeDesde": null,
+   "estado": "Sin firmas",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/14G0B8wbya6PZXHCbno-vowayhi48Qd4Y/view"
+  },
+  {
+   "id": "A12",
+   "fecha": "2026-09-01",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 1798/2026",
+   "efecto": "Pide a la Administración gestionar con Cosemar no aplicar el IPC 2026 por falta de presupuesto. Sin acuerdo escrito.",
+   "neto": null,
+   "bruto": null,
+   "rigeDesde": null,
+   "estado": "Sin respuesta formal",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1c0ZXfhg83M3qxeXwiT2_lgU2SRcYmP5K/view"
+  },
+  {
+   "id": "A13",
+   "fecha": "2026-10-02",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 2013/2026",
+   "efecto": "Reitera la solicitud de decreto y cuantifica las diferencias devengadas desde jul-2026.",
+   "neto": 229431447,
+   "bruto": 273023422,
+   "rigeDesde": null,
+   "estado": "Sin decreto",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1g3l6kVOd8r6gtrjAn9YMx1DK1nEfGdDM/view"
+  },
+  {
+   "id": "A14",
+   "fecha": "2026-10-16",
+   "tipo": "Bases sin decreto",
+   "acto": "Memo 2097/2026 · IPC 4,3% sobre el D.A. 3.957",
+   "efecto": "Valor que corresponde según art. 9 BA: IPC 4,3% ($9.458.823 neto) más el componente de viviendas del D.A. 3.957. Pide anexo y decreto a Jurídico.",
+   "neto": 234618492,
+   "bruto": 279196005,
+   "rigeDesde": "2026-07",
+   "estado": "Devengado, sin decreto",
+   "capa": "Bases sin decreto",
+   "respaldo": "https://drive.google.com/file/d/15aL2kZK2d9Yf94NcxwQrCPQD9rSXzG7o/view"
+  },
+  {
+   "id": "A15",
+   "fecha": "2026-11-13",
+   "tipo": "Memo DMAO",
+   "acto": "Respuesta a Jurídico (13-11-2026)",
+   "efecto": "DAF no emite certificado presupuestario (saldo negativo). Pide confirmar por escrito que el anexo de reajuste queda suspendido y consolidar anexos.",
+   "neto": null,
+   "bruto": null,
+   "rigeDesde": null,
+   "estado": "Anexo suspendido",
+   "capa": "Trámite",
+   "respaldo": "https://drive.google.com/file/d/1vMOv4FLFO-oOIyYnhbd7O_xYNAlzdCkn/view"
+  }
+ ],
+ "meta": [
+  {
+   "label": "Fuente",
+   "value": "Bases, contrato, decretos 2.459 y 3.957/2026, memos DMAO y cartas de Cosemar citadas en ellos"
+  },
+  {
+   "label": "Leído",
+   "value": "17-11-2026, desde Google Drive"
+  },
+  {
+   "label": "Generado por",
+   "value": "datos/historico_pagos.js (repositorio tablero-cosemar-recoleccion)"
+  }
+ ]
+}

@@ -32,6 +32,21 @@
 .va-tbl th { text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; white-space: nowrap; }
 .va-tbl td { border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; vertical-align: top; }
 .va-tbl a { color: var(--color-fg); }
+.va h4 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-lg) 0 var(--cds-gap-xs); text-wrap: balance; }
+.va-sec { margin-top: var(--cds-gap-xl); }
+.va-deuda { color: var(--color-bad); }
+.va-ipc { color: var(--color-warn); }
+.va-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--cds-gap-md); margin: var(--cds-gap-md) 0; }
+.va-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); font-size: var(--cds-font-size-caption); }
+.va-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; margin: 4px 0; }
+.va-k-dash { height: 0; border-top: 2px dashed var(--color-warn); background: none; vertical-align: 3px; }
+.va-k-dot { border-radius: 50%; }
+.va-k-ring { border-radius: 50%; background: none; border: 2px solid var(--cds-chart-reference); width: 8px; height: 8px; }
+.va-k-deuda { background: var(--color-bad); opacity: .35; }
+.va-k-ipc { background: var(--color-warn); opacity: .35; }
+.va-chip { display: inline-block; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--color-border-line); white-space: nowrap; }
+.va-chip-ok { color: var(--color-ok); } .va-chip-bad { color: var(--color-bad); } .va-chip-warn { color: var(--color-warn); }
+.va-tbl td.va-r, .va-tbl th.va-r { text-align: right; }
 .va details summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); margin-top: var(--cds-gap-xl); }
 </style>
 
@@ -41,10 +56,43 @@
   <p>El libro de control registra <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio, de los cuales <b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> no tienen monto cargado. La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
   <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
 
-  <h3 id="h-pagos">Lo tramitado cada mes frente al valor que fija el decreto vigente</h3>
-  <p class="va-muted">Barras: monto del memo de pago, o de la solicitud de OC si aún no hay memo. Raya: valor mensual bruto del decreto vigente en ese mes. Marco punteado: mes sin monto en el libro.</p>
-  <div id="graf-pagos" data-draw="va_pagos" data-source="c_pagos">—</div>
-  <div class="va-legend"><span><span class="va-key" data-draw="va_k1"></span>Tramitado</span><span><span class="va-key va-k-line"></span>Esperado según decreto</span></div>
+  <section id="alzas" class="va-sec">
+  <h3 id="h-alzas">Lo que se debió pagar a Cosemar cada mes y lo que se tramitó, desde el inicio del contrato</h3>
+  <p>Entre julio de 2024 y <b data-draw="vd_ultimo" data-source="c_deuda_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vd_tram" data-source="c_deuda_resumen" data-field="tramitadoTotal" data-row="0">—</b>, retroactivo incluido. Por decretos dictados y no aplicados el municipio adeuda <b class="va-deuda" data-draw="vd_dec" data-source="c_deuda_resumen" data-field="deudaDecreto" data-row="0">—</b>, y las bases (art. 9) suman <b class="va-ipc" data-draw="vd_bases" data-source="c_deuda_resumen" data-field="deudaBases" data-row="0">—</b> más por el IPC que Cosemar pidió y que no tiene decreto. Cada mes sin regularizar agrega <b data-draw="vd_mesdec" data-source="c_deuda_resumen" data-field="mensualDecreto" data-row="0">—</b> y <b data-draw="vd_mesbases" data-source="c_deuda_resumen" data-field="mensualBases" data-row="0">—</b>, respectivamente.</p>
+  <div class="va-cards">
+    <div class="va-card" id="card-dec"><div class="va-eyebrow">Adeudado por decretos</div><div class="va-big va-deuda" data-draw="vd_dec2" data-source="c_deuda_resumen" data-field="deudaDecreto" data-row="0">—</div><div class="va-muted">D.A. 3.957/2026 rige desde julio de 2026; las OC siguen al valor del D.A. 2.459. Incluye $7 de redondeo entre el retroactivo decretado y la suma de las diferencias mensuales.</div></div>
+    <div class="va-card" id="card-bases"><div class="va-eyebrow">Adicional según bases, sin decreto</div><div class="va-big va-ipc" data-draw="vd_bases2" data-source="c_deuda_resumen" data-field="deudaBases" data-row="0">—</div><div class="va-muted">IPC 4,3% del segundo año, pedido por carta de Cosemar del 10-07-2026 y concordado; el anexo está suspendido por falta de certificado presupuestario.</div></div>
+    <div class="va-card" id="card-total"><div class="va-eyebrow">Total que Cosemar puede exigir</div><div class="va-big" data-draw="vd_total" data-source="c_deuda_resumen" data-field="deudaTotal" data-row="0">—</div><div class="va-muted">Retroactivo del D.A. 2.459 ya remitido a pago: <span data-draw="vd_retro" data-source="c_deuda_resumen" data-field="retroTramitado" data-row="0">—</span> (factura 50.836).</div></div>
+  </div>
+
+  <h4 id="h-escalera">Valor mensual bruto: decretado, según bases y tramitado</h4>
+  <p class="va-muted">Cada escalón es un alza. Línea continua: valor que fijan el contrato y los decretos vigentes en ese mes. Línea punteada: valor que corresponde según las bases si se decreta el IPC pedido por Cosemar. Puntos: monto del memo de pago (o de la OC pedida); el anillo sobre el punto es la diferencia pagada después como retroactivo. Rojo: adeudado por decreto. Ámbar: adicional según bases. Gris: diferencia ya saldada con el retroactivo del D.A. 2.459.</p>
+  <div id="graf-escalera" data-draw="vd_escalera" data-source="c_deuda_mes alzas">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-line"></span>Debido según decretos</span><span><span class="va-key va-k-dash"></span>Debido según bases</span><span><span class="va-key va-k-dot" data-draw="vd_k1"></span>Tramitado</span><span><span class="va-key va-k-ring"></span>Retroactivo pagado después</span><span><span class="va-key va-k-deuda"></span>Adeudado por decreto</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
+
+  <h4 id="h-acumulado">Deuda acumulada con Cosemar a cada fecha</h4>
+  <p class="va-muted">Suma de lo que faltó pagar mes a mes. La deuda del primer reajuste creció de julio de 2025 a marzo de 2026 y se saldó con el retroactivo remitido en junio de 2026; desde julio de 2026 vuelve a crecer.</p>
+  <div id="graf-acumulado" data-draw="vd_acum" data-source="c_deuda_mes">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-deuda"></span>Por decretos</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
+
+  <h4 id="h-anual">Resumen de deuda por año</h4>
+  <p class="va-muted">Montos brutos con IVA por mes de servicio. El retroactivo se cuenta en el año del servicio al que corresponde. La multa descontada no es deuda: se muestra aparte.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-anual" data-source="c_deuda_anual" data-row-key="clave">
+      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="debidoDecreto">Debido según decretos</th><th data-field="tramitado">Tramitado (mensual + retroactivo)</th><th data-field="multa">Multas descontadas</th><th data-field="deudaDecreto">Adeudado por decretos</th><th data-field="deudaBases">Adicional según bases</th><th data-field="deudaTotal">Total adeudado</th></tr></thead>
+      <tbody data-draw="vd_anual"></tbody>
+    </table>
+  </div>
+
+  <h4 id="h-cronologia">Alzas, decretos, anexos y cartas de Cosemar</h4>
+  <p class="va-muted">Cada acto con su efecto en el valor mensual. Solo los marcados «Contrato» y «Decreto» son exigibles hoy; «Bases sin decreto» es el derecho del art. 9 que falta formalizar.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-alzas" data-source="alzas" data-row-key="id">
+      <thead><tr><th data-field="fecha">Fecha</th><th data-field="tipo">Tipo</th><th data-field="acto">Acto</th><th data-field="efecto">Efecto</th><th data-field="bruto">Valor bruto</th><th data-field="rigeDesde">Rige desde</th><th data-field="estado">Estado</th><th data-field="respaldo">Respaldo</th></tr></thead>
+      <tbody data-draw="vd_alzas"></tbody>
+    </table>
+  </div>
+  </section>
 
   <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
   <p class="va-muted">Ningún mes llega a «Pago efectivo» con comprobante, y la revisión de sanciones antes del pago no consta en ningún mes.</p>

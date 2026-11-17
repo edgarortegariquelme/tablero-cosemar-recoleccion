@@ -1,42 +1,23 @@
-/* Tablero Cosemar Recolección · lógica de página. El cálculo de estados, plazos y montos lo hace window.Motor (motor.js),
-   el mismo código que corre en los nodos de n8n. */
+/* Tablero Cosemar Recolección · análisis visual. Cálculos idénticos a los del tablero (mismos ids y funciones). */
 (function () {
   var M = window.Motor;
-  var SECCIONES = ['portada', 'sanciones', 'pagos', 'vencimientos', 'obligaciones', 'flujos', 'pendientes'];
-  window.CosemarUI = window.CosemarUI || {};
-  var UI = window.CosemarUI;
-
-  // ---------- utilidades de dibujo (solo se usan dentro de drawings) ----------
   function h(tag, attrs, kids) {
     var e = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) { var v = attrs[k]; if (v == null || v === false) return; if (k === 'text') e.textContent = v; else if (k === 'cls') e.className = v; else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v); else e.setAttribute(k, v); });
     (kids || []).forEach(function (k) { if (k == null) return; e.appendChild(typeof k === 'string' ? document.createTextNode(k) : k); });
     return e;
   }
-  function enlace(url, texto) { return url ? h('a', { href: url, target: '_blank', rel: 'noopener', cls: 'cz-link', text: texto || 'Abrir respaldo' }) : h('span', { cls: 'cz-muted', text: 'Sin respaldo' }); }
-  function chip(t, tipo) { return h('span', { cls: 'cz-chip cz-' + (tipo || 'n'), text: t }); }
   function clp(v) { return v == null ? null : '$' + M.fmt(v); }
-  function monto(v, u) { if (v == null) return null; return u === 'CLP' ? clp(v) : (u === 'UF' ? 'UF ' + String(v).replace('.', ',') : v + ' ' + (u || '')); }
-  function vacio(el, texto) { el.replaceChildren(h('span', { cls: 'cz-muted', text: texto || '—' })); }
   function fechaCL(s) { if (!s) return null; var p = s.slice(0, 10).split('-'); return p[2] + '-' + p[1] + '-' + p[0]; }
-  function estadoDe(id) { var d = dash.data(id); return d.status; }
+  function filas(id) { var d = dash.data(id); return d.status === 'ok' && Array.isArray(d.data) ? d.data : []; }
   function listo(el, ids) {
-    for (var i = 0; i < ids.length; i++) { var st = estadoDe(ids[i]); if (st !== 'ok') { el.classList.toggle('dash-skeleton', st === 'loading'); if (st !== 'loading') vacio(el, st === 'error' ? 'No se pudo cargar' : '—'); return false; } }
+    for (var i = 0; i < ids.length; i++) { var st = dash.data(ids[i]).status; if (st !== 'ok') { el.classList.toggle('dash-skeleton', st === 'loading'); if (st !== 'loading') el.replaceChildren(h('span', { cls: 'va-muted', text: st === 'error' ? 'No se pudo cargar' : '—' })); return false; } }
     el.classList.remove('dash-skeleton'); return true;
   }
-  function filas(id) { var d = dash.data(id); return d.status === 'ok' && Array.isArray(d.data) ? d.data : []; }
-  function P() { return dash.params() || {}; }
-  function tonoPlazo(e) { return e === 'vencido' ? 'bad' : e === 'en plazo' ? 'ok' : e === 'por verificar' ? 'warn' : 'n'; }
-  function tonoVenc(e) { return e === 'vencido' ? 'bad' : e === 'por vencer' ? 'warn' : e === 'vigente' ? 'ok' : 'n'; }
-  function tonoVerif(v) { return v === 'Acreditado' ? 'ok' : v === 'Reportado' ? 'info' : v === 'Por verificar' ? 'warn' : 'bad'; }
-  UI.ir = function (sec, params) {
-    if (params) dash.setParams(params);
-    document.querySelectorAll('[data-seccion]').forEach(function (s) { s.hidden = s.getAttribute('data-seccion') !== sec; });
-    document.querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-selected', b.getAttribute('data-tab') === sec ? 'true' : 'false'); });
-    dash.setLink(sec);
-    var top = document.getElementById('cz-top'); if (top && top.scrollIntoView) top.scrollIntoView({ block: 'start' });
-  };
-
+  var MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  function mesTxt(p) { var x = p.split('-'); return MES[+x[1] - 1] + ' ' + x[0].slice(2); }
+  function tip(box) { return box.append('div').attr('class', 'va-tip').attr('hidden', ''); }
+  function showTip(t, el, ev, txt) { var r = el.getBoundingClientRect(); t.attr('hidden', null).text(txt).style('left', Math.max(0, Math.min(ev.clientX - r.left + 10, r.width - 240)) + 'px').style('top', (ev.clientY - r.top + 12) + 'px'); }
   // ---------- loaders: Notion devuelve filas con escapes de Markdown ----------
   ['libro_san', 'libro_pag', 'libro_ven', 'libro_sis'].forEach(function (id) {
     dash.loader(id, {
@@ -153,242 +134,280 @@
     }
   });
 
-  // ---------- navegación ----------
-  document.querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { UI.ir(b.getAttribute('data-tab')); }); });
-  document.querySelectorAll('[data-ir]').forEach(function (b) { b.addEventListener('click', function () { var p = b.getAttribute('data-params'); UI.ir(b.getAttribute('data-ir'), p ? JSON.parse(p) : null); }); });
-  var hash = (location.hash || '').slice(1); UI.ir(SECCIONES.indexOf(hash) >= 0 ? hash : 'portada');
 
-  // ---------- portada ----------
-  function kpi(campo, fmt) { return function (el) { if (!listo(el, ['c_portada'])) return; var r = filas('c_portada')[0]; el.textContent = fmt ? fmt(r[campo], r) : String(r[campo]); }; }
-  dash.draw('k_vence', kpi('vencen30')); dash.draw('k_atraso', kpi('atrasados')); dash.draw('k_decision', kpi('decision'));
-  dash.draw('k_porverificar', kpi('plazoPorVerificar')); dash.draw('k_monto', kpi('remitidoSinPago', function (v) { return clp(v); }));
-  dash.draw('k_meses', kpi('mesesRemitidos')); dash.draw('k_sinmonto', kpi('mesesSinMonto')); dash.draw('k_dif', kpi('diferenciaDecreto', function (v) { return clp(v); }));
-  dash.draw('k_revision', kpi('revision')); dash.draw('k_errores', kpi('errores')); dash.draw('k_registros', kpi('registros'));
-  dash.draw('k_sync', kpi('ultimaSync', function (v) { return v ? fechaCL(v) : 'sin registro'; }));
-  dash.draw('k_syncdet', kpi('ultimaSyncDetalle', function (v) { return v || 'Sin detalle'; }));
-  dash.draw('k_hoy', function (el) { el.textContent = fechaCL(hoyCL()); });
-  dash.draw('resumen', function (el) {
-    if (!listo(el, ['c_portada', 'c_sanciones'])) return; var r = filas('c_portada')[0], s = filas('c_sanciones').filter(function (x) { return !x.cerrada; });
-    var t = s.length + ' procesos sancionatorios abiertos' + (r.plazoPorVerificar ? ', ' + r.plazoPorVerificar + ' con plazo por verificar por falta de notificación acreditada' : '') + '; ' +
-      r.mesesRemitidos + ' meses remitidos a pago sin pago acreditado' + (r.diferenciaDecreto ? ' y $' + M.fmt(r.diferenciaDecreto) + ' de diferencia entre lo tramitado y el valor decretado' : '') + '.';
-    el.textContent = t;
+  // ---------- titular y frase de apertura ----------
+  dash.draw('va_titular', function (el) {
+    if (!listo(el, ['c_portada', 'c_pagos'])) return; var r = filas('c_portada')[0];
+    var meses = filas('c_pagos').filter(function (p) { return p.diferencia > 0; }).length;
+    var sinPago = r.mesesRemitidos ? (r.mesesRemitidos === 1 ? 'el mes remitido a pago no tiene' : 'ninguno de los ' + r.mesesRemitidos + ' meses remitidos a pago tiene') + ' pago acreditado' : 'no hay meses remitidos a pago pendientes';
+    el.textContent = r.diferenciaDecreto > 0 ? 'En ' + meses + (meses === 1 ? ' mes se tramitaron $' : ' meses se tramitaron $') + M.fmt(r.diferenciaDecreto) + ' menos de lo que fija el decreto vigente, y ' + sinPago
+      : 'Lo tramitado coincide con el valor decretado, y ' + sinPago;
   });
-  function filaSancion(s, conFicha) {
-    return h('tr', { 'data-key': encodeURIComponent(s.id), cls: 'cz-click', onclick: function () { UI.ir('sanciones', { sancion: s.id }); } }, [
-      h('td', null, [h('b', { text: s.id }), h('div', { cls: 'cz-muted', text: s.titulo })]),
-      h('td', { text: s.estado }),
-      h('td', null, [chip(s.plazoEstado, tonoPlazo(s.plazoEstado)), s.vence ? h('div', { cls: 'cz-num', text: fechaCL(s.vence) + (s.diasHabiles != null ? ' · ' + (s.diasHabiles >= 0 ? s.diasHabiles + ' días hábiles' : Math.abs(s.diasHabiles) + ' días hábiles de atraso') : '') }) : (s.falta ? h('div', { cls: 'cz-muted cz-small', text: s.falta }) : null)]),
-      h('td', { text: s.siguiente }), h('td', { text: s.unidad || 'No consta' })
-    ]);
-  }
-  dash.draw('tbl_san_plazo', function (el) { if (!listo(el, ['c_sanciones'])) return; el.replaceChildren.apply(el, filas('c_sanciones').filter(function (s) { return !s.cerrada; }).map(function (s) { return filaSancion(s); })); });
+  dash.draw('va_dif', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = clp(filas('c_portada')[0].diferenciaDecreto); });
+  dash.draw('va_rem', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = clp(filas('c_portada')[0].remitidoSinPago); });
+  dash.draw('va_meses', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].mesesRemitidos); });
+  dash.draw('va_sinmonto', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].mesesSinMonto); });
+  dash.draw('va_abiertas', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].decision); });
+  dash.draw('va_porver', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].plazoPorVerificar); });
+  dash.draw('va_vence', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].vencen30); });
+  dash.draw('va_atraso', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].atrasados); });
+  dash.draw('va_sync', function (el) { if (!listo(el, ['c_portada'])) return; var v = filas('c_portada')[0].ultimaSync; el.textContent = v ? fechaCL(v) : 'sin registro'; });
+  dash.draw('va_hoy', function (el) { el.textContent = fechaCL(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date())); });
 
-  // ---------- línea de tiempo general con filtros ----------
-  function opciones(sel, base, lista, param) { var v = P()[param] || ''; sel.replaceChildren.apply(sel, [new Option(base, '')].concat(lista.map(function (x) { return new Option(x[1] || x[0], x[0]); }))); sel.value = v; sel.onchange = function () { var o = {}; o[param] = sel.value || null; dash.setParams(o); }; }
-  function uniq(a) { return a.filter(function (x, i) { return x && a.indexOf(x) === i; }).sort(); }
-  dash.draw('f_periodo', function (sel) { var ev = filas('c_eventos'); opciones(sel, 'Todos los meses', uniq(ev.map(function (e) { return e.fecha && e.fecha.slice(0, 7); })).reverse().map(function (p) { return [p]; }), 'periodo'); });
-  dash.draw('f_modulo', function (sel) { opciones(sel, 'Todos los módulos', ['Sanción', 'Hallazgo', 'Pago', 'Reajuste', 'Vencimiento', 'Control', 'Aviso', 'Revisión', 'Error'].map(function (m) { return [m]; }), 'modulo'); });
-  dash.draw('f_entidad', function (sel) { var ev = filas('c_eventos'); opciones(sel, 'Todas las entidades', uniq(ev.map(function (e) { return e.entidad; })).map(function (x) { return [x]; }), 'entidad'); });
-  dash.draw('f_obligacion', function (sel) { var c = dash.data('catalogo'); opciones(sel, 'Todas las obligaciones', c.status === 'ok' ? c.data.obligaciones.map(function (o) { return [o.id, o.id + ' · ' + o.titulo.slice(0, 48)]; }) : [], 'obligacion'); });
-  dash.draw('f_verif', function (sel) { opciones(sel, 'Toda verificación', ['Acreditado', 'Reportado', 'Por verificar', 'En revisión'].map(function (x) { return [x]; }), 'verif'); });
-  dash.draw('f_sector', function (sel) { var c = dash.data('catalogo'); var s = c.status === 'ok' ? uniq(Object.keys(c.data.sanciones).map(function (k) { return c.data.sanciones[k].sector; })) : []; opciones(sel, 'Todos los sectores', s.map(function (x) { return [x]; }), 'sector'); });
-  dash.draw('f_patente', function (sel) { var ev = filas('c_eventos'); opciones(sel, 'Todas las patentes', uniq(ev.map(function (e) { return e.patente; })).map(function (x) { return [x]; }), 'patente'); });
-  function filtrados() {
-    var p = P(), ev = filas('c_eventos'), c = dash.data('catalogo'), sec = c.status === 'ok' ? c.data.sanciones : {};
-    return ev.filter(function (e) {
-      if (e.modulo === 'Sistema') return false;
-      if (p.periodo && !(e.fecha && e.fecha.slice(0, 7) === p.periodo) && e.entidad !== p.periodo) return false;
-      if (p.modulo && e.modulo !== p.modulo) return false;
-      if (p.entidad && e.entidad !== p.entidad) return false;
-      if (p.obligacion && (e.obligacion || '').split(',').map(function (s) { return s.trim(); }).indexOf(p.obligacion) < 0) return false;
-      if (p.verif && e.verificacion !== p.verif) return false;
-      if (p.patente && e.patente !== p.patente) return false;
-      if (p.sector && (e.sector || (sec[e.entidad] && sec[e.entidad].sector)) !== p.sector) return false;
-      if (p.historial !== 'si' && !e.vigente) return false;
-      if (e.modulo === 'Vencimiento' && p.modulo !== 'Vencimiento' && e.fecha && e.fecha > hoyCL()) return false;
-      return true;
-    }).sort(function (a, b) { return (b.fecha || '') < (a.fecha || '') ? -1 : 1; });
-  }
-  dash.draw('tl_contador', function (el) { if (!listo(el, ['c_eventos'])) return; el.textContent = String(filtrados().length); });
-  dash.draw('timeline', function (el) {
-    if (!listo(el, ['c_eventos', 'catalogo'])) return;
-    var ev = filtrados().filter(function (e) { return e.fecha; }), w = Math.max(320, el.clientWidth || 600), mods = ['Sanción', 'Pago', 'Vencimiento', 'Reajuste', 'Control', 'Revisión', 'Error', 'Aviso'].filter(function (m) { return ev.some(function (e) { return e.modulo === m; }); });
-    el.replaceChildren(); if (!ev.length) { vacio(el, 'Sin registros con fecha para estos filtros'); return; }
-    var lm = 92, rH = 26, H = mods.length * rH + 34, dom = d3.extent(ev, function (e) { return new Date(e.fecha + 'T12:00:00Z'); });
-    if (+dom[0] === +dom[1]) dom = [d3.utcDay.offset(dom[0], -15), d3.utcDay.offset(dom[1], 15)];
-    var x = d3.scaleUtc().domain(dom).range([lm, w - 14]).nice(), y = function (m) { return 10 + mods.indexOf(m) * rH + rH / 2; };
-    var box = d3.select(el).append('div').attr('class', 'cz-chartbox');
-    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Línea de tiempo de ' + ev.length + ' registros por módulo');
-    svg.append('g').attr('transform', 'translate(0,' + (H - 22) + ')').attr('class', 'cz-axis').call(d3.axisBottom(x).ticks(Math.max(2, Math.floor(w / 110))).tickFormat(function (d) { return ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][d.getUTCMonth()] + ' ' + String(d.getUTCFullYear()).slice(2); }));
-    svg.append('g').selectAll('line').data(mods).join('line').attr('x1', lm).attr('x2', w - 14).attr('y1', y).attr('y2', y).style('stroke', 'var(--cds-chart-grid)');
-    svg.append('g').selectAll('text').data(mods).join('text').attr('x', 0).attr('y', function (m) { return y(m) + 4; }).text(function (m) { return m; }).attr('class', 'cz-axlab');
-    var tip = box.append('div').attr('class', 'cz-tip').attr('hidden', '');
-    var col = { 'Sanción': 0, 'Pago': 1, 'Vencimiento': 2, 'Reajuste': 3, 'Control': 4, 'Revisión': 5, 'Error': 6, 'Aviso': 7 };
-    svg.append('g').selectAll('circle').data(ev).join('circle').attr('cx', function (e) { return x(new Date(e.fecha + 'T12:00:00Z')); }).attr('cy', function (e) { return y(e.modulo); }).attr('r', 5)
-      .style('fill', function (e) { return dash.colors[col[e.modulo] % dash.colors.length]; }).style('opacity', function (e) { return e.verificacion === 'Por verificar' ? 0.45 : 0.9; }).style('cursor', 'pointer')
-      .on('pointerenter', function (event, e) { var r = el.getBoundingClientRect(); tip.attr('hidden', null).style('left', Math.min(event.clientX - r.left + 8, w - 230) + 'px').style('top', (event.clientY - r.top + 10) + 'px').text(fechaCL(e.fecha) + ' · ' + e.entidad + ' · ' + (e.documento || e.hito)); })
-      .on('pointerleave', function () { tip.attr('hidden', ''); })
-      .on('click', function (event, e) { dash.setParams({ entidad: e.entidad }); });
+  // ---------- alzas y deuda con Cosemar (pagos_contrato + alzas) ----------
+  dash.calc('c_deuda_mes', {
+    inputs: ['pagos_contrato', 'alzas'], title: 'Debido y tramitado por mes de servicio',
+    description: 'Para cada mes toma el valor bruto del último acto que rige (contrato y decretos; y aparte, contrato, decretos y bases sin decreto), lo compara con lo tramitado más el retroactivo asignado a ese mes y acumula lo que falta, descontando el retroactivo en el mes en que se remitió a pago.',
+    fn: function (pagos, alzas) {
+      function rige(p, capas) {
+        var a = alzas.filter(function (x) { return capas.indexOf(x.capa) >= 0 && x.rigeDesde && x.rigeDesde <= p && x.bruto != null; })
+          .sort(function (x, y) { return x.rigeDesde < y.rigeDesde ? -1 : x.rigeDesde > y.rigeDesde ? 1 : 0; });
+        return a[a.length - 1] || null;
+      }
+      var ps = pagos.slice().sort(function (x, y) { return x.periodo < y.periodo ? -1 : 1; });
+      var retroPagos = {}; ps.forEach(function (p) { if (p.ajusteRetro && p.ajusteRetroPagadoEn) retroPagos[p.ajusteRetroPagadoEn] = (retroPagos[p.ajusteRetroPagadoEn] || 0) + Number(p.ajusteRetro); });
+      var accD = 0, accB = 0;
+      return ps.map(function (p) {
+        var d = rige(p.periodo, ['Contrato', 'Decreto']), b = rige(p.periodo, ['Contrato', 'Decreto', 'Bases sin decreto']);
+        var tram = Number(p.tramitado) || 0, retro = Number(p.ajusteRetro) || 0, multa = Number(p.multa) || 0;
+        var dD = d ? d.bruto : null, dB = b ? b.bruto : null;
+        accD += (dD || 0) - tram; accD -= retroPagos[p.periodo] || 0; accB += (dB || 0) - (dD || 0);
+        return { periodo: p.periodo, anio: p.anio, estado: p.estado, debidoDecreto: dD, actoDecreto: d ? d.acto : null, debidoBases: dB, actoBases: b ? b.acto : null,
+          tramitado: tram, ajusteRetro: retro, multa: multa, pagoNeto: tram - multa,
+          deltaDecreto: (dD || 0) - tram - retro, deltaBases: (dB || 0) - (dD || 0),
+          deudaVivaDecreto: accD, deudaVivaBases: accB, memo: p.memo, factura: p.factura, oc: p.oc, respaldo: p.respaldo, nota: p.nota };
+      });
+    }
   });
-  dash.draw('tl_lista', function (el) {
-    if (!listo(el, ['c_eventos'])) return; var ev = filtrados().slice(0, 150);
-    if (!ev.length) { el.replaceChildren(h('tr', null, [h('td', { colspan: '6', cls: 'cz-muted', text: 'Sin registros para estos filtros' })])); return; }
-    el.replaceChildren.apply(el, ev.map(function (e) {
-      return h('tr', { cls: e.vigente ? '' : 'cz-hist' }, [h('td', { cls: 'cz-num', text: fechaCL(e.fecha) || 'Sin fecha' }), h('td', null, [chip(e.modulo, 'n')]),
-        h('td', null, [h('button', { cls: 'cz-linkbtn', text: e.entidad || '—', onclick: function () { dash.setParams({ entidad: e.entidad }); } })]),
-        h('td', null, [h('div', { text: e.documento || e.hito }), h('div', { cls: 'cz-muted cz-small', text: (M.H_SAN[e.hito] ? M.H_SAN[e.hito].nombre : M.H_PAGO[e.hito] ? M.H_PAGO[e.hito].nombre : e.hito) + (e.vigente ? '' : ' · versión ' + e.version + ' reemplazada') + (e.monto != null ? ' · ' + monto(e.monto, e.unidadMonto) : '') })]),
-        h('td', null, [chip(e.verificacion, tonoVerif(e.verificacion)), h('div', { cls: 'cz-muted cz-small', text: e.fechaTipo })]), h('td', null, [enlace(e.respaldo), ' ', enlace(e.url, 'Fila en Notion')])]);
+  dash.calc('c_deuda_anual', {
+    inputs: ['c_deuda_mes'], title: 'Resumen de deuda por año',
+    description: 'Suma por año de servicio lo debido según decretos, lo tramitado con el retroactivo asignado, las multas descontadas y lo adeudado por decretos y adicional según bases; agrega una fila Total.',
+    fn: function (meses) {
+      var by = {}, orden = [];
+      function fila(k) { return { clave: k, meses: 0, debidoDecreto: 0, tramitado: 0, multa: 0, deudaDecreto: 0, deudaBases: 0, deudaTotal: 0 }; }
+      var tot = fila('Total');
+      meses.forEach(function (m) {
+        var k = String(m.anio); if (!by[k]) { by[k] = fila(k); orden.push(k); }
+        [by[k], tot].forEach(function (r) { r.meses++; r.debidoDecreto += m.debidoDecreto || 0; r.tramitado += m.tramitado + m.ajusteRetro; r.multa += m.multa; r.deudaDecreto += m.deltaDecreto; r.deudaBases += m.deltaBases; r.deudaTotal += m.deltaDecreto + m.deltaBases; });
+      });
+      return orden.map(function (k) { return by[k]; }).concat([tot]);
+    }
+  });
+  dash.calc('c_deuda_resumen', {
+    inputs: ['c_deuda_mes'], title: 'Deuda con Cosemar a la fecha',
+    description: 'Último mes de servicio registrado, total tramitado, lo adeudado por decretos y según bases, lo que se suma cada mes sin regularizar y el retroactivo remitido a pago.',
+    fn: function (meses) {
+      if (!meses.length) return [];
+      var u = meses[meses.length - 1], s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); };
+      var dD = s('deltaDecreto'), dB = s('deltaBases');
+      return [{ ultimoMes: u.periodo, tramitadoTotal: s('tramitado') + s('ajusteRetro'), deudaDecreto: dD, deudaBases: dB, deudaTotal: dD + dB,
+        mensualDecreto: (u.debidoDecreto || 0) - u.tramitado, mensualBases: u.deltaBases, retroTramitado: s('ajusteRetro'), multas: s('multa') }];
+    }
+  });
+
+  var MESL = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  function mesLargo(p) { var x = String(p).split('-'); return MESL[+x[1] - 1] + ' de ' + x[0]; }
+  function R(id, f, fmt) { dash.draw(id, function (el) { if (!listo(el, ['c_deuda_resumen'])) return; var r = filas('c_deuda_resumen')[0]; el.textContent = r ? fmt(r[f]) : '—'; }); }
+  R('vd_ultimo', 'ultimoMes', mesLargo); R('vd_tram', 'tramitadoTotal', clp); R('vd_dec', 'deudaDecreto', clp); R('vd_bases', 'deudaBases', clp);
+  R('vd_mesdec', 'mensualDecreto', clp); R('vd_mesbases', 'mensualBases', clp); R('vd_dec2', 'deudaDecreto', clp); R('vd_bases2', 'deudaBases', clp);
+  R('vd_total', 'deudaTotal', clp); R('vd_retro', 'retroTramitado', clp);
+  dash.draw('vd_k1', function (el) { el.style.background = dash.colors[0]; });
+  function mill(v) { return '$' + (v / 1e6).toFixed(1).replace('.', ',') + ' M'; }
+
+  // Escalera de precios: debido por decreto, según bases y tramitado.
+  dash.draw('vd_escalera', function (el) {
+    if (!listo(el, ['c_deuda_mes', 'alzas'])) return;
+    var ms = filas('c_deuda_mes'), al = filas('alzas');
+    el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = w < 520 ? 300 : 340, m = { l: 62, r: 14, t: 40, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).paddingInner(0);
+    var vals = []; ms.forEach(function (p) { vals.push(p.debidoDecreto, p.debidoBases, p.tramitado); });
+    var y = d3.scaleLinear().domain([d3.min(vals) * 0.985, d3.max(vals) * 1.012]).range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img')
+      .attr('aria-label', 'Valor mensual bruto debido según decretos y según bases, y monto tramitado, por mes de servicio desde julio de 2024');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(5).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')')
+      .call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    var x0 = function (p) { return x(p.periodo); }, x1 = function (p) { return x(p.periodo) + x.bandwidth(); };
+    // Franjas de diferencia
+    svg.append('g').selectAll('rect').data(ms.filter(function (p) { return p.debidoDecreto > p.tramitado; })).join('rect')
+      .attr('x', x0).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.debidoDecreto); }).attr('height', function (p) { return y(p.tramitado) - y(p.debidoDecreto); })
+      .style('fill', function (p) { return p.deltaDecreto > 1000 ? 'var(--color-bad)' : 'var(--cds-chart-muted)'; }).style('opacity', 0.28);
+    svg.append('g').selectAll('rect').data(ms.filter(function (p) { return p.deltaBases > 0; })).join('rect')
+      .attr('x', x0).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.debidoBases); }).attr('height', function (p) { return y(p.debidoDecreto) - y(p.debidoBases); })
+      .style('fill', 'var(--color-warn)').style('opacity', 0.3);
+    // Escalones
+    function escalon(f) { var pts = []; ms.forEach(function (p) { pts.push([x0(p), y(p[f])], [x1(p), y(p[f])]); }); return d3.line()(pts); }
+    svg.append('path').attr('d', escalon('debidoBases')).style('fill', 'none').style('stroke', 'var(--color-warn)').style('stroke-width', 2).style('stroke-dasharray', '5 4');
+    svg.append('path').attr('d', escalon('debidoDecreto')).style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 2.5);
+    // Tramitado
+    var cx = function (p) { return x(p.periodo) + x.bandwidth() / 2; };
+    svg.append('path').attr('d', d3.line().x(cx).y(function (p) { return y(p.tramitado); })(ms)).style('fill', 'none').style('stroke', dash.colors[0]).style('stroke-width', 1.5);
+    svg.append('g').selectAll('circle.r').data(ms.filter(function (p) { return p.ajusteRetro > 0; })).join('circle').attr('cx', cx).attr('cy', function (p) { return y(p.tramitado + p.ajusteRetro); }).attr('r', 4)
+      .style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 1.5);
+    svg.append('g').selectAll('circle.t').data(ms).join('circle').attr('cx', cx).attr('cy', function (p) { return y(p.tramitado); }).attr('r', 3.5)
+      .style('fill', function (p) { return p.estado === 'OC solicitada' ? 'var(--color-bg)' : dash.colors[0]; }).style('stroke', dash.colors[0]).style('stroke-width', 1.5);
+    // Rótulos de cada alza (donde cambia un escalón)
+    var marcas = [];
+    ms.forEach(function (p, i) {
+      var prev = ms[i - 1];
+      if (prev && p.debidoDecreto !== prev.debidoDecreto) marcas.push({ p: p, v: p.debidoDecreto, d: p.debidoDecreto - prev.debidoDecreto, acto: p.actoDecreto, tono: 'var(--color-fg)' });
+      if (prev && p.debidoBases !== prev.debidoBases && p.debidoBases !== p.debidoDecreto) marcas.push({ p: p, v: p.debidoBases, d: p.debidoBases - p.debidoDecreto, acto: 'IPC 4,3% sin decreto', tono: 'var(--color-warn)' });
+    });
+    var lab = svg.append('g').selectAll('g').data(marcas).join('g');
+    lab.append('line').attr('x1', function (k) { return x0(k.p); }).attr('x2', function (k) { return x0(k.p); }).attr('y1', function (k) { return y(k.v); }).attr('y2', function (k, i) { return 12 + (i % 3) * 12; })
+      .style('stroke', 'var(--cds-chart-grid)');
+    lab.append('text').attr('class', 'va-lab').attr('x', function (k) { return x0(k.p) + 3; }).attr('y', function (k, i) { return 12 + (i % 3) * 12; }).style('fill', function (k) { return k.tono; })
+      .attr('text-anchor', function (k) { return x0(k.p) > w * 0.62 ? 'end' : 'start'; }).attr('dx', function (k) { return x0(k.p) > w * 0.62 ? -6 : 0; })
+      .text(function (k) { return k.acto.replace('/2026', '') + ' +' + mill(k.d); });
+    // Tooltip
+    var t = tip(box);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', x0).attr('width', x.bandwidth()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) {
+        showTip(t, el, ev, mesLargo(p.periodo) + ' · tramitado ' + clp(p.tramitado) + (p.estado === 'OC solicitada' ? ' (OC pedida)' : '') + (p.ajusteRetro ? ' + retroactivo ' + clp(p.ajusteRetro) : '') +
+          ' · debido ' + clp(p.debidoDecreto) + ' (' + p.actoDecreto + ')' + (p.deltaBases ? ' · según bases ' + clp(p.debidoBases) : '') +
+          (p.deltaDecreto > 0 ? ' · adeudado ' + clp(p.deltaDecreto) : '') + (p.multa ? ' · multa descontada ' + clp(p.multa) : '') + ' · ' + p.memo + (p.nota ? ' · ' + p.nota : ''));
+      })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  // Deuda viva acumulada.
+  dash.draw('vd_acum', function (el) {
+    if (!listo(el, ['c_deuda_mes'])) return;
+    var ms = filas('c_deuda_mes'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses de servicio'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = 220, m = { l: 62, r: 14, t: 14, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.15);
+    var y = d3.scaleLinear().domain([0, d3.max(ms, function (p) { return Math.max(0, p.deudaVivaDecreto) + p.deudaVivaBases; }) * 1.1 || 1]).nice().range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Deuda acumulada con Cosemar por decretos y adicional según bases, a cada mes');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    var dv = function (p) { return Math.max(0, p.deudaVivaDecreto); };
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
+      .attr('y', function (p) { return y(dv(p)); }).attr('height', function (p) { return H - m.b - y(dv(p)); }).style('fill', 'var(--color-bad)').style('opacity', 0.6);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth())
+      .attr('y', function (p) { return y(dv(p) + p.deudaVivaBases); }).attr('height', function (p) { return y(dv(p)) - y(dv(p) + p.deudaVivaBases); }).style('fill', 'var(--color-warn)').style('opacity', 0.6);
+    var pico = ms.reduce(function (a, p) { return dv(p) > dv(a) ? p : a; }, ms[0]), ult = ms[ms.length - 1];
+    [pico, ult].filter(function (p, i, a) { return dv(p) + p.deudaVivaBases > 0 && a.indexOf(p) === i; }).forEach(function (p) {
+      var v = dv(p) + p.deudaVivaBases, xx = x(p.periodo) + x.bandwidth() / 2;
+      svg.append('text').attr('class', 'va-lab').attr('x', xx).attr('y', y(v) - 4).attr('text-anchor', xx > w * 0.8 ? 'end' : 'middle').text(mill(v));
+    });
+    var t = tip(box);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · por decretos ' + clp(dv(p)) + (p.deudaVivaBases ? ' · adicional según bases ' + clp(p.deudaVivaBases) : '')); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  dash.draw('vd_anual', function (el) {
+    if (!listo(el, ['c_deuda_anual'])) return;
+    el.replaceChildren.apply(el, filas('c_deuda_anual').map(function (r) {
+      var tot = r.clave === 'Total', c = function (v, cls) { return h('td', { cls: 'va-num va-r' + (cls ? ' ' + cls : ''), text: clp(v) }); };
+      return h('tr', { 'data-key': encodeURIComponent(r.clave), style: tot ? 'font-weight:600' : null }, [h('td', { text: r.clave === 'Total' ? 'Total a la fecha' : r.clave }), h('td', { cls: 'va-num va-r', text: String(r.meses) }),
+        c(r.debidoDecreto), c(r.tramitado), c(r.multa), c(r.deudaDecreto, r.deudaDecreto > 1000 ? 'va-deuda' : ''), c(r.deudaBases, r.deudaBases > 0 ? 'va-ipc' : ''), c(r.deudaTotal)]);
     }));
   });
-  dash.draw('tl_activos', function (el) {
-    var p = P(), keys = ['periodo', 'modulo', 'entidad', 'obligacion', 'verif', 'sector', 'patente'].filter(function (k) { return p[k]; });
-    el.replaceChildren.apply(el, keys.map(function (k) { return h('button', { cls: 'cz-chip cz-info cz-x', text: p[k] + ' ×', onclick: function () { var o = {}; o[k] = null; dash.setParams(o); } }); }));
+
+  dash.draw('vd_alzas', function (el) {
+    if (!listo(el, ['alzas'])) return;
+    var tono = function (e) { return /Ejecutado|Vigente/.test(e) ? 'ok' : /no aplicado|sin decreto|Sin decreto|suspendido|Sin firmas|Sin respuesta/i.test(e) ? 'bad' : /Concordada|Devengado|Remitido/.test(e) ? 'warn' : ''; };
+    el.replaceChildren.apply(el, filas('alzas').map(function (a) {
+      return h('tr', { 'data-key': encodeURIComponent(a.id) }, [h('td', { cls: 'va-num', text: fechaCL(a.fecha) }), h('td', { text: a.tipo }), h('td', null, [h('b', { text: a.acto })]), h('td', { text: a.efecto }),
+        h('td', { cls: 'va-num va-r', text: a.bruto == null ? '—' : clp(a.bruto) }), h('td', { cls: 'va-num', text: a.rigeDesde ? mesTxt(a.rigeDesde) : '—' }),
+        h('td', null, [h('span', { cls: 'va-chip' + (tono(a.estado) ? ' va-chip-' + tono(a.estado) : ''), text: a.estado })]),
+        h('td', null, [a.respaldo ? h('a', { href: a.respaldo, target: '_blank', rel: 'noopener', text: 'Abrir' }) : h('span', { cls: 'va-muted', text: 'Sin respaldo' })])]);
+    }));
   });
 
-  // ---------- sanciones: lista y ficha ----------
-  dash.draw('san_lista', function (el) { if (!listo(el, ['c_sanciones'])) return; el.replaceChildren.apply(el, filas('c_sanciones').map(function (s) { var tr = filaSancion(s); if (P().sancion === s.id) tr.classList.add('cz-sel'); return tr; })); });
-  dash.draw('san_ficha', function (el) {
-    if (!listo(el, ['c_sanciones', 'c_eventos', 'catalogo'])) return;
-    var S = filas('c_sanciones'), id = P().sancion || (S.filter(function (s) { return !s.cerrada; })[0] || S[0] || {}).id, s = S.filter(function (x) { return x.id === id; })[0];
-    if (!s) { vacio(el, 'Elija un proceso en la lista'); return; }
-    var c = dash.data('catalogo').data, ob = c.obligaciones.filter(function (o) { return o.id === s.obligacion; })[0] || {};
-    var evs = filas('c_eventos').filter(function (e) { return e.modulo === 'Sanción' && e.entidad === s.id; }).sort(function (a, b) { return (a.fecha || '9') < (b.fecha || '9') ? -1 : 1; });
-    function dato(et, val, extra) { return h('div', { cls: 'cz-dato' }, [h('div', { cls: 'cz-et', text: et }), h('div', { cls: 'cz-val', text: val == null ? 'Sin antecedentes' : val }), extra || null]); }
-    var mU = function (v, u) { return v == null ? null : monto(v, u); };
-    el.replaceChildren(
-      h('div', { cls: 'cz-fhead' }, [h('h3', { text: s.id + ' · ' + s.titulo }), h('div', { cls: 'cz-row' }, [chip(s.cerrada ? 'Cerrado' : 'Abierto', s.cerrada ? 'n' : 'warn'), chip('Plazo ' + s.plazoEstado, tonoPlazo(s.plazoEstado)), s.patente ? chip('Patente ' + s.patente, 'n') : null, s.sector ? chip(s.sector, 'n') : null])]),
-      h('div', { cls: 'cz-grid4' }, [
-        dato('Último estado acreditado', s.estado, h('div', { cls: 'cz-small' }, [fechaCL(s.ultimaFecha) ? (fechaCL(s.ultimaFecha) + ' · ' + (s.ultimaFechaTipo || '')) + ' · ' : '', enlace(s.ultimoRespaldo, 'Evidencia')])),
-        dato('Notificación', s.notificacion ? fechaCL(s.notificacion) : (s.cerrada ? 'No aplica' : 'Sin antecedentes'), s.notificacionTipo ? h('div', { cls: 'cz-small cz-muted', text: s.notificacionTipo }) : null),
-        dato('Plazo', s.vence ? fechaCL(s.vence) + ' · ' + (s.diasHabiles >= 0 ? s.diasHabiles + ' días hábiles restantes' : Math.abs(s.diasHabiles) + ' días hábiles de atraso') : (s.plazoEstado === 'no aplica' ? 'No aplica' : 'Plazo por verificar'), h('div', { cls: 'cz-small cz-muted', text: s.plazoRegla + (s.falta ? ' · ' + s.falta : '') })),
-        dato('Siguiente acción', s.siguiente, h('div', { cls: 'cz-small cz-muted', text: 'A cargo: ' + (s.unidad || 'No consta') }))
-      ]),
-      h('div', { cls: 'cz-grid4' }, [dato('Propuesto', mU(s.propuesto, s.propuestoUnidad)), dato('Decretado', mU(s.decretado, s.decretadoUnidad)), dato('Derivado a cobro', mU(s.derivado, 'CLP')),
-        dato('Cobrado o descontado', s.cobrado != null ? mU(s.cobrado, s.cobradoUnidad) : (s.cerrada && s.decretado == null ? 'No aplica' : 'Sin antecedentes'), s.cobradoRespaldo ? h('div', { cls: 'cz-small' }, [enlace(s.cobradoRespaldo, 'Estado de pago')]) : null)]),
-      h('p', { cls: 'cz-small' }, [h('b', { text: 'Obligación: ' }), h('button', { cls: 'cz-linkbtn', text: (ob.id || '—') + ' · ' + (ob.titulo || ''), onclick: function () { UI.ir('obligaciones', { obligacion: ob.id }); } }), ' · ' + (ob.clausula || '') + (ob.pagina ? ', p. ' + ob.pagina : '')]),
-      h('h4', { text: 'Línea de tiempo del proceso (' + evs.length + ' hitos)' }),
-      h('ol', { cls: 'cz-tl' }, evs.map(function (e) {
-        var hn = M.H_SAN[e.hito] ? M.H_SAN[e.hito].nombre : e.hito, sinR = !(e.respaldo || e.documento) || e.verificacion === 'Por verificar';
-        return h('li', { cls: (e.vigente ? '' : 'cz-hist ') + (sinR ? 'cz-pend' : '') }, [h('div', { cls: 'cz-num cz-small', text: (fechaCL(e.fecha) || 'Sin fecha') + ' · ' + (e.fechaTipo || '') }), h('div', null, [h('b', { text: hn }), e.monto != null ? ' · ' + monto(e.monto, e.unidadMonto) : '', sinR ? ' · ' : '', sinR ? chip('no avanza el estado', 'warn') : null]),
-          h('div', { cls: 'cz-small' }, [e.documento || '', ' · ', enlace(e.respaldo), ' · ', enlace(e.url, 'Fila en Notion')]), e.detalle ? h('div', { cls: 'cz-small cz-muted', text: e.detalle }) : null]);
-      }))
-    );
+  // ---------- 2 · dónde está detenido cada pago ----------
+  dash.draw('va_cadena', function (el) {
+    if (!listo(el, ['c_pagos', 'c_eventos'])) return;
+    var ps = filas('c_pagos').filter(function (p) { return !p.ajuste && p.periodo >= '2026-01'; }).map(function (p) { return p.periodo; });
+    var ev = filas('c_eventos').filter(function (e) { return e.vigente && e.modulo === 'Pago'; });
+    var hs = M.HITOS_PAGO;
+    function estado(per, hid) { var es = ev.filter(function (e) { return e.entidad === per && e.hito === hid; }); if (!es.length) return 0; return es.some(function (e) { return e.verificacion !== 'Por verificar' && (e.respaldo || e.documento); }) ? 2 : 1; }
+    el.replaceChildren();
+    var w = Math.max(560, el.clientWidth || 640), lw = 190, cw = (w - lw - 8) / ps.length, rh = 22, H = hs.length * rh + 30;
+    var box = d3.select(el).append('div').attr('class', 'va-box va-scroll');
+    var svg = box.append('svg').attr('width', w).attr('height', H).attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Hitos del pago acreditados, por verificar o sin antecedentes, por mes de servicio');
+    svg.append('g').selectAll('text').data(ps).join('text').attr('class', 'va-axlab').attr('x', function (p, i) { return lw + i * cw + cw / 2; }).attr('y', 14).attr('text-anchor', 'middle').text(mesTxt);
+    svg.append('g').selectAll('text').data(hs).join('text').attr('class', 'va-axlab').attr('x', lw - 8).attr('y', function (d, i) { return 24 + i * rh + rh / 2 + 4; }).attr('text-anchor', 'end').text(function (d) { return d.nombre.length > 30 ? d.nombre.slice(0, 29) + '…' : d.nombre; });
+    var t = tip(box), cells = [];
+    hs.forEach(function (hh, i) { ps.forEach(function (p, j) { cells.push({ i: i, j: j, per: p, hito: hh, s: estado(p, hh.id) }); }); });
+    var fill = ['var(--color-panel)', 'var(--color-warn)', 'var(--color-ok)'];
+    svg.append('g').selectAll('rect').data(cells).join('rect').attr('x', function (c) { return lw + c.j * cw + 2; }).attr('y', function (c) { return 24 + c.i * rh + 2; }).attr('width', cw - 4).attr('height', rh - 4).attr('rx', 3)
+      .style('fill', function (c) { return fill[c.s]; }).style('opacity', function (c) { return c.s === 1 ? 0.55 : c.s === 2 ? 0.8 : 1; }).style('stroke', 'var(--color-border-line)')
+      .on('pointerenter pointermove', function (e2, c) { showTip(t, el, e2, mesTxt(c.per) + ' · ' + c.hito.nombre + ' · ' + ['sin antecedentes', 'por verificar', 'acreditado'][c.s]); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
   });
 
-  // ---------- pagos ----------
-  dash.draw('pag_sel', function (sel) { var ps = filas('c_pagos').map(function (p) { return p.periodo; }).reverse(); var v = P().pago || ps.filter(function (x) { return !/AJUSTE/.test(x); })[0] || ''; sel.replaceChildren.apply(sel, ps.map(function (x) { return new Option(/AJUSTE/.test(x) ? 'Ajuste retroactivo D.A. 2.459' : x, x); })); sel.value = v; sel.onchange = function () { dash.setParams({ pago: sel.value }); }; });
-  function pagoSel() { var ps = filas('c_pagos'); var id = P().pago || (ps.filter(function (x) { return !x.ajuste; }).slice(-1)[0] || {}).periodo; return ps.filter(function (p) { return p.periodo === id; })[0]; }
-  dash.draw('pag_cadena', function (el) {
-    if (!listo(el, ['c_pagos', 'c_eventos'])) return; var p = pagoSel(); if (!p) { vacio(el, 'Sin antecedentes'); return; }
-    var evs = filas('c_eventos').filter(function (e) { return e.modulo === 'Pago' && e.entidad === p.periodo; });
-    var sanAbiertas = filas('c_sanciones').filter(function (s) { return !s.cerrada; }).length;
-    el.replaceChildren(h('ol', { cls: 'cz-chain' }, M.HITOS_PAGO.map(function (hp) {
-      var es = evs.filter(function (e) { return e.hito === hp.id; }), vig = es.filter(function (e) { return e.vigente; }), ok = vig.some(function (e) { return e.verificacion !== 'Por verificar' && (e.respaldo || e.documento); });
-      return h('li', { cls: ok ? 'cz-okstep' : vig.length ? 'cz-warnstep' : 'cz-nostep' }, [h('div', null, [h('b', { text: hp.nombre }), ' ', chip(ok ? 'acreditado' : vig.length ? 'por verificar' : 'sin antecedentes', ok ? 'ok' : vig.length ? 'warn' : 'n')]),
-        h('div', { cls: 'cz-small cz-muted', text: 'A cargo: ' + hp.unidad + (hp.id === 'revision_sanciones' && !vig.length ? ' · hay ' + sanAbiertas + ' procesos abiertos que revisar antes de derivar' : '') })].concat(es.map(function (e) {
-          return h('div', { cls: 'cz-small' + (e.vigente ? '' : ' cz-hist') }, [(fechaCL(e.fecha) || 'Sin fecha') + ' (' + (e.fechaTipo || '') + ') · ' + (e.numero ? 'N° ' + e.numero + ' · ' : '') + (e.documento || '') + (e.monto != null ? ' · ' + monto(e.monto, e.unidadMonto) : '') + (e.vigente ? '' : ' · versión ' + e.version + ' reemplazada') + ' · ', enlace(e.respaldo), e.detalle ? h('div', { cls: 'cz-muted', text: e.detalle }) : null]);
-        })));
-    })), h('div', { cls: 'cz-small' }, evs.filter(function (e) { return e.hito === 'diferencia' && e.vigente; }).map(function (e) { return h('div', { cls: 'cz-alert' }, ['Diferencia documental: ' + e.detalle + ' · ', enlace(e.respaldo)]); })));
+  // ---------- 3 · sanciones: hasta dónde llega cada proceso ----------
+  var ETAPAS = [['Hallazgo', ['manifold']], ['Comunicación', ['comunicacion_empresa']], ['Descargos', ['respuesta_empresa']], ['Evaluación o informe', ['informe_evaluacion', 'informe_tecnico', 'revision_edgar']],
+    ['Memo y visados', ['memo_secmun', 'visado_alcaldia', 'remision_secmun', 'borrador_decreto', 'revision_control']], ['Decreto', ['decreto_multa', 'publicacion_mp']], ['Notificación', ['notificacion']],
+    ['Reposición', ['reposicion_recibida', 'analisis_reposicion', 'memo_reposicion', 'visado_juridico', 'visado_alcaldia_rep', 'sin_reposicion']], ['Decreto final', ['decreto_final', 'rectificacion_decreto', 'comunicacion_final']], ['Cobro', ['derivacion_cobro', 'cobro_efectivo']]];
+  dash.draw('va_sanciones', function (el) {
+    if (!listo(el, ['c_sanciones', 'c_eventos'])) return;
+    var S = filas('c_sanciones'), ev = filas('c_eventos').filter(function (e) { return e.vigente && e.modulo === 'Sanción' && e.verificacion !== 'Por verificar' && (e.respaldo || e.documento); });
+    function etapa(id) { var mx = -1; ev.forEach(function (e) { if (e.entidad !== id) return; ETAPAS.forEach(function (st, k) { if (st[1].indexOf(e.hito) >= 0 && k > mx) mx = k; }); }); return mx; }
+    el.replaceChildren();
+    var w = Math.max(560, el.clientWidth || 640), lw = 72, H = S.length * 34 + 56, x = d3.scalePoint().domain(ETAPAS.map(function (e) { return e[0]; })).range([lw + 10, w - 30]);
+    var box = d3.select(el).append('div').attr('class', 'va-box va-scroll');
+    var svg = box.append('svg').attr('width', w).attr('height', H).attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Etapa acreditada más avanzada de cada proceso sancionatorio');
+    svg.append('g').selectAll('text').data(ETAPAS).join('text').attr('class', 'va-axlab').attr('transform', function (e) { return 'translate(' + x(e[0]) + ',' + (H - 6) + ') rotate(-28)'; }).attr('text-anchor', 'end').text(function (e) { return e[0]; });
+    var t = tip(box);
+    var g = svg.append('g').selectAll('g').data(S).join('g').attr('transform', function (s, i) { return 'translate(0,' + (18 + i * 34) + ')'; });
+    g.append('text').attr('class', 'va-axlab va-strong').attr('x', 0).attr('y', 4).text(function (s) { return s.id; });
+    g.append('line').attr('x1', x(ETAPAS[0][0])).attr('x2', x(ETAPAS[ETAPAS.length - 1][0])).style('stroke', 'var(--cds-chart-grid)').style('stroke-width', 6).style('stroke-linecap', 'round');
+    g.append('line').attr('x1', x(ETAPAS[0][0])).attr('x2', function (s) { var k = etapa(s.id); return k < 0 ? x(ETAPAS[0][0]) : x(ETAPAS[k][0]); }).style('stroke', function (s) { return s.cerrada ? 'var(--cds-chart-muted)' : dash.colors[0]; }).style('stroke-width', 6).style('stroke-linecap', 'round');
+    g.append('circle').attr('cx', function (s) { var k = etapa(s.id); return x(ETAPAS[Math.max(0, k)][0]); }).attr('r', 7)
+      .style('fill', function (s) { return s.cerrada ? 'var(--cds-chart-muted)' : s.plazoEstado === 'vencido' ? 'var(--cds-chart-status-critical)' : s.plazoEstado === 'por verificar' ? 'var(--color-warn)' : 'var(--color-ok)'; })
+      .on('pointerenter pointermove', function (e2, s) { showTip(t, el, e2, s.id + ' · ' + s.estado + ' · plazo ' + s.plazoEstado + (s.falta ? ' · ' + s.falta : s.vence ? ' · vence ' + fechaCL(s.vence) : '')); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
   });
-  function pm(campo, nulo) { return function (el) { if (!listo(el, ['c_pagos'])) return; var p = pagoSel(); el.textContent = !p ? '—' : p[campo] == null ? (nulo || 'Sin antecedentes') : clp(p[campo]); if (p) { el.setAttribute('data-where', 'periodo=' + encodeURIComponent(p.periodo)); } }; }
-  dash.draw('pm_esperado', pm('esperado', 'Sin precio vigente cargado')); dash.draw('pm_oc', pm('solicitadoOC')); dash.draw('pm_fact', pm('facturado')); dash.draw('pm_rem', pm('remitido')); dash.draw('pm_pag', pm('pagado', 'Sin pago acreditado'));
-  dash.draw('pm_acto', function (el) { var p = pagoSel(); el.textContent = p ? (p.actoEsperado ? 'Valor del ' + p.actoEsperado + (p.enEjecucion != null && p.enEjecucion !== p.esperado ? '; en ejecución: $' + M.fmt(p.enEjecucion) : '') : (p.ajuste ? 'Ajuste: se controla aparte de las mensualidades' : 'Sin decreto de precio cargado para el mes')) : '—'; });
-  dash.draw('pm_obs', function (el) { var p = pagoSel(); el.textContent = p ? (p.observaciones || 'Sin diferencias registradas') + ' · Último hito: ' + (p.ultimoHito || 'ninguno') + ' · Siguiente: ' + (p.siguiente || '—') + ' (' + (p.siguienteUnidad || 'No consta') + ')' : '—'; });
-  dash.draw('pag_tabla', function (el) {
+  dash.draw('va_faltas', function (el) {
+    if (!listo(el, ['c_sanciones'])) return;
+    el.replaceChildren.apply(el, filas('c_sanciones').filter(function (s) { return !s.cerrada; }).map(function (s) {
+      return h('li', null, [h('b', { text: s.id + ' · ' }), s.titulo + '. ', h('span', { cls: 'va-muted', text: (s.falta || ('Vence ' + fechaCL(s.vence))) + ' Siguiente: ' + s.siguiente + '.' })]);
+    }));
+  });
+
+  // ---------- 4 · vencimientos de los próximos 120 días ----------
+  dash.draw('va_venc', function (el) {
+    if (!listo(el, ['c_vencimientos'])) return;
+    var vs = filas('c_vencimientos').filter(function (v) { return v.dias != null && v.dias <= 120; });
+    el.replaceChildren(); if (!vs.length) { el.textContent = 'Nada vence en los próximos 120 días'; return; }
+    var w = Math.max(320, el.clientWidth || 640), H = 150, m = { l: 14, r: 14 };
+    var hoy = new Date(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date()) + 'T12:00:00Z');
+    var x = d3.scaleUtc().domain([d3.utcDay.offset(hoy, -10), d3.utcDay.offset(hoy, 120)]).range([m.l, w - m.r]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', vs.length + ' documentos que vencen en los próximos 120 días');
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - 24) + ')').call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(w / 120))).tickFormat(function (d) { return d.getUTCDate() + ' ' + MES[d.getUTCMonth()]; }));
+    svg.append('line').attr('x1', x(hoy)).attr('x2', x(hoy)).attr('y1', 8).attr('y2', H - 24).style('stroke', 'var(--cds-chart-reference)').style('stroke-dasharray', '4 3');
+    svg.append('text').attr('class', 'va-axlab').attr('x', x(hoy) + 4).attr('y', 16).text('hoy');
+    var t = tip(box), lane = {};
+    var pts = vs.map(function (v) { var d = new Date(v.vence + 'T12:00:00Z'), k = d3.utcWeek.floor(d).toISOString(); lane[k] = (lane[k] || 0) + 1; return { v: v, d: d, n: lane[k] - 1 }; });
+    svg.append('g').selectAll('circle').data(pts).join('circle').attr('cx', function (p) { return x(p.d); }).attr('cy', function (p) { return H - 36 - p.n * 14; }).attr('r', 6)
+      .style('fill', function (p) { return p.v.estado === 'vencido' ? 'var(--cds-chart-status-critical)' : p.v.estado === 'por vencer' ? 'var(--color-warn)' : dash.colors[0]; })
+      .on('pointerenter pointermove', function (e2, p) { showTip(t, el, e2, p.v.entidad + (p.v.patente ? ' ' + p.v.patente : '') + ' · ' + p.v.documento + ' · ' + fechaCL(p.v.vence) + ' · ' + p.v.estado); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+    svg.append('g').selectAll('text').data(pts.filter(function (p) { return p.v.dias <= 30; })).join('text').attr('class', 'va-lab').attr('x', function (p) { return x(p.d) + 9; }).attr('y', function (p) { return H - 32 - p.n * 14; }).text(function (p) { return p.v.entidad; });
+  });
+
+  dash.draw('va_causa', function (el) {
     if (!listo(el, ['c_pagos'])) return;
-    el.replaceChildren.apply(el, filas('c_pagos').slice().reverse().map(function (p) {
-      var c = function (v) { return h('td', { cls: 'cz-num', text: v == null ? 'Sin antecedentes' : clp(v) }); };
-      return h('tr', { 'data-key': encodeURIComponent(p.periodo), cls: 'cz-click' + (P().pago === p.periodo ? ' cz-sel' : ''), onclick: function () { dash.setParams({ pago: p.periodo }); } }, [h('td', { text: p.ajuste ? 'Ajuste D.A. 2.459' : p.periodo }), h('td', { text: p.estado }), c(p.esperado), c(p.solicitadoOC), c(p.facturado), c(p.remitido), c(p.pagado), h('td', { cls: 'cz-num ' + (p.diferencia ? 'cz-badtext' : ''), text: p.diferencia ? clp(p.diferencia) : '0' })]);
-    }));
-  });
-  dash.draw('rea_tabla', function (el) {
-    if (!listo(el, ['c_eventos'])) return;
-    el.replaceChildren.apply(el, filas('c_eventos').filter(function (e) { return e.modulo === 'Reajuste' && e.vigente; }).map(function (e) { return h('tr', null, [h('td', { text: e.documento }), h('td', { cls: 'cz-num', text: e.monto != null ? monto(e.monto, e.unidadMonto) + '/mes' : 'Sin monto' }), h('td', { cls: 'cz-small', text: e.detalle }), h('td', null, [enlace(e.respaldo, 'Trámite en Notion')])]); }));
+    var ps = filas('c_pagos').filter(function (p) { return p.diferencia > 0; });
+    if (!ps.length) { el.textContent = ''; return; }
+    var actos = ps.map(function (p) { return p.actoEsperado; }).filter(function (a, i, x) { return a && x.indexOf(a) === i; });
+    el.textContent = ' Corresponde a ' + ps.map(function (p) { return mesTxt(p.periodo); }).join(', ') + ', meses en que rige el ' + actos.join(' y ') + ' pero se tramitó un valor menor.';
   });
 
-  // ---------- vencimientos ----------
-  dash.draw('v_patente', function (sel) { var vs = filas('c_vencimientos'); opciones(sel, 'Todas las patentes', uniq(vs.map(function (v) { return v.patente; })).map(function (x) { return [x]; }), 'patente'); });
-  document.querySelectorAll('[data-vgrupo]').forEach(function (s) { s.addEventListener('change', function () { dash.setParams({ vgrupo: s.value || null }); }); });
-  dash.draw('ven_tabla', function (el) {
-    if (!listo(el, ['c_vencimientos'])) return; var p = P();
-    var vs = filas('c_vencimientos').filter(function (v) { return (!p.vgrupo || v.grupo === p.vgrupo) && (!p.patente || v.patente === p.patente); });
-    el.replaceChildren.apply(el, vs.map(function (v) {
-      return h('tr', { 'data-key': encodeURIComponent(v.clave) }, [h('td', null, [h('b', { text: v.entidad }), v.patente ? h('div', { cls: 'cz-muted cz-small', text: v.patente }) : null]), h('td', { text: v.documento }),
-        h('td', { cls: 'cz-num', text: fechaCL(v.vence) || 'Sin antecedentes' }), h('td', null, [chip(v.estado + (v.dias == null ? '' : v.dias < 0 ? ' · ' + Math.abs(v.dias) + (v.dias === -1 ? ' día' : ' días') + ' de atraso' : v.dias === 0 ? ' · vence hoy' : ' · faltan ' + v.dias + (v.dias === 1 ? ' día' : ' días')), tonoVenc(v.estado))]),
-        h('td', { cls: 'cz-num', text: v.capital != null ? monto(v.capital, v.unidad) : '' }), h('td', null, [chip(v.verificacion, tonoVerif(v.verificacion)), v.detalle ? h('div', { cls: 'cz-small cz-muted', text: v.detalle }) : null]), h('td', null, [enlace(v.respaldo)])]);
-    }));
-  });
-
-  // ---------- obligaciones ----------
-  document.querySelectorAll('[data-ocob]').forEach(function (s) { s.addEventListener('change', function () { dash.setParams({ ocob: s.value || null }); }); });
-  dash.draw('obl_tabla', function (el) {
-    if (!listo(el, ['c_obligaciones'])) return; var p = P();
-    el.replaceChildren.apply(el, filas('c_obligaciones').filter(function (o) { return !p.ocob || o.cobertura === p.ocob; }).map(function (o) {
-      return h('tr', { 'data-key': o.id, cls: 'cz-click' + (p.obligacion === o.id ? ' cz-sel' : ''), onclick: function () { dash.setParams({ obligacion: o.id }); var f = document.getElementById('obl-ficha'); if (f && f.scrollIntoView) f.scrollIntoView({ block: 'start' }); } }, [
-        h('td', null, [h('b', { text: o.id }), h('div', { text: o.titulo })]), h('td', { text: o.clausula + ' · p. ' + o.pagina }), h('td', { text: o.frecuencia + ' · ' + o.plazo }),
-        h('td', { cls: 'cz-small', text: o.exigenciaVigente ? o.exigenciaVigente + (o.actoVigente ? ' (' + o.actoVigente + ')' : '') : o.criterio }), h('td', { cls: 'cz-num', text: String(o.registros) }),
-        h('td', null, [chip(o.cobertura, o.cobertura === 'Fiscalizable desde el tablero' ? 'ok' : o.cobertura === 'Pendiente de respaldo' ? 'warn' : 'bad')])]);
-    }));
-  });
-  dash.draw('obl_ficha', function (el) {
-    if (!listo(el, ['catalogo', 'c_eventos', 'c_sanciones'])) return; var id = P().obligacion, c = dash.data('catalogo').data, o = c.obligaciones.filter(function (x) { return x.id === id; })[0];
-    if (!o) { vacio(el, 'Elija una obligación en la matriz para ver sus controles, hallazgos y sanciones'); return; }
-    var evs = filas('c_eventos').filter(function (e) { return (e.obligacion || '').split(',').map(function (s) { return s.trim(); }).indexOf(id) >= 0 && e.vigente; });
-    var g = function (mods) { return evs.filter(function (e) { return mods.indexOf(e.modulo) >= 0; }); };
-    var sans = filas('c_sanciones').filter(function (s) { return s.obligacion === id; });
-    var lista = function (t, xs, fn) { return h('div', { cls: 'cz-col' }, [h('h4', { text: t + ' (' + xs.length + ')' }), xs.length ? h('ul', { cls: 'cz-ul' }, xs.slice(0, 40).map(fn)) : h('p', { cls: 'cz-muted', text: 'Sin antecedentes' })]); };
-    var item = function (e) { return h('li', null, [(fechaCL(e.fecha) || 'Sin fecha') + ' · ' + (e.entidad || '') + ' · ' + (e.documento || e.hito) + ' · ', enlace(e.respaldo)]); };
-    el.replaceChildren(h('h3', { text: o.id + ' · ' + o.titulo }),
-      h('dl', { cls: 'cz-dl' }, [['Cláusula y página', o.clausula + ', p. ' + o.pagina + ' · ' + (c.fuentes[o.fuente] || {}).n], ['Frecuencia', o.frecuencia], ['Plazo', o.plazo], ['Evidencia exigida', o.evidencia], ['Criterio de cumplimiento', o.criterio], ['Acción ante una observación', o.accion], ['Nota', o.nota || '—']].reduce(function (a, kv) { return a.concat([h('dt', { text: kv[0] }), h('dd', { text: kv[1] })]); }, [])),
-      h('p', null, [enlace((c.fuentes[o.fuente] || {}).u, 'Abrir ' + ((c.fuentes[o.fuente] || {}).n || 'fuente'))]),
-      h('h4', { text: 'Exigencia aplicable por período' }),
-      h('table', { cls: 'cz-tbl' }, [h('thead', null, [h('tr', null, [h('th', { text: 'Desde' }), h('th', { text: 'Hasta' }), h('th', { text: 'Exigencia' }), h('th', { text: 'Acto' })])]), h('tbody', null, (o.vigencias || []).map(function (v) { return h('tr', null, [h('td', { text: fechaCL(v.desde) || v.desde }), h('td', { text: v.hasta ? fechaCL(v.hasta) : 'vigente' }), h('td', { text: v.exigencia }), h('td', { text: v.acto || '—' })]); }))]),
-      h('div', { cls: 'cz-cols' }, [lista('Controles', g(['Control', 'Vencimiento', 'Pago', 'Reajuste']), item), lista('Hallazgos', g(['Hallazgo']), item),
-        lista('Sanciones', sans, function (s) { return h('li', null, [h('button', { cls: 'cz-linkbtn', text: s.id + ' · ' + s.estado, onclick: function () { UI.ir('sanciones', { sancion: s.id }); } })]); })]),
-      h('p', null, [h('button', { cls: 'cz-btn', text: 'Ver en la línea de tiempo', onclick: function () { UI.ir('portada', { obligacion: id }); } })]));
-  });
-
-  // ---------- flujogramas ----------
-  dash.draw('flujos', function (el) {
-    if (!listo(el, ['catalogo', 'c_eventos', 'c_sanciones', 'c_pagos'])) return;
-    var c = dash.data('catalogo').data, ev = filas('c_eventos').filter(function (e) { return e.vigente; }), S = filas('c_sanciones'), Pg = filas('c_pagos'), p = P();
-    var pago = Pg.filter(function (x) { return x.periodo === p.pago; })[0] || Pg.filter(function (x) { return !x.ajuste; }).slice(-1)[0], san = S.filter(function (x) { return x.id === p.sancion; })[0];
-    function cuenta(fl, paso) {
-      if (fl === 'sancion') { var ids = S.filter(function (s) { return !s.cerrada && ev.some(function (e) { return e.modulo === 'Sanción' && e.entidad === s.id && e.hito === paso.hito; }) && M.H_SAN[paso.hito] && s.estado === M.H_SAN[paso.hito].nombre; }); return ids; }
-      return [];
-    }
-    function hecho(fl, paso) {
-      if (fl === 'pago' && pago) return ev.some(function (e) { return e.modulo === 'Pago' && e.entidad === pago.periodo && e.hito === paso.hito && e.verificacion !== 'Por verificar'; });
-      if (fl === 'sancion' && san) return ev.some(function (e) { return e.modulo === 'Sanción' && e.entidad === san.id && e.hito === paso.hito && e.verificacion !== 'Por verificar'; });
-      return false;
-    }
-    el.replaceChildren.apply(el, c.flujos.map(function (f) {
-      var ctx = f.id === 'pago' ? (pago ? 'Mes de servicio: ' + pago.periodo + ' · ' + pago.estado : '') : f.id === 'sancion' ? (san ? 'Proceso: ' + san.id + ' · ' + san.estado : 'Elija un proceso para marcar su recorrido; los números indican cuántos procesos abiertos están en cada paso') : 'Cada paso abre su módulo filtrado';
-      return h('section', { cls: 'cz-flow', id: 'flujo-' + f.id }, [h('h3', { text: f.titulo }), h('p', { cls: 'cz-small cz-muted', text: ctx }),
-        h('div', { cls: 'cz-ramas' }, f.ramas.map(function (r) {
-          return h('div', { cls: 'cz-rama' }, [h('div', { cls: 'cz-et', text: r.nombre }), h('ol', { cls: 'cz-pasos' }, r.pasos.map(function (paso) {
-            var n = cuenta(f.id, paso), ok = hecho(f.id, paso);
-            return h('li', null, [h('button', { cls: 'cz-paso' + (ok ? ' cz-hecho' : '') + (n.length ? ' cz-activo' : ''), onclick: function () {
-              if (f.id === 'pago') UI.ir('pagos', pago ? { pago: pago.periodo } : null);
-              else if (f.id === 'sancion') { if (n.length) UI.ir('sanciones', { sancion: n[0].id }); else UI.ir('portada', { modulo: 'Sanción', entidad: san ? san.id : null }); }
-              else if (paso.vista === 'vencimientos') UI.ir('vencimientos', { vgrupo: paso.filtro.entidad === 'GAR-FC' ? 'Garantía' : paso.filtro.entidad === 'SEG-RC' ? 'Seguro' : paso.filtro.grupo === 'flota' ? 'Flota' : null });
-              else if (paso.vista === 'obligaciones') UI.ir('obligaciones', { obligacion: paso.obl || null });
-              else if (paso.vista === 'sanciones') UI.ir('sanciones');
-              else UI.ir('portada', { modulo: 'Control' });
-            } }, [h('span', { cls: 'cz-pt', text: paso.t }), paso.d ? h('span', { cls: 'cz-pd', text: paso.d }) : null, n.length ? h('span', { cls: 'cz-badge', text: n.map(function (x) { return x.id; }).join(', ') }) : null, ok ? h('span', { cls: 'cz-badge cz-okb', text: 'acreditado' }) : null])]);
-          }))]);
-        }))]);
-    }));
-  });
-  dash.draw('flujo_sel', function (sel) { var S = filas('c_sanciones'); sel.replaceChildren.apply(sel, [new Option('Proceso sancionatorio: ninguno', '')].concat(S.map(function (s) { return new Option(s.id + ' · ' + s.estado, s.id); }))); sel.value = P().sancion || ''; sel.onchange = function () { dash.setParams({ sancion: sel.value || null }); }; });
-  dash.draw('flujo_pago', function (sel) { var ps = filas('c_pagos'); sel.replaceChildren.apply(sel, ps.slice().reverse().map(function (x) { return new Option('Pago · ' + (x.ajuste ? 'Ajuste D.A. 2.459' : x.periodo), x.periodo); })); sel.value = P().pago || (ps.filter(function (x) { return !x.ajuste; }).slice(-1)[0] || {}).periodo || ''; sel.onchange = function () { dash.setParams({ pago: sel.value }); }; });
-
-  // ---------- pendientes ----------
-  document.querySelectorAll('[data-ptipo]').forEach(function (s) { s.addEventListener('change', function () { dash.setParams({ ptipo: s.value || null }); }); });
-  dash.draw('pend_tabla', function (el) {
-    if (!listo(el, ['c_pendientes'])) return; var t = P().ptipo;
-    el.replaceChildren.apply(el, filas('c_pendientes').filter(function (r) { return !t || r.tipo === t; }).map(function (r) {
-      return h('tr', { 'data-key': encodeURIComponent(r.clave) }, [h('td', null, [chip(r.tipo, r.tipo === 'Error' ? 'bad' : r.tipo === 'Sanción' ? 'warn' : 'n')]), h('td', { text: r.entidad || '—' }), h('td', null, [h('div', { text: r.descripcion || '' }), r.falta ? h('div', { cls: 'cz-small cz-muted', text: r.falta }) : null]), h('td', { cls: 'cz-num', text: fechaCL(r.plazo) || '—' }), h('td', { text: r.estado || '' }), h('td', { text: r.unidad || 'No consta' }), h('td', null, [enlace(r.enlace)])]);
+  // ---------- al pie: pendientes ----------
+  dash.draw('va_pend', function (el) {
+    if (!listo(el, ['c_pendientes'])) return;
+    el.replaceChildren.apply(el, filas('c_pendientes').map(function (r) {
+      return h('tr', { 'data-key': encodeURIComponent(r.clave) }, [h('td', { text: r.tipo }), h('td', { text: r.entidad || '—' }), h('td', null, [h('div', { text: r.descripcion || '' }), r.falta ? h('div', { cls: 'va-muted', text: r.falta }) : null]), h('td', { cls: 'va-num', text: fechaCL(r.plazo) || '—' }), h('td', { text: r.unidad || 'No consta' }), h('td', null, [r.enlace ? h('a', { href: r.enlace, target: '_blank', rel: 'noopener', text: 'Abrir' }) : h('span', { cls: 'va-muted', text: 'Sin respaldo' })])]);
     }));
   });
 })();
