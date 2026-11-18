@@ -31,3 +31,11 @@ Computador M370-00507, carpeta `PASE_CLAUDE_CODE_PP73_2026_v2`: figura como no u
 - Confirmación del encargado: pagado todo 2024 y 2025 (ambos contratos) y las mensualidades de 2026 hasta septiembre. En 2026 solo se adeudan el IPC 4,3% y el aumento poblacional del D.A. 3.957, según el plan de pago.
 - Constancia en Notion: https://app.notion.com/p/41c9e3e655c0811cb8e6d6e6afb7724c · 11 hitos «pago» agregados al Libro de control (dic-2025 a sep-2026 y retroactivo D.A. 2.459), verificación «Reportado».
 - Pendiente de pago: octubre 2026 en ambos contratos (recolección según plan, en febrero de 2027).
+
+## 18-11-2026 (tarde) · tablero en pestañas
+- Pestañas por CSS (sin scripts): Operación (selector Recolección / Disposición final), Multas, Manifolds, Correos, Flota, Personal, Bono SUBDERE y Análisis y deuda.
+- `tablero/draft/operacion.js` (nuevo): cálculos `c_ciclo`, `c_presupuesto`, `c_decretos` y `c_alertas`, y los dibujos de las pestañas nuevas.
+- `datos/operacion.js` genera manifolds, correos, flota, personal (solo agregados, sin nombres ni RUT), subdere, antecedentes, ciclo_fechas y resumenes en `tablero/store/`.
+- Reglas del ciclo: Cosemar informa del 1 al 5; OC en máximo 7 días desde el memo (alerta al vencer); factura del 15 al 20; pago a 30 días de la factura.
+- Presupuesto 2026 estimado = lo pagado con cargo a 2026 en ambos contratos ($3.799 M); deuda de octubre a diciembre que pasa a 2027: $1.147 M (estimación, falta la cifra oficial de DAF).
+- Bases recolección art. 36: $250–260 M/mes de referencia × 60 meses (art. 82).

@@ -1,0 +1,42 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "cargo": "Peoneta",
+   "dotacion": 47,
+   "oferta": 44,
+   "sueldoMin": 585932,
+   "sueldoMax": 618739
+  },
+  {
+   "cargo": "Chofer",
+   "dotacion": 17,
+   "oferta": 16,
+   "sueldoMin": 828384,
+   "sueldoMax": 883629
+  },
+  {
+   "cargo": "Supervisor",
+   "dotacion": 2,
+   "oferta": null,
+   "sueldoMin": 968429,
+   "sueldoMax": 988765
+  },
+  {
+   "cargo": "Operario de mantención",
+   "dotacion": 2,
+   "oferta": null,
+   "sueldoMin": 554092,
+   "sueldoMax": 554092,
+   "nota": "El informe de sueldos registra uno; el EDP lista dos."
+  },
+  {
+   "cargo": "Jefatura y administración",
+   "dotacion": 5,
+   "oferta": null,
+   "sueldoMin": 793381,
+   "sueldoMax": 1495829,
+   "nota": "Jefatura de proyecto, encargado de base, administrativa, prevencionista y encargado ambiental."
+  }
+ ]
+}

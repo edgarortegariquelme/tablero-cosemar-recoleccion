@@ -1,0 +1,26 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "contrato": "df",
+   "periodo": "2026-10",
+   "hito": "memo_oc",
+   "fecha": "2026-11-05",
+   "documento": "Memo 2214/2026 · pide OC de octubre"
+  },
+  {
+   "contrato": "df",
+   "periodo": "2026-10",
+   "hito": "informe_trabajos",
+   "fecha": "2026-11-02",
+   "documento": "Ingresos y tickets de octubre (relleno Santa Inés)"
+  },
+  {
+   "contrato": "rec",
+   "periodo": "2026-10",
+   "hito": "informe_trabajos",
+   "fecha": "2026-11-05",
+   "documento": "Informe por los servicios de octubre 2026"
+  }
+ ]
+}

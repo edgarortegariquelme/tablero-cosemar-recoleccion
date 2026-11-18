@@ -48,14 +48,182 @@
 .va-chip-ok { color: var(--color-ok); } .va-chip-bad { color: var(--color-bad); } .va-chip-warn { color: var(--color-warn); }
 .va-tbl td.va-r, .va-tbl th.va-r { text-align: right; }
 .va details summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); margin-top: var(--cds-gap-xl); }
+
+.vt-r, .ct-r { position: absolute; opacity: 0; pointer-events: none; }
+.vt-nav, .ct-nav { display: flex; flex-wrap: wrap; gap: 4px; margin: var(--cds-gap-md) 0; border-bottom: 1px solid var(--color-border-line); }
+.ct-nav { border-bottom: 0; margin: var(--cds-gap-sm) 0 var(--cds-gap-md); }
+.vt-nav label, .ct-nav label { cursor: pointer; padding: 6px 10px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-radius: var(--cds-radius) var(--cds-radius) 0 0; }
+.ct-nav label { border: 1px solid var(--color-border-line); border-radius: 999px; }
+.vt-nav label:hover, .ct-nav label:hover { color: var(--color-fg); }
+.va-tab, .op-c { display: none; }
+#vt-op:checked ~ #tab-op, #vt-mu:checked ~ #tab-mu, #vt-mf:checked ~ #tab-mf, #vt-co:checked ~ #tab-co, #vt-fl:checked ~ #tab-fl, #vt-pe:checked ~ #tab-pe, #vt-su:checked ~ #tab-su, #vt-an:checked ~ #tab-an { display: block; }
+#vt-op:checked ~ .vt-nav [for=vt-op], #vt-mu:checked ~ .vt-nav [for=vt-mu], #vt-mf:checked ~ .vt-nav [for=vt-mf], #vt-co:checked ~ .vt-nav [for=vt-co], #vt-fl:checked ~ .vt-nav [for=vt-fl], #vt-pe:checked ~ .vt-nav [for=vt-pe], #vt-su:checked ~ .vt-nav [for=vt-su], #vt-an:checked ~ .vt-nav [for=vt-an] { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); box-shadow: inset 0 -2px 0 var(--color-fg); }
+#ct-rec:checked ~ .op-rec, #ct-df:checked ~ .op-df { display: block; }
+#ct-rec:checked ~ .ct-nav [for=ct-rec], #ct-df:checked ~ .ct-nav [for=ct-df] { color: var(--color-fg); border-color: var(--color-fg); }
+.vt-r:focus-visible + *, .vt-nav label:focus-visible { outline: 2px solid var(--color-fg); }
+.op-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-lg); align-items: start; }
+.op-al { list-style: none; margin-left: -18px; }
+.op-sel { font: inherit; margin: 4px 0 8px; }
+.op-mon { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.op-pasos { list-style: none; padding: 0; margin: var(--cds-gap-sm) 0; display: grid; gap: 2px; font-size: var(--cds-font-size-caption); }
+.op-paso { display: grid; grid-template-columns: 16px 1fr; gap: 8px; padding: 4px 0; position: relative; }
+.op-pt { width: 10px; height: 10px; border-radius: 50%; margin-top: 3px; border: 2px solid var(--color-border-line); background: var(--color-panel); }
+.op-ok .op-pt { background: var(--color-ok); border-color: var(--color-ok); }
+.op-sig .op-pt { border-color: var(--color-warn); }
+.op-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.op-nav button { font: inherit; font-size: var(--cds-font-size-caption); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 2px 8px; cursor: pointer; color: var(--color-fg); }
+.op-vista { margin-left: auto; }
+.op-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; font-size: 11px; }
+.op-dow { color: var(--color-fg-muted); text-align: center; }
+.op-dia { min-height: 54px; border: 1px solid var(--color-border-line); border-radius: 4px; padding: 2px 3px; overflow: hidden; background: var(--color-panel); }
+.op-mini .op-dia { min-height: 0; height: 18px; padding: 0; text-align: center; border-radius: 2px; }
+.op-mini .op-dow { font-size: 9px; }
+.op-num { font-variant-numeric: tabular-nums; }
+.op-mk div { font-size: 10px; line-height: 1.2; color: var(--color-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.op-info, .op-k-info { background: color-mix(in srgb, var(--color-ok) 16%, var(--color-panel)); }
+.op-fac, .op-k-fac { background: color-mix(in srgb, var(--color-warn) 18%, var(--color-panel)); }
+.op-oc, .op-pago, .op-k-oc { box-shadow: inset 0 0 0 2px var(--cds-chart-reference); }
+.op-doc, .op-k-doc { box-shadow: inset 0 -3px 0 var(--color-fg); }
+.op-alerta, .op-k-alerta { box-shadow: inset 0 0 0 2px var(--color-bad); }
+.op-hoy { outline: 2px solid var(--color-fg); outline-offset: -1px; font-weight: 600; }
+.op-anio { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cds-gap-md); }
+.op-mes-t { font-size: var(--cds-font-size-caption); text-transform: capitalize; margin-bottom: 2px; }
+.op-tema { font-weight: var(--cds-font-weight-medium); margin: 4px 0; }
+.tl, .tl-list { list-style: none; padding: 0; margin: var(--cds-gap-sm) 0; border-left: 2px solid var(--color-border-line); }
+.tl li, .tl-li { display: grid; grid-template-columns: 82px 1fr; gap: 8px; padding: 6px 0 6px 10px; position: relative; font-size: var(--cds-font-size-caption); }
+.tl li::before, .tl-li::before { content: ''; position: absolute; left: -6px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-panel); border: 2px solid var(--color-border-line); }
+.tl-open::before { border-color: var(--color-warn) !important; }
+.tl-warn { opacity: .75; }
+.tl-f { color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.tl-item { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); margin: var(--cds-gap-sm) 0; background: var(--color-panel); }
+.tl-item summary { margin: 0 !important; }
+.tl-item summary .va-muted { font-weight: 400; }
+@media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
 </style>
 
 <article class="va" id="analisis">
-  <div class="va-eyebrow">DMAO · Contrato de recolección Cosemar · P.P. 060/2023 · ID 3447-86-LR23</div>
-  <h2 id="titular" data-draw="va_titular" data-source="c_portada c_pagos">—</h2>
-  <p>En el libro de control quedan <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago sin pago registrado, en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio (<b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> sin monto cargado). La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
+  <div class="va-eyebrow">DMAO · Contratos Cosemar · recolección 3447-86-LR23 y disposición final 3447-187-LR24</div>
+  <h2 id="titulo-op">Control de los contratos Cosemar: pagos, plazos, flota y personal</h2>
   <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
 
+  <input type="radio" name="vt" id="vt-op" class="vt-r" checked>
+  <input type="radio" name="vt" id="vt-mu" class="vt-r">
+  <input type="radio" name="vt" id="vt-mf" class="vt-r">
+  <input type="radio" name="vt" id="vt-co" class="vt-r">
+  <input type="radio" name="vt" id="vt-fl" class="vt-r">
+  <input type="radio" name="vt" id="vt-pe" class="vt-r">
+  <input type="radio" name="vt" id="vt-su" class="vt-r">
+  <input type="radio" name="vt" id="vt-an" class="vt-r">
+  <div class="vt-nav" role="tablist"><label for="vt-op">Operación</label><label for="vt-mu">Multas</label><label for="vt-mf">Manifolds</label><label for="vt-co">Correos</label><label for="vt-fl">Flota</label><label for="vt-pe">Personal</label><label for="vt-su">Bono SUBDERE</label><label for="vt-an">Análisis y deuda</label></div>
+
+  <section class="va-tab" id="tab-op">
+  <input type="radio" name="ct" id="ct-rec" class="ct-r" checked><input type="radio" name="ct" id="ct-df" class="ct-r">
+  <div class="ct-nav"><label for="ct-rec">Recolección · 3447-86-LR23</label><label for="ct-df">Disposición final · 3447-187-LR24</label></div>
+  <div class="op-c op-rec">
+    <p class="va-muted">P.P. 060/2023 · recolección y transporte · mensualidad fija. Cosemar informa del 1 al 5, la OC se genera en máximo 7 días, la factura llega del 15 al 20 y se paga a 30 días.</p>
+    <h3 id="h-alertas-rec">Alertas de hoy</h3>
+    <ul class="va-ul" id="alertas-rec" data-draw="op_alertas_rec" data-source="c_alertas"></ul>
+    <div class="op-row">
+      <div>
+        <h3 id="h-ultimo-rec">Último pago y en qué paso va cada mes</h3>
+        <div id="ultimo-rec" data-draw="op_ultimo_rec" data-source="c_ciclo">—</div>
+      </div>
+      <div>
+        <h3 id="h-cal-rec">Calendario del ciclo: informe, OC, factura y pago</h3>
+        <p class="va-muted">Pasa el cursor por un día para ver qué vence. «Ver año» muestra los doce meses en miniatura.</p>
+        <div id="cal-rec" data-draw="op_cal_rec" data-source="c_ciclo">—</div>
+      </div>
+    </div>
+    <h3 id="h-cifras-rec">Gasto del contrato, lo pagado en 2026 y lo que queda para 2027</h3>
+    <div id="cifras-rec" data-draw="op_cifras_rec" data-source="c_presupuesto">—</div>
+    <h3 id="h-ant-rec">Antecedentes, comentarios y hechos por subsanar</h3>
+    <ul class="va-ul" id="ant-rec" data-draw="op_ant_rec" data-source="antecedentes"></ul>
+    <h3 id="h-dec-rec">Decretos y actos vigentes, y lo que respaldan</h3>
+    <div class="va-wrap"><table class="va-tbl" id="tbl-dec-rec" data-source="c_decretos"><thead><tr><th>Fecha</th><th>Acto</th><th>Qué respalda</th><th>Estado</th></tr></thead><tbody data-draw="op_dec_rec"></tbody></table></div>
+  </div>
+  <div class="op-c op-df">
+    <p class="va-muted">P.P. 104/2024 · relleno sanitario Santa Inés · se paga por tonelada. Mismo ciclo y misma cuenta presupuestaria 215.22.08.001.001.</p>
+    <h3 id="h-alertas-df">Alertas de hoy</h3>
+    <ul class="va-ul" id="alertas-df" data-draw="op_alertas_df" data-source="c_alertas"></ul>
+    <div class="op-row">
+      <div>
+        <h3 id="h-ultimo-df">Último pago y en qué paso va cada mes</h3>
+        <div id="ultimo-df" data-draw="op_ultimo_df" data-source="c_ciclo">—</div>
+      </div>
+      <div>
+        <h3 id="h-cal-df">Calendario del ciclo: informe, OC, factura y pago</h3>
+        <p class="va-muted">Pasa el cursor por un día para ver qué vence. «Ver año» muestra los doce meses en miniatura.</p>
+        <div id="cal-df" data-draw="op_cal_df" data-source="c_ciclo">—</div>
+      </div>
+    </div>
+    <h3 id="h-cifras-df">Gasto del contrato, lo pagado en 2026 y lo que queda para 2027</h3>
+    <div id="cifras-df" data-draw="op_cifras_df" data-source="c_presupuesto">—</div>
+    <h3 id="h-ant-df">Antecedentes, comentarios y hechos por subsanar</h3>
+    <ul class="va-ul" id="ant-df" data-draw="op_ant_df" data-source="antecedentes"></ul>
+    <h3 id="h-dec-df">Decretos y actos vigentes, y lo que respaldan</h3>
+    <div class="va-wrap"><table class="va-tbl" id="tbl-dec-df" data-source="c_decretos"><thead><tr><th>Fecha</th><th>Acto</th><th>Qué respalda</th><th>Estado</th></tr></thead><tbody data-draw="op_dec_df"></tbody></table></div>
+  </div>
+  </section>
+
+  <section class="va-tab" id="tab-mu">
+  <h3 id="h-multas">Procesos sancionatorios y multas, del más nuevo al más antiguo</h3>
+  <p class="va-muted">Cada proceso muestra sus pasos ejecutados en orden, los documentos, los decretos de multa y el que la reafirma, el monto y el pago donde se cobra. Abiertos primero desplegados.</p>
+  <div id="multas" data-draw="vm_multas" data-source="c_sanciones c_eventos">—</div>
+  <h3 id="h-sanciones">Hasta qué etapa llega cada proceso sancionatorio con respaldo</h3>
+  <p class="va-muted">El punto marca la etapa acreditada más avanzada. Ámbar: plazo por verificar; rojo: plazo vencido; verde: en plazo; gris: proceso cerrado.</p>
+  <div id="graf-sanciones" data-draw="va_sanciones" data-source="c_sanciones c_eventos">—</div>
+  <ul class="va-ul" id="faltas" data-draw="va_faltas" data-source="c_sanciones"></ul>
+
+  </section>
+
+  <section class="va-tab" id="tab-mf">
+  <h3 id="h-mf">Manifolds, del más reciente al más antiguo</h3>
+  <p id="mf-resumen" data-draw="vm_mf_resumen" data-source="manifolds">—</p>
+  <p class="va-muted">Plazos en días hábiles desde la anotación, salvo que el manifold fije otra fecha. Solo libro del contrato Cosemar (desde julio de 2024).</p>
+  <ul class="tl-list" id="mf-lista" data-draw="vm_mf" data-source="manifolds"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-co">
+  <h3 id="h-co">Correos con el personal del contrato</h3>
+  <p class="va-muted">Hernán Gómez, Jesús Chinchayán, Edgar Ortega, Teresa Donoso, René Gutiérrez, Alejandra Marzán y Rodrigo Barril, desde agosto de 2026. Un registro por hilo, con su último mensaje.</p>
+  <div id="co-ultimo" data-draw="vc_ultimo" data-source="correos">—</div>
+  <ul class="tl-list" id="co-lista" data-draw="vc_lista" data-source="correos"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-fl">
+  <h3 id="h-fl">Flota del contrato: estado y documentos al día</h3>
+  <div id="fl-resumen" data-draw="vf_resumen" data-source="flota">—</div>
+  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. «Foto» abre el registro fotográfico de la flota.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso de circulación</th><th>SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
+  <p class="va-muted">Contrato: seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000), vence el 31-07-2027. Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF, con endoso de 419,57 UF del 29-10-2026), vence el 28-10-2029.</p>
+  <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
+  <p class="va-muted">Hoy: <b data-draw="va_vence" data-source="c_portada" data-field="vencen30" data-row="0">—</b> vencen en 30 días y <b data-draw="va_atraso" data-source="c_portada" data-field="atrasados" data-row="0">—</b> están atrasados, contando los plazos sancionatorios vencidos. Las fechas de flota vienen de la planilla de vencimientos y se confirman contra el certificado de cada patente.</p>
+  <div id="graf-venc" data-draw="va_venc" data-source="c_vencimientos">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-crit"></span>Vencido</span><span><span class="va-key va-k-warn"></span>Vence en 30 días</span></div>
+
+  </section>
+
+  <section class="va-tab" id="tab-pe">
+  <h3 id="h-pe">Personal del contrato</h3>
+  <div id="pe-resumen" data-draw="vp2_resumen" data-source="personal resumenes">—</div>
+  <p class="va-muted">Cifras agregadas del estado de pago (EDP) de Cosemar del 14-10-2026 y del informe comparativo de sueldos base. El tablero no publica nombres ni RUT.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-personal" data-source="personal" data-row-key="cargo"><thead><tr><th>Cargo</th><th class="va-r">Dotación</th><th class="va-r">Oferta</th><th class="va-r">Sueldo base julio 2026</th><th>Nota</th></tr></thead><tbody data-draw="vp2_tabla"></tbody></table></div>
+  <h4 id="h-pe-pend">Lo que falta acreditar</h4>
+  <ul class="va-ul" id="pe-pend" data-draw="vp2_pend" data-source="resumenes"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-su">
+  <h3 id="h-su">Bono SUBDERE 2026: cuánto se pagó y cuánto está rendido</h3>
+  <div id="su-resumen" data-draw="vs_resumen" data-source="subdere resumenes">—</div>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-subdere" data-source="subdere" data-row-key="concepto"><thead><tr><th>Concepto</th><th class="va-r">Trabajadores</th><th class="va-r">Nominal</th><th class="va-r">Con firma o recibo</th><th>Fecha</th><th>Estado</th></tr></thead><tbody data-draw="vs_tabla"></tbody></table></div>
+  <p class="va-muted">Los trabajadores se repiten entre planillas: no se suman. Cotejo documental municipal del 09-11-2026; no reemplaza la conciliación bancaria.</p>
+  <h4 id="h-su-pend">Para cerrar el bono</h4>
+  <ul class="va-ul" id="su-pend" data-draw="vs_pend" data-source="resumenes"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-an">
+  <h2 id="titular" data-draw="va_titular" data-source="c_portada c_pagos">—</h2>
+  <p>En el libro de control quedan <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago sin pago registrado, en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio (<b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> sin monto cargado). La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
   <section id="alzas" class="va-sec">
   <h3 id="h-alzas">Lo que se debió pagar a Cosemar cada mes y lo que se tramitó, desde el inicio del contrato</h3>
   <p>Entre julio de 2024 y <b data-draw="vd_ultimo" data-source="c_deuda_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vd_tram" data-source="c_deuda_resumen" data-field="tramitadoTotal" data-row="0">—</b>, retroactivo incluido. Por decretos dictados y no aplicados el municipio adeuda <b class="va-deuda" data-draw="vd_dec" data-source="c_deuda_resumen" data-field="deudaDecreto" data-row="0">—</b>, y las bases (art. 9) suman <b class="va-ipc" data-draw="vd_bases" data-source="c_deuda_resumen" data-field="deudaBases" data-row="0">—</b> más por el IPC que Cosemar pidió y que no tiene decreto. Cada mes sin regularizar agrega <b data-draw="vd_mesdec" data-source="c_deuda_resumen" data-field="mensualDecreto" data-row="0">—</b> y <b data-draw="vd_mesbases" data-source="c_deuda_resumen" data-field="mensualBases" data-row="0">—</b>, respectivamente.</p>
@@ -152,16 +320,6 @@
   <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
   <div class="va-legend"><span><span class="va-key va-k-ok"></span>Acreditado</span><span><span class="va-key va-k-warn"></span>Por verificar</span><span><span class="va-key va-k-none"></span>Sin antecedentes</span></div>
 
-  <h3 id="h-sanciones">Hasta qué etapa llega cada proceso sancionatorio con respaldo</h3>
-  <p class="va-muted">El punto marca la etapa acreditada más avanzada. Ámbar: plazo por verificar; rojo: plazo vencido; verde: en plazo; gris: proceso cerrado.</p>
-  <div id="graf-sanciones" data-draw="va_sanciones" data-source="c_sanciones c_eventos">—</div>
-  <ul class="va-ul" id="faltas" data-draw="va_faltas" data-source="c_sanciones"></ul>
-
-  <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
-  <p class="va-muted">Hoy: <b data-draw="va_vence" data-source="c_portada" data-field="vencen30" data-row="0">—</b> vencen en 30 días y <b data-draw="va_atraso" data-source="c_portada" data-field="atrasados" data-row="0">—</b> están atrasados, contando los plazos sancionatorios vencidos. Las fechas de flota vienen de la planilla de vencimientos y se confirman contra el certificado de cada patente.</p>
-  <div id="graf-venc" data-draw="va_venc" data-source="c_vencimientos">—</div>
-  <div class="va-legend"><span><span class="va-key va-k-crit"></span>Vencido</span><span><span class="va-key va-k-warn"></span>Vence en 30 días</span></div>
-
   <h3 id="h-pend">Pendientes y diferencias, con su respaldo</h3>
   <p class="va-muted">Para descargar esta lista, abra Fuentes y baje «Pendientes y diferencias» como CSV.</p>
   <div class="va-wrap">
@@ -175,6 +333,8 @@
     <summary>Cómo se leen estas cifras</summary>
     <p class="va-muted">Todo sale del libro de control en Notion, que n8n actualiza cada hora. «Sin antecedentes» significa que el libro no tiene el documento, no que el hito no ocurrió. Un hito solo cuenta como acreditado si trae respaldo y no está «por verificar». Los plazos se calculan en días hábiles desde 24 horas después de una notificación con fecha cierta (bases, art. 7, 177 a 186). Las fechas del inventario del 22-09-2026 son fechas de archivo, no del acto.</p>
   </details>
+  </section>
 </article>
 <script src="motor.js"></script>
 <script src="app.js"></script>
+<script src="operacion.js"></script>
