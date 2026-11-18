@@ -31,12 +31,13 @@
   }
   window.Tablero = { iniciar: function () {
     var st = document.getElementById('app-estado');
-    fetch('data/manifiesto.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (m) {
+    var incrustado = window.__DATOS;
+    var json = function (u) { return incrustado ? Promise.resolve(incrustado[u]) : fetch(u, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); };
+    json('data/manifiesto.json').then(function (m) {
       var ids = Object.keys(m.archivos); ids.forEach(function (id) { estado[id] = 'loading'; });
       dibujar();
       return Promise.all(ids.map(function (id) {
-        return fetch(m.archivos[id], { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(function (j) { raw[id] = j; estado[id] = 'ok'; }, function () { estado[id] = 'error'; });
+        return json(m.archivos[id]).then(function (j) { raw[id] = j; estado[id] = 'ok'; }, function () { estado[id] = 'error'; });
       })).then(function () {
         cache = {}; dibujar();
         var f = new Date(m.construido);

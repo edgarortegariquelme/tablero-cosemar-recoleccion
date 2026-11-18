@@ -40,3 +40,10 @@ Computador M370-00507, carpeta `PASE_CLAUDE_CODE_PP73_2026_v2`: figura como no u
 - Reglas del ciclo: Cosemar informa del 1 al 5; OC en máximo 7 días desde el memo (alerta al vencer); factura del 15 al 20; pago a 30 días de la factura.
 - Presupuesto 2026 estimado = lo pagado con cargo a 2026 en ambos contratos ($3.799 M); deuda de octubre a diciembre que pasa a 2027: $1.147 M (estimación, falta la cifra oficial de DAF).
 - Bases recolección art. 36: $250–260 M/mes de referencia × 60 meses (art. 82).
+
+## 18-11-2026 (noche) · app independiente
+- `docs/`: app web sin Claude (HTML + JS + JSON). `docs/js/runtime.js` reemplaza al runtime de Claude (`dash.*`) leyendo `docs/data/*.json`.
+- `node datos/construir_app.js` copia el código de `tablero/draft/` y los datos, y genera además `entregables/Control_Cosemar.html` (un solo archivo con todo incrustado, se abre con doble clic).
+- `datos/exportar_notion.js` baja el libro de control con la API de Notion (variable `NOTION_TOKEN`) a `docs/data/notion/`; si no hay token se usa la semilla.
+- `.github/workflows/actualizar-app.yml`: cada hora exporta Notion, regenera y hace commit si cambió algo. Falta el secreto `NOTION_TOKEN` y activar GitHub Pages (carpeta /docs).
+- Fotos por móvil: carpeta Drive 10lZuRbhinsJcuIQVneD2kLnwh861lBwG. Imposiciones ene–jul 2026 en Drive (pagos mensuales); faltan ago–oct.
