@@ -1,0 +1,61 @@
+# Flujos Cosemar sin n8n: ingesta (cada hora), avisos (08:10 Chile en horario de verano, lun-sáb) y reproceso (cada 6 h).
+# Ejecutan el mismo código de los nodos de n8n/produccion/*.json con acciones/ejecutor.js.
+# Secretos (Settings → Secrets and variables → Actions): NOTION_TOKEN (obligatorio), AVISOS_PARA, AVISOS_CC (opcional),
+# GMAIL_USUARIO, GMAIL_CLAVE_APP (avisos), GOOGLE_SA_JSON (opcional, Drive). Sin NOTION_TOKEN no se ejecuta nada.
+name: Flujos Cosemar
+on:
+  schedule:
+    - cron: '7 * * * *'        # ingesta, antes de la exportación de la app (:17)
+    - cron: '10 11 * * 1-6'    # avisos: 08:10 Chile (UTC-3); en invierno (UTC-4) corre a las 07:10
+    - cron: '37 */6 * * *'     # reproceso de errores
+  workflow_dispatch:
+    inputs:
+      proceso:
+        description: 'Proceso a ejecutar'
+        type: choice
+        options: [ingesta, avisos, reproceso, revisar]
+        default: revisar
+      eventos:
+        description: 'Solo ingesta (opcional): JSON {"eventos":[...]} o {"documentos":[...]}, igual que el webhook /cosemar/evento'
+        required: false
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: cosemar-libro
+  cancel-in-progress: false
+jobs:
+  ejecutar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Elegir proceso
+        id: p
+        env:
+          PROGRAMA: ${{ github.event.schedule }}
+          ELEGIDO: ${{ inputs.proceso }}
+        run: |
+          case "$PROGRAMA" in
+            '7 * * * *') P=ingesta ;;
+            '10 11 * * 1-6') P=avisos ;;
+            '37 */6 * * *') P=reproceso ;;
+            *) P="$ELEGIDO" ;;
+          esac
+          echo "proceso=$P" >> "$GITHUB_OUTPUT"
+      - name: Instalar dependencias
+        if: steps.p.outputs.proceso == 'avisos'
+        run: npm ci --omit=dev --no-audit --no-fund
+      - name: Ejecutar ${{ steps.p.outputs.proceso }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+          AVISOS_PARA: ${{ secrets.AVISOS_PARA }}
+          AVISOS_CC: ${{ secrets.AVISOS_CC }}
+          GMAIL_USUARIO: ${{ secrets.GMAIL_USUARIO }}
+          GMAIL_CLAVE_APP: ${{ secrets.GMAIL_CLAVE_APP }}
+          EVENTOS_JSON: ${{ inputs.eventos }}
+          PROCESO: ${{ steps.p.outputs.proceso }}
+        run: node acciones/ejecutor.js "$PROCESO"

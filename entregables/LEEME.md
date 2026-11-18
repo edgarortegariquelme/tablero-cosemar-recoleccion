@@ -6,14 +6,33 @@
 - Flujos n8n de producción: `cosemar_1_ingesta.json`, `cosemar_2_avisos.json`, `cosemar_3_reproceso.json`.
 - Flujogramas: sección «Flujogramas» del tablero (monitoreo y fiscalización, pago mensual, proceso sancionatorio).
 
-## Puesta en marcha en n8n (requiere su cuenta)
+## Puesta en marcha: GitHub Actions (reemplaza a n8n Cloud desde el 18-11-2026)
 
-1. Importar los tres JSON (Workflows → Import from file).
-2. Credenciales: «Notion API» (integración interna con acceso a la base «Cosemar · Libro de control» y a «Comunicaciones»), «Google Drive OAuth2» (lectura del expediente) y «Gmail OAuth2» (envío de avisos). Asignarlas en los nodos HTTP de Notion y Drive y en «Enviar aviso».
-3. En el nodo «Config» revisar `avisosPara` (el correo personal del encargado (variable AVISOS_PARA al construir los flujos), confirmado por usted el 17-11-2026) e `ingestaUrl` (URL de su instancia).
-4. Activar los tres flujos. La ingesta corre cada hora; avisos 08:10 lunes a sábado; reproceso cada 6 horas. También responden por webhook: `/webhook/cosemar/evento`, `/avisos`, `/reprocesar`.
+n8n Cloud quedó descartado: la cuenta está en prueba (sin API pública y con el cupo de 1.000 ejecuciones agotado). Los mismos tres flujos corren ahora en GitHub Actions (`.github/workflows/cosemar-flujos.yml`), con el código de los nodos de `n8n/produccion/*.json` ejecutado por `acciones/ejecutor.js`:
 
-## Pruebas ejecutadas (n8n 2.47.7 local con API de Notion y Drive simulada; 12/12 aprobadas, repetidas tras el reinicio del 17-11)
+| Proceso | Cuándo | Qué hace |
+|---|---|---|
+| Ingesta | cada hora, minuto 07 | Lee el libro, Drive (si hay credencial) y «Comunicaciones»; valida, deduplica, rectifica y marca la sincronización |
+| Avisos | lun–sáb 11:10 UTC (08:10 Chile en verano, 07:10 en invierno) | Un solo correo con los avisos nuevos; cada evento se avisa una vez |
+| Reproceso | cada 6 horas, minuto 37 | Reintenta las escrituras fallidas y cierra los errores resueltos |
+
+También se ejecutan a mano: pestaña **Actions → Flujos Cosemar → Run workflow** (proceso `revisar` solo informa qué secreto falta; en `ingesta` se puede pegar un JSON `{"eventos":[...]}` igual que el antiguo webhook).
+
+### Secretos (repositorio → Settings → Secrets and variables → Actions → New repository secret)
+
+1. `NOTION_TOKEN` (obligatorio; también lo usa la actualización horaria de la app). En notion.so/profile/integrations cree una integración interna y copie su secreto. Luego, en Notion, abra la base «Cosemar · Libro de control» → menú ••• → **Connections** → agregue la integración; repita en la base «Comunicaciones».
+2. `GMAIL_USUARIO` (la cuenta Gmail que envía), `GMAIL_CLAVE_APP` (contraseña de aplicación de 16 letras: myaccount.google.com/apppasswords, requiere verificación en dos pasos) y `AVISOS_PARA` (destinatario). `AVISOS_CC` es opcional.
+3. `GOOGLE_SA_JSON` (opcional): JSON de una cuenta de servicio de Google Cloud con la API de Drive habilitada, y las 7 carpetas del expediente compartidas con el correo de esa cuenta en modo lector. Sin este secreto la ingesta omite Drive y lo deja dicho en el resumen de cada corrida.
+
+Sin `NOTION_TOKEN` nada se ejecuta; sin los secretos de Gmail los avisos no se registran (para no marcarlos como enviados sin haberlos enviado).
+
+Antes del primer correo: los 7 hallazgos antiguos (PS01–PS06, REQ07) saldrán como «Hallazgo nuevo» porque aún no hay filas «Aviso» en el libro.
+
+### Alternativa n8n (conservada)
+
+Los JSON `cosemar_1_ingesta.json`, `cosemar_2_avisos.json` y `cosemar_3_reproceso.json` siguen sirviendo para un n8n con plan pagado: importar, asignar las credenciales «Notion API», «Google Drive OAuth2» y «Gmail OAuth2», reemplazar `CORREO_AVISOS` en el nodo «Config» y activar.
+
+## Pruebas ejecutadas (API de Notion y Drive simulada; 12/12 aprobadas en n8n 2.47.7 local el 17-11 y 12/12 con `acciones/ejecutor.js` el 18-11, `pruebas/resultados_e2e_acciones.json`)
 
 | # | Prueba | Resultado | Evidencia |
 |---|---|---|---|

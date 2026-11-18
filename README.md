@@ -9,10 +9,12 @@ Control contractual del servicio de recolección, transporte y disposición fina
 
 ```
 Drive (expediente) ─┐
-Notion Comunicaciones ┼─> n8n 1 · Ingesta (cada hora) ──> Notion · Libro de control ──> Tablero (lee en vivo 4 vistas)
-Webhook /evento ────┘        │ valida, deduplica, rectifica           │
-                              └─> errores ─> n8n 3 · Reproceso (6 h)   └─> n8n 2 · Avisos (08:10, una vez por evento)
+Notion Comunicaciones ┼─> 1 · Ingesta (cada hora)   ──> Notion · Libro de control ──> Tablero (lee en vivo 4 vistas)
+Evento manual ──────┘        │ valida, deduplica, rectifica           │
+                              └─> errores ─> 3 · Reproceso (6 h)       └─> 2 · Avisos (08:10, una vez por evento)
 ```
+
+Los tres flujos corren en GitHub Actions (`acciones/ejecutor.js`) con el mismo código de los nodos de n8n, que se conserva como alternativa.
 
 El cálculo de estados, plazos (días hábiles, BA 7, 177–186) y montos vive en un solo archivo, `motor/motor.js`, que se inserta igual en los nodos Code de n8n y en el tablero.
 
@@ -23,6 +25,7 @@ El cálculo de estados, plazos (días hábiles, BA 7, 177–186) y montos vive e
 | `motor/` | Motor de reglas: validación, huella, rectificaciones, sanciones, pagos, vencimientos, avisos, cobertura |
 | `datos/` | `catalogo.js` (matriz de 40 obligaciones, precios por decreto, flujogramas) y `semilla.js` (carga inicial del libro, 161 registros) |
 | `n8n/` | Fuentes de los nodos Code, `build.js` que genera los flujos, `produccion/` y `prueba/` |
+| `acciones/` | `ejecutor.js`: corre los 3 flujos en GitHub Actions con el código de `n8n/produccion/` |
 | `tablero/store/` | Página del tablero (`index.html`, `app.js`, `motor.js`) y `catalogo.json` |
 | `pruebas/` | API simulada de Notion y Drive, batería de extremo a extremo (12 pruebas), arnés del tablero con jsdom |
 | `entregables/` | Matriz de obligaciones (.xlsx), flujos n8n listos para importar, `LEEME.md` con puesta en marcha y tabla de pruebas |
@@ -36,9 +39,9 @@ npm run test:tablero
 npm run build:n8n
 ```
 
-Pruebas de extremo a extremo: levantar `npm run mock`, importar `n8n/prueba/*.json` en un n8n local (Node 24), publicarlos y ejecutar `npm run test:e2e`.
+Pruebas de extremo a extremo: levantar `npm run mock` y ejecutar `npm run test:e2e:acciones` (ejecutor de GitHub Actions) o, con un n8n local (Node 24) y `n8n/prueba/*.json` importados y publicados, `npm run test:e2e`.
 
-Puesta en marcha en n8n de producción: ver `entregables/LEEME.md`.
+Producción: GitHub Actions (`.github/workflows/cosemar-flujos.yml` + `acciones/ejecutor.js`, mismo código de los nodos n8n). Secretos y puesta en marcha: `entregables/LEEME.md`.
 
 ## Límites conocidos
 

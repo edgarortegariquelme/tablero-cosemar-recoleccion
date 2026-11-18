@@ -1,0 +1,258 @@
+{
+ "fecha": "2026-11-18T20:12:48.138Z",
+ "motor": "acciones/ejecutor.js (GitHub Actions)",
+ "pruebas": [
+  {
+   "id": "P01",
+   "nombre": "Corrida sin novedades: lee las 161 filas (2 páginas), no crea nada y marca la última actualización exitosa",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "informe": {
+     "exito": true,
+     "escritos": 0,
+     "fallas": 0,
+     "resumen": {
+      "crear": 0,
+      "rectificar": 0,
+      "duplicado": 0,
+      "revision": 0,
+      "error": 0
+     },
+     "fuentes": {
+      "drive": 0,
+      "comunicaciones": 0,
+      "webhook": 0
+     },
+     "omitidos": 0,
+     "fallasFuente": [],
+     "hoy": "2026-11-16",
+     "cierreFallido": 0
+    },
+    "filas": 161,
+    "marca": "Última actualización exitosa: 2026-11-18T20:12:41.608Z · leídos 161 · nuevos 0 · rectificados 0 · duplicados omitidos 0 · a revisión 0 · errores 0"
+   }
+  },
+  {
+   "id": "P02",
+   "nombre": "Un archivo nuevo en la carpeta de octubre actualiza el pago sin intervención manual",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "antes": "OC solicitada",
+    "despues": "OC emitida",
+    "fila": {
+     "clave": "PAG|2026-10|oc_emitida|3447-2901-SE26",
+     "origen": "n8n · drive:drv-OC-oct · mod:2026-11-16T14:02:11.000Z",
+     "respaldo": "https://drive.google.com/file/d/drv-OC-oct/view",
+     "fechaTipo": "Fecha de archivo"
+    },
+    "informe": {
+     "crear": 1,
+     "rectificar": 0,
+     "duplicado": 0,
+     "revision": 0,
+     "error": 0
+    }
+   }
+  },
+  {
+   "id": "P03",
+   "nombre": "El mismo documento no se carga dos veces (ni por Drive ni por reenvío del evento)",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "reintentoDrive": {
+     "creados": 0,
+     "omitidos": 1
+    },
+    "reenvio": {
+     "crear": 0,
+     "rectificar": 0,
+     "duplicado": 1,
+     "revision": 0,
+     "error": 0
+    },
+    "filasConEsaClave": 1
+   }
+  },
+  {
+   "id": "P04",
+   "nombre": "Una rectificación crea la versión 2, deja la 1 como historial y el tablero usa la nueva cifra",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "versiones": [
+     {
+      "version": 1,
+      "vigente": false,
+      "monto": 261767423,
+      "rectificaA": null
+     },
+     {
+      "version": 2,
+      "vigente": true,
+      "monto": 267940006,
+      "rectificaA": "PAG|2026-10|memo_oc|2211 v1"
+     }
+    ],
+    "diferenciaAntes": [
+     6172583
+    ],
+    "solicitadoOCDespues": 267940006,
+    "diferenciasDespues": []
+   }
+  },
+  {
+   "id": "P05",
+   "nombre": "Un documento que no se puede clasificar va a la cola de revisión sin mover ningún estado; el de disposición final se omite",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "informe": {
+     "crear": 0,
+     "rectificar": 0,
+     "duplicado": 0,
+     "revision": 1,
+     "error": 0
+    },
+    "omitidos": 1,
+    "filaRevision": {
+     "clave": "REV|DOC|?|?|5b30b9bd",
+     "detalle": "Ruta: 1. LICITACION RECOLECCION RSD 3447-86-LR23 · Motivo: no se pudo determinar la entidad (proceso, período o patente)"
+    }
+   }
+  },
+  {
+   "id": "P06",
+   "nombre": "Un dato inválido (fecha imposible, monto negativo) se rechaza y queda registrado con el motivo",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "informe": {
+     "crear": 0,
+     "rectificar": 0,
+     "duplicado": 0,
+     "revision": 0,
+     "error": 1
+    },
+    "motivo": "Rechazado por validación: fecha inválida: 2026-13-45; monto inválido: -5 · Corregir la fuente y reenviar · car"
+   }
+  },
+  {
+   "id": "P07",
+   "nombre": "Una falla temporal de escritura (3 intentos) queda registrada y el reproceso la completa y la cierra",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "falla": {
+     "exito": false,
+     "fallas": 1,
+     "intentos503": 3,
+     "errorRegistrado": 1,
+     "creado": false
+    },
+    "trasReproceso": {
+     "creado": true,
+     "errorVerificacion": "Acreditado",
+     "nota": "Reprocesado correctamente el 2026-11-18T20:12:44.822Z",
+     "estadoPago": "OC aceptada"
+    },
+    "respuesta": {
+     "reprocesados": 1,
+     "resueltos": 1
+    }
+   }
+  },
+  {
+   "id": "P08",
+   "nombre": "Si Drive no responde, la corrida lo informa, no marca «exitosa» y la siguiente corrida se recupera",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "conDriveCaido": {
+     "exito": false,
+     "fallasFuente": [
+      "Drive: 500 - {\"error\":{\"code\":500,\"message\":\"Drive no disponible (simulado)\"}}"
+     ],
+     "marca": "Último intento con errores: 2026-11-18T20:12:47.947Z · leído"
+    },
+    "siguiente": {
+     "exito": true
+    }
+   }
+  },
+  {
+   "id": "P09",
+   "nombre": "Un decreto sin respaldo no cambia el estado; con respaldo y notificación acreditada avanza y calcula el plazo de reposición",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "estadoInicial": "Informe que evalúa la respuesta",
+    "sinRespaldo": {
+     "estado": "Informe que evalúa la respuesta",
+     "plazo": "por verificar"
+    },
+    "conRespaldo": {
+     "estado": "Notificación del decreto a Cosemar",
+     "notificacion": "2026-11-12",
+     "regla": "BA 184 · 5 días hábiles para reposición",
+     "vence": "2026-11-20",
+     "diasHabilesRestantes": 4,
+     "decretadoUTM": 10
+    }
+   }
+  },
+  {
+   "id": "P10",
+   "nombre": "Derivar a cobro no equivale a cobrar; el descuento efectivo se contabiliza una sola vez aunque el documento llegue tres veces",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "antes": {
+     "estado": "Decreto que rectifica",
+     "cobrado": null
+    },
+    "trasDerivacion": {
+     "estado": "Derivación a cobro (instrucción de descuento)",
+     "derivado": 4193340,
+     "cobrado": null
+    },
+    "trasCobro": {
+     "estado": "Cobro o descuento efectivo",
+     "propuestoUTM": 60,
+     "decretadoUTM": 60,
+     "cobradoCLP": 4193340,
+     "respaldo": "https://drive.google.com/file/d/prueba-ep/view",
+     "filasDelCobro": 1
+    }
+   }
+  },
+  {
+   "id": "P11",
+   "nombre": "Los avisos se envían en un solo mensaje y una sola vez por evento",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "primeraCorrida": {
+     "avisosRegistrados": 13,
+     "mensajes": 1,
+     "asunto": "Cosemar recolección · 13 aviso(s) · 2026-11-16"
+    },
+    "segundaCorrida": {
+     "mensajesTotales": 1,
+     "respuesta": {
+      "noop": true,
+      "hoy": "2026-11-16",
+      "mensaje": "Sin avisos nuevos"
+     }
+    },
+    "ejemplos": [
+     "<li><b>M-921</b> · Vence en 0 días: Revisión técnica (M-921) el 2026-11-16</li>",
+     "<li><b>M-922</b> · Vence en 3 días: Revisión técnica (M-922) el 2026-11-19</li>",
+     "<li><b>M-940</b> · Vence en 19 días: Revisión técnica (M-940) el 2026-12-05</li>"
+    ]
+   }
+  },
+  {
+   "id": "P12",
+   "nombre": "Un documento de flota que aparece vencido genera un único aviso adicional",
+   "resultado": "APROBADA",
+   "evidencia": {
+    "mensajes": 2,
+    "aviso": [
+     "<li><b>M-940</b> · VENCIDO: Revisión técnica (PRUEBA de vencido) (M-940) venció el 2026-11-10</li>"
+    ]
+   }
+  }
+ ]
+}

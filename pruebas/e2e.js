@@ -1,9 +1,15 @@
-/* Pruebas de extremo a extremo: n8n real (local) + API simulada de Notion/Drive. Uso: node pruebas/e2e.js */
+/* Pruebas de extremo a extremo con la API simulada de Notion/Drive (npm run mock).
+ * Modo n8n (por defecto): n8n local con los flujos de n8n/prueba importados. Uso: node pruebas/e2e.js
+ * Modo acciones: el ejecutor de GitHub Actions (acciones/ejecutor.js), sin n8n. Uso: E2E_MODO=acciones node pruebas/e2e.js */
 const M = require('../motor/motor.js'), C = require('../datos/catalogo.js'), fs = require('fs');
 const N8 = 'http://127.0.0.1:5678/webhook/cosemar/', MK = 'http://127.0.0.1:8787', HOY = '2026-11-16', R = [];
 const j = async (u, b, m) => { const r = await fetch(u, { method: m || 'POST', headers: { 'content-type': 'application/json' }, body: b ? JSON.stringify(b) : undefined }); const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { raw: t.slice(0, 300), status: r.status }; } };
 const ctl = set => j(MK + '/_ctl', { set }), estado = async () => { const s = await j(MK + '/_state', null, 'GET'); s.eventos = M.normalizarLibro(s.eventos); return s; };
-const ingesta = b => j(N8 + 'evento', b || {});
+const ACC = process.env.E2E_MODO === 'acciones';
+if (ACC) Object.assign(process.env, { COSEMAR_BASE: MK, COSEMAR_HOY: HOY, COSEMAR_CORREO_PRUEBA: MK + '/sink/mail' });
+const A = ACC ? require('../acciones/ejecutor.js') : null;
+const llamar = (ruta, b) => !ACC ? j(N8 + ruta, b || {}) : ruta === 'evento' ? A.ingesta(b && Object.keys(b).length ? b : null) : ruta === 'avisos' ? A.avisos() : A.reproceso();
+const ingesta = b => llamar('evento', b);
 function ok(id, nombre, cond, evidencia) { R.push({ id, nombre, resultado: cond ? 'APROBADA' : 'FALLA', evidencia }); console.log((cond ? '✔ ' : '✘ ') + id + ' ' + nombre + ' → ' + JSON.stringify(evidencia).slice(0, 330)); }
 const pago = (s, per) => M.derivarPagos(s.eventos, C, HOY).filter(p => p.periodo === per)[0];
 const san = (s, id) => M.derivarSanciones(s.eventos, HOY, C.sanciones).filter(x => x.id === id)[0];
@@ -39,7 +45,7 @@ const san = (s, id) => M.derivarSanciones(s.eventos, HOY, C.sanciones).filter(x 
   const ev = { clave: 'PAG|2026-10|oc_aceptada|3447-2901-SE26', modulo: 'Pago', entidad: '2026-10', hito: 'oc_aceptada', numero: '3447-2901-SE26', fecha: '2026-11-16', fechaTipo: 'Acto acreditado', verificacion: 'Acreditado', documento: 'Aceptación OC 3447-2901-SE26 en Mercado Público (PRUEBA)', respaldo: 'https://www.mercadopublico.cl/prueba', obligacion: 'OB-02' };
   await ctl({ failClaves: { [ev.clave]: 3 } }); r = await ingesta({ eventos: [ev] }); s = await estado(); const e1 = s.eventos.filter(e => e.modulo === 'Error' && e.hito === 'escritura_fallida');
   const falla = { exito: r.exito, fallas: r.fallas, intentos503: s.log.length, errorRegistrado: e1.length, creado: s.eventos.some(e => e.clave === ev.clave) };
-  const rr = await j(N8 + 'reprocesar', {}); s = await estado(); const e2 = s.eventos.filter(e => e.modulo === 'Error' && e.hito === 'escritura_fallida')[0];
+  const rr = await llamar('reprocesar'); s = await estado(); const e2 = s.eventos.filter(e => e.modulo === 'Error' && e.hito === 'escritura_fallida')[0];
   ok('P07', 'Una falla temporal de escritura (3 intentos) queda registrada y el reproceso la completa y la cierra', falla.exito === false && falla.intentos503 === 3 && falla.errorRegistrado === 1 && !falla.creado && s.eventos.some(e => e.clave === ev.clave && e.vigente) && e2.verificacion === 'Acreditado' && pago(s, '2026-10').estado === 'OC aceptada', { falla, trasReproceso: { creado: s.eventos.some(e => e.clave === ev.clave), errorVerificacion: e2.verificacion, nota: e2.rectificaA, estadoPago: pago(s, '2026-10').estado }, respuesta: rr });
   // P08 fuente caída
   const marcaAntes = s.eventos.filter(e => e.modulo === 'Sistema')[0].fecha; await new Promise(z => setTimeout(z, 1100));
@@ -61,13 +67,14 @@ const san = (s, id) => M.derivarSanciones(s.eventos, HOY, C.sanciones).filter(x 
   await ingesta({ eventos: [cob] }); await ingesta({ eventos: [cob, Object.assign({}, cob)] }); s = await estado(); const c2 = san(s, 'PS05');
   ok('P10', 'Derivar a cobro no equivale a cobrar; el descuento efectivo se contabiliza una sola vez aunque el documento llegue tres veces', c0.montos.cobrado === null && c1.estado === 'Derivación a cobro (instrucción de descuento)' && c1.montos.cobrado === null && c2.cerrada && c2.montos.cobrado.valor === 4193340 && s.eventos.filter(e => e.clave === cob.clave).length === 1, { antes: { estado: c0.estado, cobrado: c0.montos.cobrado }, trasDerivacion: { estado: c1.estado, derivado: c1.montos.derivado.valor, cobrado: c1.montos.cobrado }, trasCobro: { estado: c2.estado, propuestoUTM: c2.montos.propuesto.valor, decretadoUTM: c2.montos.decretado.valor, cobradoCLP: c2.montos.cobrado.valor, respaldo: c2.montos.cobrado.respaldo, filasDelCobro: s.eventos.filter(e => e.clave === cob.clave).length } });
   // P11 avisos una sola vez
-  const a1 = await j(N8 + 'avisos', {}); s = await estado(); const n1 = s.eventos.filter(e => e.modulo === 'Aviso').length, m1 = s.mails.length; const a2 = await j(N8 + 'avisos', {}); s = await estado();
+  const a1 = await llamar('avisos'); s = await estado(); const n1 = s.eventos.filter(e => e.modulo === 'Aviso').length, m1 = s.mails.length; const a2 = await llamar('avisos'); s = await estado();
   ok('P11', 'Los avisos se envían en un solo mensaje y una sola vez por evento', n1 > 0 && m1 === 1 && s.mails.length === 1 && s.eventos.filter(e => e.modulo === 'Aviso').length === n1 && s.mails[0].total === n1, { primeraCorrida: { avisosRegistrados: n1, mensajes: m1, asunto: s.mails[0].asunto }, segundaCorrida: { mensajesTotales: s.mails.length, respuesta: a2 }, ejemplos: s.mails[0].html.match(/<li>.*?<\/li>/g).slice(0, 3) });
   // P12 un vencimiento nuevo genera exactamente un aviso más
   await ingesta({ eventos: [{ clave: 'VEN|M-940|revision_tecnica|2026-11-10', modulo: 'Vencimiento', entidad: 'M-940', hito: 'revision_tecnica', fecha: '2026-11-10', fechaTipo: 'Declarada', documento: 'Revisión técnica (PRUEBA de vencido)', respaldo: 'https://docs.google.com/spreadsheets/d/prueba', patente: 'TCRY91-K', obligacion: 'OB-20' }] });
-  await j(N8 + 'avisos', {}); s = await estado(); const ult = s.mails[s.mails.length - 1];
+  await llamar('avisos'); s = await estado(); const ult = s.mails[s.mails.length - 1];
   ok('P12', 'Un documento de flota que aparece vencido genera un único aviso adicional', s.mails.length === 2 && ult.total === 1 && /VENCIDO/.test(ult.html), { mensajes: s.mails.length, aviso: ult.html.match(/<li>.*?<\/li>/g) });
-  fs.writeFileSync(__dirname + '/resultados_e2e.json', JSON.stringify({ fecha: new Date().toISOString(), n8n: '2.47.7 (local)', pruebas: R }, null, 1));
-  fs.writeFileSync(__dirname + '/estado_final_mock.json', JSON.stringify(s.eventos));
+  if (ACC) fs.writeFileSync(__dirname + '/resultados_e2e_acciones.json', JSON.stringify({ fecha: new Date().toISOString(), motor: 'acciones/ejecutor.js (GitHub Actions)', pruebas: R }, null, 1));
+  else { fs.writeFileSync(__dirname + '/resultados_e2e.json', JSON.stringify({ fecha: new Date().toISOString(), n8n: '2.47.7 (local)', pruebas: R }, null, 1));
+  fs.writeFileSync(__dirname + '/estado_final_mock.json', JSON.stringify(s.eventos)); }
   const f = R.filter(x => x.resultado !== 'APROBADA'); console.log('\n' + (R.length - f.length) + '/' + R.length + ' aprobadas'); process.exit(f.length ? 1 : 0);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

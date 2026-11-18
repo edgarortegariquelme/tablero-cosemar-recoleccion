@@ -8,7 +8,14 @@
     "test:motor": "node pruebas/t0_motor.js",
     "test:tablero": "node pruebas/harness_borrador.js",
     "mock": "node pruebas/mock.js",
-    "test:e2e": "node pruebas/e2e.js"
+    "test:e2e": "node pruebas/e2e.js",
+    "test:e2e:acciones": "E2E_MODO=acciones node pruebas/e2e.js"
   },
-  "devDependencies": { "d3": "7.9.0", "jsdom": "24.1.3" }
+  "devDependencies": {
+    "d3": "7.9.0",
+    "jsdom": "24.1.3"
+  },
+  "dependencies": {
+    "nodemailer": "10.3.1"
+  }
 }
