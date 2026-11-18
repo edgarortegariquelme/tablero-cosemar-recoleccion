@@ -224,7 +224,7 @@
   R('vd_mesdec', 'mensualDecreto', clp); R('vd_mesbases', 'mensualBases', clp); R('vd_dec2', 'deudaDecreto', clp); R('vd_bases2', 'deudaBases', clp);
   R('vd_total', 'deudaTotal', clp); R('vd_proyhasta', 'proyHasta', mesLargo); R('vd_proymeses', 'proyMeses', String); R('vd_proydec', 'proyDecreto', clp); R('vd_proybases', 'proyBases', clp); R('vd_proytotal', 'proyTotal', clp); R('vd_retro', 'retroTramitado', clp);
   dash.draw('vd_k1', function (el) { el.style.background = dash.colors[0]; });
-  function mill(v) { return '$' + (v / 1e6).toFixed(1).replace('.', ',') + ' M'; }
+  function mill(v) { return Math.abs(v) >= 1e9 ? '$' + M.fmt(Math.round(v / 1e6)) + ' M' : '$' + (v / 1e6).toFixed(1).replace('.', ',') + ' M'; }
 
   // Escalera de precios: debido por decreto, según bases y tramitado.
   dash.draw('vd_escalera', function (el) {
@@ -324,6 +324,98 @@
       var tot = r.clave === 'Total', c = function (v, cls) { return h('td', { cls: 'va-num va-r' + (cls ? ' ' + cls : ''), text: clp(v) }); };
       return h('tr', { 'data-key': encodeURIComponent(r.clave), style: tot ? 'font-weight:600' : null }, [h('td', { text: r.clave === 'Total' ? 'Total a la fecha' : r.clave }), h('td', { cls: 'va-num va-r', text: String(r.meses) }),
         c(r.debidoDecreto), c(r.tramitado), c(r.multa), c(r.deudaDecreto, r.deudaDecreto > 1000 ? 'va-deuda' : ''), c(r.deudaBases, r.deudaBases > 0 ? 'va-ipc' : ''), c(r.deudaTotal)]);
+    }));
+  });
+
+  // ---------- plan de pago vigente (plan_pago, Notion 17-11-2026) ----------
+  var PLAZO_MESES = 2; // factura a mediados del mes siguiente + 30 días contra recepción conforme (OC)
+  function difMeses(a, b) { return (+b.slice(0, 4) - +a.slice(0, 4)) * 12 + (+b.slice(5, 7) - +a.slice(5, 7)); }
+  function sigMes(p) { var y = +p.slice(0, 4), m = +p.slice(5, 7) + 1; if (m > 12) { m = 1; y++; } return y + '-' + (m < 10 ? '0' : '') + m; }
+  dash.calc('c_plan_mes', {
+    inputs: ['plan_pago'], title: 'Plan de pago por mes de desembolso',
+    description: 'Suma lo que el plan paga cada mes por componente y calcula el saldo adeudado al cierre: servicios ya prestados (mes de servicio hasta ese mes) que el plan paga en un mes posterior.',
+    fn: function (plan) {
+      if (!plan.length) return [];
+      var meses = plan.map(function (r) { return r.mesPago; }).concat(plan.map(function (r) { return r.servicio; })).filter(function (p) { return p >= '2026-11'; }).sort();
+      var out = [], p = meses[0], fin = meses[meses.length - 1];
+      while (p <= fin) {
+        var de = plan.filter(function (r) { return r.mesPago === p; }), sum = function (t) { return de.filter(function (r) { return r.tipo === t; }).reduce(function (a, r) { return a + Number(r.monto); }, 0); };
+        var saldo = plan.filter(function (r) { return r.servicio <= p && r.mesPago > p; }).reduce(function (a, r) { return a + Number(r.monto); }, 0);
+        out.push({ mesPago: p, base: sum('base'), pob: sum('pob'), ipc: sum('ipc'), total: sum('base') + sum('pob') + sum('ipc'), saldo: saldo });
+        p = sigMes(p);
+      }
+      return out;
+    }
+  });
+  dash.calc('c_plan_servicio', {
+    inputs: ['plan_pago', 'alzas'], title: 'Plan de pago por mes de servicio',
+    description: 'Para cada mes de servicio suma lo programado, lo compara con el valor que corresponde según bases (contrato, decretos y bases sin decreto) y mide el atraso de la mensualidad frente a un plazo estimado de dos meses.',
+    fn: function (plan, alzas) {
+      function rige(p) { var a = alzas.filter(function (x) { return ['Contrato', 'Decreto', 'Bases sin decreto'].indexOf(x.capa) >= 0 && x.rigeDesde && x.rigeDesde <= p && x.bruto != null; }).sort(function (x, y) { return x.rigeDesde < y.rigeDesde ? -1 : 1; }); return a.length ? a[a.length - 1].bruto : null; }
+      var ss = plan.map(function (r) { return r.servicio; }).filter(function (s, i, a) { return a.indexOf(s) === i; }).sort();
+      return ss.map(function (s) {
+        var rs = plan.filter(function (r) { return r.servicio === s; }), base = rs.filter(function (r) { return r.tipo === 'base'; })[0];
+        var partes = rs.map(function (r) { return r.componente + ' $' + window.Motor.fmt(r.monto) + ' en ' + r.mesPago; });
+        var atraso = base ? Math.max(0, difMeses(s, base.mesPago) - PLAZO_MESES) : null;
+        return { servicio: s, programado: rs.reduce(function (a, r) { return a + Number(r.monto); }, 0), debidoBases: rige(s), mesPago: base ? base.mesPago : null,
+          atraso: atraso, detalle: (base ? '' : 'Mensualidad ya tramitada en 2026. ') + partes.join(' · ') };
+      });
+    }
+  });
+  dash.calc('c_plan_resumen', {
+    inputs: ['plan_pago', 'c_plan_mes', 'c_plan_servicio'], title: 'Resumen del plan de pago',
+    description: 'Total programado, parte que depende del IPC sin decreto, meses de servicio pagados después del plazo estimado y saldo adeudado máximo.',
+    fn: function (plan, meses, servicios) {
+      if (!plan.length) return [];
+      var tot = plan.reduce(function (a, r) { return a + Number(r.monto); }, 0), ipc = plan.filter(function (r) { return !r.decretado; }).reduce(function (a, r) { return a + Number(r.monto); }, 0);
+      var pagos = plan.map(function (r) { return r.mesPago; }).sort(), at = servicios.filter(function (s) { return s.atraso > 0; });
+      var mx = meses.reduce(function (a, m) { return m.saldo > a.saldo ? m : a; }, meses[0] || { saldo: 0, mesPago: null });
+      return [{ total: tot, sinDecreto: ipc, decretado: tot - ipc, primerMes: pagos[0], ultimoMes: pagos[pagos.length - 1], mesesAtrasados: at.length,
+        maxAtraso: at.reduce(function (a, s) { return Math.max(a, s.atraso); }, 0), saldoMax: mx.saldo, saldoMaxMes: mx.mesPago }];
+    }
+  });
+  function RP(id, f, fmt) { dash.draw(id, function (el) { if (!listo(el, ['c_plan_resumen'])) return; var r = filas('c_plan_resumen')[0]; el.textContent = r ? fmt(r[f]) : '—'; }); }
+  RP('vp_total', 'total', clp); RP('vp_desde', 'primerMes', mesLargo); RP('vp_hasta', 'ultimoMes', mesLargo); RP('vp_ipc', 'sinDecreto', clp); RP('vp_dec', 'decretado', clp);
+  RP('vp_atrasados', 'mesesAtrasados', String); RP('vp_maxatraso', 'maxAtraso', String); RP('vp_saldomax', 'saldoMax', clp); RP('vp_saldomes', 'saldoMaxMes', mesLargo);
+  dash.draw('vp_plazo', function (el) { el.textContent = PLAZO_MESES === 2 ? 'dos' : String(PLAZO_MESES); });
+  dash.draw('vp_k0', function (el) { el.style.background = dash.colors[0]; });
+  dash.draw('vp_k1', function (el) { el.style.background = dash.colors[1] || dash.colors[0]; });
+
+  dash.draw('vp_caja', function (el) {
+    if (!listo(el, ['c_plan_mes'])) return;
+    var ms = filas('c_plan_mes'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin plan cargado'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = w < 520 ? 280 : 320, m = { l: 66, r: 14, t: 22, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.mesPago; })).range([m.l, w - m.r]).padding(0.22);
+    var y = d3.scaleLinear().domain([0, d3.max(ms, function (p) { return Math.max(p.total, p.saldo); }) * 1.12]).nice().range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Desembolso programado por mes y saldo adeudado a Cosemar al cierre de cada mes, de noviembre de 2026 a diciembre de 2027');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(5).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.mesPago; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    var capas = [['base', dash.colors[0], 0.85], ['pob', dash.colors[1] || dash.colors[0], 0.85], ['ipc', 'var(--color-warn)', 0.8]];
+    ms.forEach(function (p) {
+      var acc = 0;
+      capas.forEach(function (c) { var v = p[c[0]]; if (!v) return; svg.append('rect').attr('x', x(p.mesPago)).attr('width', x.bandwidth()).attr('y', y(acc + v)).attr('height', y(acc) - y(acc + v)).style('fill', c[1]).style('opacity', c[2]); acc += v; });
+    });
+    svg.append('g').selectAll('text').data(ms.filter(function (p) { return p.total > 0 && x.bandwidth() > 26; })).join('text').attr('class', 'va-lab').attr('text-anchor', 'middle')
+      .attr('x', function (p) { return x(p.mesPago) + x.bandwidth() / 2; }).attr('y', function (p) { return y(p.total) - 4; }).text(function (p) { return (p.total / 1e6).toFixed(0) + ' M'; });
+    var cx = function (p) { return x(p.mesPago) + x.bandwidth() / 2; };
+    svg.append('path').attr('d', d3.line().x(cx).y(function (p) { return y(p.saldo); })(ms)).style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 2.5);
+    svg.append('g').selectAll('circle').data(ms).join('circle').attr('cx', cx).attr('cy', function (p) { return y(p.saldo); }).attr('r', 3).style('fill', 'var(--cds-chart-reference)');
+    var mx = ms.reduce(function (a, p) { return p.saldo > a.saldo ? p : a; }, ms[0]);
+    svg.append('text').attr('class', 'va-lab va-strong').attr('x', cx(mx) + 6).attr('y', y(mx.saldo) - 6).attr('text-anchor', cx(mx) > w * 0.7 ? 'end' : 'start').text('Saldo ' + mill(mx.saldo));
+    var t = tip(box);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.mesPago); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.mesPago) + ' · paga ' + clp(p.total) + (p.total ? ' (mensualidad ' + clp(p.base) + ', viviendas ' + clp(p.pob) + ', IPC ' + clp(p.ipc) + ')' : '') + ' · adeudado al cierre ' + clp(p.saldo)); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  dash.draw('vp_servicios', function (el) {
+    if (!listo(el, ['c_plan_servicio'])) return;
+    el.replaceChildren.apply(el, filas('c_plan_servicio').map(function (r) {
+      var at = r.atraso == null ? h('span', { cls: 'va-muted', text: '—' }) : r.atraso > 0 ? h('span', { cls: 'va-chip va-chip-bad', text: r.atraso + (r.atraso === 1 ? ' mes' : ' meses') }) : h('span', { cls: 'va-chip va-chip-ok', text: 'en plazo' });
+      return h('tr', { 'data-key': encodeURIComponent(r.servicio) }, [h('td', { cls: 'va-num', text: mesTxt(r.servicio) }), h('td', { cls: 'va-num va-r', text: clp(r.programado) }),
+        h('td', { cls: 'va-num va-r', text: r.debidoBases == null ? '—' : clp(r.debidoBases) }), h('td', { cls: 'va-num', text: r.mesPago ? mesTxt(r.mesPago) : 'tramitada en 2026' }), h('td', null, [at]), h('td', { cls: 'va-muted', text: r.detalle })]);
     }));
   });
 

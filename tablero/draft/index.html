@@ -95,6 +95,26 @@
   </div>
   </section>
 
+  <section id="plan" class="va-sec">
+  <h3 id="h-plan">Plan de pago vigente: qué se paga cada mes y con cuánto atraso</h3>
+  <p>El plan registrado en Notion el 17-11-2026 programa <b data-draw="vp_total" data-source="c_plan_resumen" data-field="total" data-row="0">—</b> entre <b data-draw="vp_desde" data-source="c_plan_resumen" data-field="primerMes" data-row="0">—</b> y <b data-draw="vp_hasta" data-source="c_plan_resumen" data-field="ultimoMes" data-row="0">—</b>. De ese monto, <b class="va-ipc" data-draw="vp_ipc" data-source="c_plan_resumen" data-field="sinDecreto" data-row="0">—</b> corresponden al IPC 4,3%, que no tiene decreto: sin él, lo exigible baja a <b data-draw="vp_dec" data-source="c_plan_resumen" data-field="decretado" data-row="0">—</b>. <b class="va-deuda" data-draw="vp_atrasados" data-source="c_plan_resumen" data-field="mesesAtrasados" data-row="0">—</b> meses de servicio se pagan después del plazo estimado, hasta <b data-draw="vp_maxatraso" data-source="c_plan_resumen" data-field="maxAtraso" data-row="0">—</b> meses tarde, y lo adeudado a Cosemar llega a <b class="va-deuda" data-draw="vp_saldomax" data-source="c_plan_resumen" data-field="saldoMax" data-row="0">—</b> al cierre de <b data-draw="vp_saldomes" data-source="c_plan_resumen" data-field="saldoMaxMes" data-row="0">—</b>.</p>
+
+  <h4 id="h-plan-caja">Desembolso por mes de pago y saldo adeudado al cierre de cada mes</h4>
+  <p class="va-muted">Barras: lo que el plan paga cada mes, separado en mensualidad del D.A. 2.459, diferencia del D.A. 3.957 por viviendas e IPC 4,3% sin decreto. Línea: lo que se adeuda al cierre del mes, es decir, servicios ya prestados que el plan paga después.</p>
+  <div id="graf-plan" data-draw="vp_caja" data-source="c_plan_mes">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vp_k0"></span>Mensualidad (D.A. 2.459)</span><span><span class="va-key" data-draw="vp_k1"></span>Aumento poblacional (D.A. 3.957)</span><span><span class="va-key va-k-ipc" style="opacity:.8"></span>IPC 4,3% sin decreto</span><span><span class="va-key va-k-line"></span>Saldo adeudado al cierre</span></div>
+
+  <h4 id="h-plan-servicio">Cada mes de servicio: monto programado, mes de pago y atraso</h4>
+  <p class="va-muted">Plazo estimado de pago: <span data-draw="vp_plazo">—</span> meses después del mes de servicio (la factura llega a mediados del mes siguiente y las OC fijan 30 días contra recepción conforme). Julio a septiembre de 2026 ya se tramitaron al valor del D.A. 2.459; el plan solo les paga las diferencias por viviendas e IPC.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-plan" data-source="c_plan_servicio" data-row-key="servicio">
+      <thead><tr><th data-field="servicio">Mes de servicio</th><th data-field="programado">Programado en el plan</th><th data-field="debidoBases">Debido según bases</th><th data-field="mesPago">Mes de pago de la mensualidad</th><th data-field="atraso">Atraso</th><th data-field="detalle">Qué incluye</th></tr></thead>
+      <tbody data-draw="vp_servicios"></tbody>
+    </table>
+  </div>
+  <p class="va-muted">Fuera del plan: la mensualidad de diciembre de 2027 y el reajuste IPC del tercer año, que rige desde julio de 2027. <a id="lnk-plan" href="https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d" target="_blank" rel="noopener">Abrir el plan en Notion</a>.</p>
+  </section>
+
   <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
   <p class="va-muted">Ningún mes llega a «Pago efectivo» con comprobante, y la revisión de sanciones antes del pago no consta en ningún mes.</p>
   <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
