@@ -8,12 +8,12 @@
    "modelo": "VW Constellation 17.280",
    "estado": "Operativo en ruta",
    "estadoFecha": "2026-11-09",
-   "rt": "2026-11-16",
+   "rt": "2027-05-14",
    "rtOtraFuente": null,
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "Cosemar envió la revisión técnica renovada el 16-11; falta cargar la fecha nueva.",
+   "nota": "Revisión técnica renovada el 14-11-2026 (certificado A0110000000079161, enviado por Teresa Donoso el 16-11).",
    "foto": "https://drive.google.com/file/d/1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit/view",
    "fotoId": "1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit",
    "imagen": "fotos/rt-921.jpg"
@@ -268,7 +268,7 @@
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. El certificado en la carpeta es el de febrero (vencía el 03-08-2026): pedir el vigente hasta el 31-01-2027.",
+   "nota": "Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. Revisión técnica vigente hasta el 31-01-2027 (certificado A0110000000075103 del 31-07-2026, enviado por Teresa Donoso).",
    "foto": "https://drive.google.com/file/d/1IldVUd3n-F_t004yf8P91nNrIg4zNFi9/view",
    "fotoId": "1IldVUd3n-F_t004yf8P91nNrIg4zNFi9",
    "imagen": "fotos/rt-980.jpg"

@@ -79,7 +79,7 @@ const FOTOS = { '921': '1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit', '922': '13Ndz0O0tNlz
   '977': '1-XcMS3ltnhYjaZyEtQSPDRMpQLgLKIqJ', '978': '1TElCNlVlvR3IGlCchNIcPk74dfhcDgSl', '979': '1qd9_zR10OqVzNS2rlghCCSFt6OGH_1fv', '980': '1IldVUd3n-F_t004yf8P91nNrIg4zNFi9',
   '984': '11n5nepvOT-_dbqYt-K6F-06nduWw04QL', '985': '1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp' }; // carpeta Drive 10lZuRbhinsJcuIQVneD2kLnwh861lBwG
 const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (planilla), RT según «FLOTA ACTUAL» si difiere
-  ['921', 'SZZJ80-4', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-11-16', null, 'Cosemar envió la revisión técnica renovada el 16-11; falta cargar la fecha nueva.'],
+  ['921', 'SZZJ80-4', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-05-14', null, 'Revisión técnica renovada el 14-11-2026 (certificado A0110000000079161, enviado por Teresa Donoso el 16-11).'],
   ['922', 'SZZJ82-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-11-19', null, ''],
   ['938', 'TCXV47-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-12-18', null, 'Siniestro informado en noviembre (cerrado por la ITS).'],
   ['939', 'TCXV48-9', 'Recolector', 'VW Constellation 17.280', 'En taller', '2026-12-24', null, 'Taller en Iquique: fuga hidráulica del cilindro expulsor.'],
@@ -94,7 +94,7 @@ const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (plan
   ['977', 'TPPW39-9', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-21', null, 'Certificado de revisión técnica confirma el 21-01-2027.'],
   ['978', 'TPPW42-9', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-11', null, ''],
   ['979', 'TPRD80-3', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-13', null, ''],
-  ['980', 'TPPW41-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-31', null, 'Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. El certificado en la carpeta es el de febrero (vencía el 03-08-2026): pedir el vigente hasta el 31-01-2027.'],
+  ['980', 'TPPW41-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-31', null, 'Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. Revisión técnica vigente hasta el 31-01-2027 (certificado A0110000000075103 del 31-07-2026, enviado por Teresa Donoso).'],
   ['984', 'TPRF92-3', 'Minicargador', 'Bobcat S510', 'Operativo en base', '2030-07-22', null, ''],
   ['985', 'PWWC14-3', 'Carro de arrastre', 'Invicta T6000', 'Operativo en base', '2027-01-14', null, '']
 ];
