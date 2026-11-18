@@ -316,7 +316,8 @@
     var hoy = hoyCL();
     el.replaceChildren.apply(el, filas('flota').map(function (x) {
       var rt = docEstado(x.rt, hoy), pc = docEstado(x.permiso, hoy), so = docEstado(x.soap, hoy);
-      var foto = x.fotoId ? h('a', { href: x.foto, target: '_blank', rel: 'noopener', title: 'Abrir foto del móvil ' + x.movil }, [h('img', { cls: 'fl-foto', src: 'https://drive.google.com/thumbnail?id=' + x.fotoId + '&sz=w240', alt: 'Móvil ' + x.movil + ', patente ' + x.patente, loading: 'lazy', onerror: function () { this.replaceWith(h('span', { cls: 'fl-sin', text: 'Ver foto' })); } })]) : null;
+      var src = x.imagen || (x.fotoId ? 'https://drive.google.com/thumbnail?id=' + x.fotoId + '&sz=w240' : null);
+      var foto = src ? h('a', { href: x.imagen || x.foto, target: '_blank', rel: 'noopener', title: 'Abrir certificado de revisión técnica del móvil ' + x.movil }, [h('img', { cls: 'fl-foto', src: src, alt: 'Certificado de revisión técnica del móvil ' + x.movil + ', patente ' + x.patente, loading: 'lazy', onerror: function () { this.replaceWith(h('span', { cls: 'fl-sin', text: 'Ver certificado' })); } })]) : null;
       return h('tr', null, [h('td', null, [foto, h('b', { text: x.movil }), h('div', { cls: 'va-muted', text: x.patente })]), h('td', { text: x.tipo + ' · ' + x.modelo }),
         h('td', null, [chip(x.estado, /^Operativo/.test(x.estado) ? 'ok' : 'warn')]), h('td', null, [chip(rt[0], rt[1]), x.rtOtraFuente ? h('div', { cls: 'va-muted', text: 'La ficha de flota dice ' + fCL(x.rtOtraFuente) }) : null]),
         h('td', null, [chip(pc[0], pc[1])]), h('td', null, [chip(so[0], so[1]), h('div', { cls: 'va-muted', text: x.aseguradora })]), h('td', { text: x.nota || '' })]);

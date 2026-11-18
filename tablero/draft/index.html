@@ -99,7 +99,7 @@
 .tl-item summary { margin: 0 !important; }
 .tl-item summary .va-muted { font-weight: 400; }
 .fl-sin { display: inline-block; margin-bottom: 4px; font-size: var(--cds-font-size-caption); }
-.fl-foto { display: block; width: 96px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
+.fl-foto { display: block; width: 96px; height: 72px; object-fit: cover; object-position: top; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
 @media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
 </style>
 
@@ -195,7 +195,7 @@
   <section class="va-tab" id="tab-fl">
   <h3 id="h-fl">Flota del contrato: estado y documentos al día</h3>
   <div id="fl-resumen" data-draw="vf_resumen" data-source="flota">—</div>
-  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. La foto de cada móvil se abre al tocarla.</p>
+  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. La imagen de cada móvil es su certificado de revisión técnica con la patente; se abre en grande al tocarla.</p>
   <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso de circulación</th><th>SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
   <p class="va-muted">Contrato: seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000), vence el 31-07-2027. Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF, con endoso de 419,57 UF del 29-10-2026), vence el 28-10-2029.</p>
   <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>

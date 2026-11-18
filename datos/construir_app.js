@@ -43,6 +43,8 @@ fs.writeFileSync(path.join(D, '.nojekyll'), '');
 // Versión de un solo archivo (sin publicar): datos y scripts incrustados; se abre con doble clic.
 const incr = { 'data/manifiesto.json': JSON.parse(fs.readFileSync(path.join(DATA, 'manifiesto.json'), 'utf8')) };
 Object.values(mapa).forEach(f => { incr[f] = JSON.parse(fs.readFileSync(path.join(D, f), 'utf8')); });
+// Imágenes de la flota incrustadas en la versión de un solo archivo
+const fl = incr[mapa.flota]; (fl.rows || []).forEach(r => { if (r.imagen && fs.existsSync(path.join(D, r.imagen))) r.imagen = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(D, r.imagen)).toString('base64'); });
 const js = f => '<script>' + fs.readFileSync(path.join(D, 'js', f), 'utf8').replace(/<\/script/gi, '<\\/script') + '</script>';
 const datos = '<script>window.__DATOS=' + JSON.stringify(incr).replace(/</g, '\\u003c') + ';</script>';
 fs.writeFileSync(path.join(R, 'entregables', 'Control_Cosemar.html'), head + cuerpo + '\n<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>\n' + datos + '\n' + ['runtime.js', 'motor.js', 'app.js', 'operacion.js'].map(js).join('\n') + '\n<script>Tablero.iniciar();</script>\n</body>\n</html>\n');

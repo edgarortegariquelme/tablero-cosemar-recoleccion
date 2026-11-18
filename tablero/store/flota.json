@@ -15,7 +15,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "Cosemar envió la revisión técnica renovada el 16-11; falta cargar la fecha nueva.",
    "foto": "https://drive.google.com/file/d/1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit/view",
-   "fotoId": "1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit"
+   "fotoId": "1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit",
+   "imagen": "fotos/rt-921.jpg"
   },
   {
    "movil": "922",
@@ -31,7 +32,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4/view",
-   "fotoId": "13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4"
+   "fotoId": "13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4",
+   "imagen": "fotos/rt-922.jpg"
   },
   {
    "movil": "938",
@@ -47,7 +49,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "Siniestro informado en noviembre (cerrado por la ITS).",
    "foto": "https://drive.google.com/file/d/1vYTkANa-4V8Y4wHgmeCaLmZG2AYWsnEl/view",
-   "fotoId": "1vYTkANa-4V8Y4wHgmeCaLmZG2AYWsnEl"
+   "fotoId": "1vYTkANa-4V8Y4wHgmeCaLmZG2AYWsnEl",
+   "imagen": "fotos/rt-938.jpg"
   },
   {
    "movil": "939",
@@ -63,7 +66,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "Taller en Iquique: fuga hidráulica del cilindro expulsor.",
    "foto": "https://drive.google.com/file/d/1uciHPystIjOzFxrIcn9v-pFtwjgsbLFD/view",
-   "fotoId": "1uciHPystIjOzFxrIcn9v-pFtwjgsbLFD"
+   "fotoId": "1uciHPystIjOzFxrIcn9v-pFtwjgsbLFD",
+   "imagen": "fotos/rt-939.jpg"
   },
   {
    "movil": "940",
@@ -79,7 +83,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/10jYcYIx-rLimK0_6wNwqJ0Ll1vNHIP0Y/view",
-   "fotoId": "10jYcYIx-rLimK0_6wNwqJ0Ll1vNHIP0Y"
+   "fotoId": "10jYcYIx-rLimK0_6wNwqJ0Ll1vNHIP0Y",
+   "imagen": "fotos/rt-940.jpg"
   },
   {
    "movil": "970",
@@ -95,7 +100,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1HURoAvNblbAuSl1zo9cuhwlOAkxiVKqC/view",
-   "fotoId": "1HURoAvNblbAuSl1zo9cuhwlOAkxiVKqC"
+   "fotoId": "1HURoAvNblbAuSl1zo9cuhwlOAkxiVKqC",
+   "imagen": "fotos/rt-970.jpg"
   },
   {
    "movil": "971",
@@ -105,13 +111,14 @@
    "estado": "Operativo en base",
    "estadoFecha": "2026-11-09",
    "rt": "2027-01-07",
-   "rtOtraFuente": "2027-07-01",
+   "rtOtraFuente": null,
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "",
+   "nota": "Certificado de revisión técnica confirma el 07-01-2027 (la ficha de flota tenía día y mes invertidos).",
    "foto": "https://drive.google.com/file/d/1t3EOQgiuPTiUOTFyuleEGSqBf82WWKsl/view",
-   "fotoId": "1t3EOQgiuPTiUOTFyuleEGSqBf82WWKsl"
+   "fotoId": "1t3EOQgiuPTiUOTFyuleEGSqBf82WWKsl",
+   "imagen": "fotos/rt-971.jpg"
   },
   {
    "movil": "972",
@@ -127,7 +134,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "Siniestro de septiembre (calle Canadá).",
    "foto": "https://drive.google.com/file/d/1w0MzaJkGyi0ZpRD3Z-sqOyzYqQ1AriGR/view",
-   "fotoId": "1w0MzaJkGyi0ZpRD3Z-sqOyzYqQ1AriGR"
+   "fotoId": "1w0MzaJkGyi0ZpRD3Z-sqOyzYqQ1AriGR",
+   "imagen": "fotos/rt-972.jpg"
   },
   {
    "movil": "973",
@@ -137,13 +145,14 @@
    "estado": "En taller",
    "estadoFecha": "2026-11-09",
    "rt": "2027-01-23",
-   "rtOtraFuente": "2027-07-23",
+   "rtOtraFuente": null,
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
    "nota": "Taller externo: reparación del cuchillo y la compactadora.",
    "foto": "https://drive.google.com/file/d/1NcVtn-puGWn6vA15-uS963v4O34wuuvt/view",
-   "fotoId": "1NcVtn-puGWn6vA15-uS963v4O34wuuvt"
+   "fotoId": "1NcVtn-puGWn6vA15-uS963v4O34wuuvt",
+   "imagen": "fotos/rt-973.jpg"
   },
   {
    "movil": "974",
@@ -159,7 +168,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1rXJofABOfqYe86bkHc8VBiMY1pwBGgJp/view",
-   "fotoId": "1rXJofABOfqYe86bkHc8VBiMY1pwBGgJp"
+   "fotoId": "1rXJofABOfqYe86bkHc8VBiMY1pwBGgJp",
+   "imagen": "fotos/rt-974.jpg"
   },
   {
    "movil": "975",
@@ -175,7 +185,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1elJ2fluBZc1ZvX-4boilzOqhM88NHjeZ/view",
-   "fotoId": "1elJ2fluBZc1ZvX-4boilzOqhM88NHjeZ"
+   "fotoId": "1elJ2fluBZc1ZvX-4boilzOqhM88NHjeZ",
+   "imagen": "fotos/rt-975.jpg"
   },
   {
    "movil": "976",
@@ -191,7 +202,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1xFGVxMU_Jgd15KQXZTI1FAGvncg-OgyX/view",
-   "fotoId": "1xFGVxMU_Jgd15KQXZTI1FAGvncg-OgyX"
+   "fotoId": "1xFGVxMU_Jgd15KQXZTI1FAGvncg-OgyX",
+   "imagen": "fotos/rt-976.jpg"
   },
   {
    "movil": "977",
@@ -201,13 +213,14 @@
    "estado": "Operativo en ruta",
    "estadoFecha": "2026-11-09",
    "rt": "2027-01-21",
-   "rtOtraFuente": "2027-07-07",
+   "rtOtraFuente": null,
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "",
+   "nota": "Certificado de revisión técnica confirma el 21-01-2027.",
    "foto": "https://drive.google.com/file/d/1-XcMS3ltnhYjaZyEtQSPDRMpQLgLKIqJ/view",
-   "fotoId": "1-XcMS3ltnhYjaZyEtQSPDRMpQLgLKIqJ"
+   "fotoId": "1-XcMS3ltnhYjaZyEtQSPDRMpQLgLKIqJ",
+   "imagen": "fotos/rt-977.jpg"
   },
   {
    "movil": "978",
@@ -223,7 +236,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1TElCNlVlvR3IGlCchNIcPk74dfhcDgSl/view",
-   "fotoId": "1TElCNlVlvR3IGlCchNIcPk74dfhcDgSl"
+   "fotoId": "1TElCNlVlvR3IGlCchNIcPk74dfhcDgSl",
+   "imagen": "fotos/rt-978.jpg"
   },
   {
    "movil": "979",
@@ -239,7 +253,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1qd9_zR10OqVzNS2rlghCCSFt6OGH_1fv/view",
-   "fotoId": "1qd9_zR10OqVzNS2rlghCCSFt6OGH_1fv"
+   "fotoId": "1qd9_zR10OqVzNS2rlghCCSFt6OGH_1fv",
+   "imagen": "fotos/rt-979.jpg"
   },
   {
    "movil": "980",
@@ -253,9 +268,10 @@
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero.",
+   "nota": "Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. El certificado en la carpeta es el de febrero (vencía el 03-08-2026): pedir el vigente hasta el 31-01-2027.",
    "foto": "https://drive.google.com/file/d/1IldVUd3n-F_t004yf8P91nNrIg4zNFi9/view",
-   "fotoId": "1IldVUd3n-F_t004yf8P91nNrIg4zNFi9"
+   "fotoId": "1IldVUd3n-F_t004yf8P91nNrIg4zNFi9",
+   "imagen": "fotos/rt-980.jpg"
   },
   {
    "movil": "984",
@@ -271,7 +287,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/11n5nepvOT-_dbqYt-K6F-06nduWw04QL/view",
-   "fotoId": "11n5nepvOT-_dbqYt-K6F-06nduWw04QL"
+   "fotoId": "11n5nepvOT-_dbqYt-K6F-06nduWw04QL",
+   "imagen": "fotos/rt-984.jpg"
   },
   {
    "movil": "985",
@@ -287,7 +304,8 @@
    "aseguradora": "Seguros Sura",
    "nota": "",
    "foto": "https://drive.google.com/file/d/1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp/view",
-   "fotoId": "1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp"
+   "fotoId": "1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp",
+   "imagen": "fotos/rt-985.jpg"
   }
  ]
 }

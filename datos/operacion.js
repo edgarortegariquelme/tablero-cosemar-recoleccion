@@ -85,20 +85,20 @@ const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (plan
   ['939', 'TCXV48-9', 'Recolector', 'VW Constellation 17.280', 'En taller', '2026-12-24', null, 'Taller en Iquique: fuga hidráulica del cilindro expulsor.'],
   ['940', 'TCRY91-K', 'Ampliroll', 'VW Constellation 17.280', 'Operativo en base', '2026-12-05', null, ''],
   ['970', 'TPPW40-2', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-02', null, ''],
-  ['971', 'TPPW38-0', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-07', '2027-07-01', ''],
+  ['971', 'TPPW38-0', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-07', null, 'Certificado de revisión técnica confirma el 07-01-2027 (la ficha de flota tenía día y mes invertidos).'],
   ['972', 'TPPW36-4', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-17', null, 'Siniestro de septiembre (calle Canadá).'],
-  ['973', 'TPPW34-8', 'Recolector', 'VW Constellation 17.280', 'En taller', '2027-01-23', '2027-07-23', 'Taller externo: reparación del cuchillo y la compactadora.'],
+  ['973', 'TPPW34-8', 'Recolector', 'VW Constellation 17.280', 'En taller', '2027-01-23', null, 'Taller externo: reparación del cuchillo y la compactadora.'],
   ['974', 'TPPW33-K', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-14', null, ''],
   ['975', 'TPPW31-3', 'Recolector satélite', 'VW Delivery', 'Operativo en ruta', '2027-01-24', null, ''],
   ['976', 'TPPW32-1', 'Recolector satélite', 'VW Delivery', 'Operativo en base', '2027-01-18', null, ''],
-  ['977', 'TPPW39-9', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-21', '2027-07-07', ''],
+  ['977', 'TPPW39-9', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-21', null, 'Certificado de revisión técnica confirma el 21-01-2027.'],
   ['978', 'TPPW42-9', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-11', null, ''],
   ['979', 'TPRD80-3', 'Tolva', 'VW Constellation 17.280', 'Operativo en base', '2027-01-13', null, ''],
-  ['980', 'TPPW41-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-31', null, 'Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero.'],
+  ['980', 'TPPW41-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-01-31', null, 'Colisión del 10-11-2026; multa de 5 UTM por revisión vencida en febrero. El certificado en la carpeta es el de febrero (vencía el 03-08-2026): pedir el vigente hasta el 31-01-2027.'],
   ['984', 'TPRF92-3', 'Minicargador', 'Bobcat S510', 'Operativo en base', '2030-07-22', null, ''],
   ['985', 'PWWC14-3', 'Carro de arrastre', 'Invicta T6000', 'Operativo en base', '2027-01-14', null, '']
 ];
-w('flota.json', FL.map(r => ({ movil: r[0], patente: r[1], tipo: r[2], modelo: r[3], estado: r[4], estadoFecha: '2026-11-09', rt: r[5], rtOtraFuente: r[6], permiso: '2027-09-30', soap: '2027-09-30', aseguradora: 'Seguros Sura', nota: r[7], foto: FOTOS[r[0]] ? D + FOTOS[r[0]] + '/view' : FOTO, fotoId: FOTOS[r[0]] || null })),
+w('flota.json', FL.map(r => ({ movil: r[0], patente: r[1], tipo: r[2], modelo: r[3], estado: r[4], estadoFecha: '2026-11-09', rt: r[5], rtOtraFuente: r[6], permiso: '2027-09-30', soap: '2027-09-30', aseguradora: 'Seguros Sura', nota: r[7], foto: FOTOS[r[0]] ? D + FOTOS[r[0]] + '/view' : FOTO, fotoId: FOTOS[r[0]] || null, imagen: FOTOS[r[0]] ? 'fotos/rt-' + r[0] + '.jpg' : null })),
   { contrato: [{ documento: 'Seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000)', vence: '2027-07-31' }, { documento: 'Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF; endoso por 419,57 UF el 29-10-2026)', vence: '2029-10-28' }],
     otros: 'El EDP también lista tres camionetas de apoyo (904, 986, 987) sin documentos en la planilla.', fuentes: { vencimientos: 'https://docs.google.com/spreadsheets/d/1tHM807N-TxxC-WTic12y5tgCJoNP0KEcBCvgX-dgE5w/edit', estado: G + '1a1c29df4f6d7d7c', ficha: D + '1hxwOOry6aPjS6QpeY4ETbQ43ThyvbVEw/view', fotos: FOTO } });
 
