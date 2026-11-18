@@ -8,7 +8,7 @@ Fecha de corte: 2026-11-17. Rama `main`.
 - Borrador «Visual analysis» en `drafts/kmut6ifm93nv` (fuente: `tablero/draft/`), pendiente de Guardar/Cancelar por el usuario.
 - Motor de reglas compartido: `motor/motor.js` (copias en `tablero/store/` y `tablero/draft/`).
 - Flujos n8n (JSON de producción): `entregables/cosemar_1_ingesta.json`, `cosemar_2_avisos.json`, `cosemar_3_reproceso.json`. 12/12 pruebas e2e aprobadas en n8n local (`pruebas/e2e.js`, `pruebas/resultados_e2e.json`).
-- Avisos a: CORREO_AVISOS (configurado en `n8n/build.js`).
+- Avisos a: el correo personal del encargado (variable AVISOS_PARA al construir los flujos) (configurado en `n8n/build.js`).
 - Matriz de obligaciones: `entregables/Matriz_obligaciones_Cosemar_3447-86-LR23.xlsx`.
 
 ## Pendiente (único bloqueo)

@@ -8,7 +8,7 @@ const CARPETAS = { '11kjK9ibJ3DTL4CQU0tzBPuLHQD9zbOmm': '1. LICITACION RECOLECCI
   '1eJrvdI2lkm6YtU-eR4rvDV6ipN-_BfVH': '2. PAGOS SERVICIOS 2026/9. SEPTIEMBRE 2026', '1204ZW0LRhGlJkoaRyah8wFf6u0UYuTtS': '2. PAGOS SERVICIOS 2026/10. OCTUBRE 2026', '1new6tELuK_9HDRqRkvCQaXYunKtBB-zy': '3. POLIZAS', '182QnsD9zNaSZkIz_5HPbTvRomvymlgE2': '6. FISCALIZACION AL CONTRATO' };
 function build(test) {
   const cfg = { notionBase: test ? 'http://127.0.0.1:8787' : 'https://api.notion.com', driveBase: test ? 'http://127.0.0.1:8787' : 'https://www.googleapis.com', libroDb: NOTION.libroDb, comunicacionesDb: NOTION.comDb, contratoPagina: test ? null : NOTION.contratoPagina,
-    carpetas: CARPETAS, hoy: test ? '2026-11-16' : null, avisosPara: 'CORREO_AVISOS', tableroUrl: 'https://claude.ai/artifact/FqSZ9xCaUeVFhjHQPZhtMG', ingestaUrl: test ? 'http://127.0.0.1:5678/webhook/cosemar/evento' : 'https://edgar-ortega.app.n8n.cloud/webhook/cosemar/evento', desdeInicial: '2026-11-10' };
+    carpetas: CARPETAS, hoy: test ? '2026-11-16' : null, avisosPara: process.env.AVISOS_PARA || 'CORREO_AVISOS', avisosCc: process.env.AVISOS_CC || '', tableroUrl: 'https://edgarortegariquelme.github.io/tablero-cosemar-recoleccion/', ingestaUrl: test ? 'http://127.0.0.1:5678/webhook/cosemar/evento' : 'https://edgar-ortega.app.n8n.cloud/webhook/cosemar/evento', desdeInicial: '2026-11-10' };
   let y = 0; const id = n => 'cos-' + n.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const N = (name, type, v, params, x, yy, extra) => Object.assign({ id: id(name), name, type: 'n8n-nodes-base.' + type, typeVersion: v, position: [x, yy], parameters: params }, extra || {});
   const config = (x, yy) => N('Config', 'set', 3.4, { mode: 'raw', jsonOutput: JSON.stringify(cfg, null, 2), options: {} }, x, yy, { notes: 'Único lugar para cambiar identificadores, carpetas, destinatarios y URL. «hoy» vacío = fecha de Chile.' });
@@ -35,7 +35,7 @@ function build(test) {
     ['¿Sin cambios?', 'Cierre: errores y marca de sincronización', 0], ['¿Sin cambios?', 'Notion: escribir', 1], ['Notion: escribir', 'Cierre: errores y marca de sincronización'], ['Cierre: errores y marca de sincronización', 'Notion: cierre'], ['Notion: cierre', 'Informe']]);
   // ---- 2 · Vencimientos y avisos ----
   const enviar = test ? N('Enviar aviso', 'httpRequest', 4.2, { method: 'POST', url: 'http://127.0.0.1:8787/sink/mail', sendBody: true, specifyBody: 'json', jsonBody: '={{ JSON.stringify($json) }}', options: {} }, 1540, 0)
-    : N('Enviar aviso', 'gmail', 2.1, { sendTo: '={{ $json.para }}', subject: '={{ $json.asunto }}', emailType: 'html', message: '={{ $json.html }}', options: { appendAttribution: false } }, 1540, 0);
+    : N('Enviar aviso', 'gmail', 2.1, { sendTo: '={{ $json.para }}', subject: '={{ $json.asunto }}', emailType: 'html', message: '={{ $json.html }}', options: { appendAttribution: false, ccList: '={{ $("Config").first().json.avisosCc }}' } }, 1540, 0);
   const w2 = wf(test ? 'cosemarT2avisos0000' : 'cosemar2avisos00000', 'Cosemar 2 · Vencimientos y avisos', [
     cron('Cada día 08:10', { field: 'cronExpression', expression: '10 8 * * 1-6' }, 0, 0), hook('Webhook avisos', 'cosemar/avisos', 0, 200), config(220, 100), leer(440, 100), js('Motor: avisos', 'code_avisos.js', 660, 100), si('¿Sin avisos?', 880, 100),
     escribir('Notion: registrar aviso', 1100, 0), js('Componer mensaje', 'code_mensaje.js', 1320, 0), enviar

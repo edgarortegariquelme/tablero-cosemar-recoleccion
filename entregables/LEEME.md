@@ -10,7 +10,7 @@
 
 1. Importar los tres JSON (Workflows → Import from file).
 2. Credenciales: «Notion API» (integración interna con acceso a la base «Cosemar · Libro de control» y a «Comunicaciones»), «Google Drive OAuth2» (lectura del expediente) y «Gmail OAuth2» (envío de avisos). Asignarlas en los nodos HTTP de Notion y Drive y en «Enviar aviso».
-3. En el nodo «Config» revisar `avisosPara` (CORREO_AVISOS, confirmado por usted el 17-11-2026) e `ingestaUrl` (URL de su instancia).
+3. En el nodo «Config» revisar `avisosPara` (el correo personal del encargado (variable AVISOS_PARA al construir los flujos), confirmado por usted el 17-11-2026) e `ingestaUrl` (URL de su instancia).
 4. Activar los tres flujos. La ingesta corre cada hora; avisos 08:10 lunes a sábado; reproceso cada 6 horas. También responden por webhook: `/webhook/cosemar/evento`, `/avisos`, `/reprocesar`.
 
 ## Pruebas ejecutadas (n8n 2.47.7 local con API de Notion y Drive simulada; 12/12 aprobadas, repetidas tras el reinicio del 17-11)
