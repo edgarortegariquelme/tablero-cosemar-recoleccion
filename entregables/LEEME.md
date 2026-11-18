@@ -6,12 +6,13 @@
 - Flujos n8n de producción: `cosemar_1_ingesta.json`, `cosemar_2_avisos.json`, `cosemar_3_reproceso.json`.
 - Flujogramas: sección «Flujogramas» del tablero (monitoreo y fiscalización, pago mensual, proceso sancionatorio).
 
-## Puesta en marcha en n8n (requiere su cuenta)
+## Preparación de borradores en n8n
 
-1. Importar los tres JSON (Workflows → Import from file).
+1. Verificar el proyecto DMAO y sus flujos existentes. Importar los JSON como borradores únicamente después de descartar duplicados.
 2. Credenciales: «Notion API» (integración interna con acceso a la base «Cosemar · Libro de control» y a «Comunicaciones»), «Google Drive OAuth2» (lectura del expediente) y «Gmail OAuth2» (envío de avisos). Asignarlas en los nodos HTTP de Notion y Drive y en «Enviar aviso».
 3. En el nodo «Config» revisar `avisosPara` (edgar.ortega.riquelme@gmail.com, confirmado por usted el 17-11-2026) e `ingestaUrl` (URL de su instancia).
-4. Activar los tres flujos. La ingesta corre cada hora; avisos 08:10 lunes a sábado; reproceso cada 6 horas. También responden por webhook: `/webhook/cosemar/evento`, `/avisos`, `/reprocesar`.
+4. Asignar una credencial de cabecera Cosemar a cada webhook y al nodo Reenviar. Para la herramienta de despliegue, indicar su ID en `COSEMAR_WEBHOOK_CREDENTIAL_ID`. El valor secreto permanece en n8n.
+5. Antes de publicar, completar las comprobaciones de [auditoría](../documentacion/auditoria-integraciones.md) y obtener aprobación de Edgar. La ingesta corre cada hora; avisos 08:10 lunes a sábado; reproceso cada 6 horas. También responden por webhook: `/webhook/cosemar/evento`, `/avisos`, `/reprocesar`.
 
 ## Pruebas ejecutadas (n8n 2.47.7 local con API de Notion y Drive simulada; 12/12 aprobadas, repetidas tras el reinicio del 17-11)
 

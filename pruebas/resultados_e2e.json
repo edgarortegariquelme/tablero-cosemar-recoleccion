@@ -1,5 +1,5 @@
 {
- "fecha": "2026-11-17T11:50:24.668Z",
+ "fecha": "2026-11-18T03:45:46.760Z",
  "n8n": "2.47.7 (local)",
  "pruebas": [
   {
@@ -11,6 +11,7 @@
      "exito": true,
      "escritos": 0,
      "fallas": 0,
+     "bajasFallidas": 0,
      "resumen": {
       "crear": 0,
       "rectificar": 0,
@@ -29,7 +30,7 @@
      "cierreFallido": 0
     },
     "filas": 161,
-    "marca": "Última actualización exitosa: 2026-11-17T11:50:15.762Z · leídos 161 · nuevos 0 · rectificados 0 · duplicados omitidos 0 · a revisión 0 · errores 0"
+    "marca": "Última actualización exitosa: 2026-11-18T03:45:37.961Z · leídos 161 · nuevos 0 · rectificados 0 · duplicados omitidos 0 · a revisión 0 · errores 0"
    }
   },
   {
@@ -135,35 +136,35 @@
   },
   {
    "id": "P07",
-   "nombre": "Una falla temporal de escritura (3 intentos) queda registrada y el reproceso la completa y la cierra",
+   "nombre": "Una falla temporal de escritura (sin repetir el POST a ciegas) queda registrada y el reproceso la completa y la cierra",
    "resultado": "APROBADA",
    "evidencia": {
     "falla": {
      "exito": false,
      "fallas": 1,
-     "intentos503": 3,
+     "intentos503": 1,
      "errorRegistrado": 1,
      "creado": false
     },
     "trasReproceso": {
      "creado": true,
      "errorVerificacion": "Acreditado",
-     "nota": "Reprocesado correctamente el 2026-11-17T11:50:20.639Z",
+     "nota": "Reprocesado correctamente el 2026-11-18T03:45:41.506Z",
      "estadoPago": "OC aceptada"
     },
     "respuesta": {
      "object": "page",
      "id": "pg-00166",
      "url": "https://mock.notion/166",
-     "created_time": "2026-11-17T11:50:20.268Z",
-     "last_edited_time": "2026-11-17T11:50:20.646Z",
+     "created_time": "2026-11-18T03:45:40.915Z",
+     "last_edited_time": "2026-11-18T03:45:41.517Z",
      "properties": {
       "Clave": {
        "title": [
         {
          "type": "text",
          "text": {
-          "content": "ERR|escritura|92c2d20b"
+          "content": "ERR|escritura|3c82e115"
          }
         }
        ]
@@ -214,7 +215,7 @@
         {
          "type": "text",
          "text": {
-          "content": "8136d30b"
+          "content": "62123cbf"
          }
         }
        ]
@@ -259,7 +260,7 @@
         {
          "type": "text",
          "text": {
-          "content": "Reprocesado correctamente el 2026-11-17T11:50:20.639Z"
+          "content": "Reprocesado correctamente el 2026-11-18T03:45:41.506Z"
          }
         }
        ]
@@ -276,9 +277,9 @@
     "conDriveCaido": {
      "exito": false,
      "fallasFuente": [
-      "Drive: 500 - \"{\\\"error\\\":{\\\"code\\\":500,\\\"message\\\":\\\"Drive no disponible (simulado)\\\"}}\""
+      "Drive: Listado incompleto"
      ],
-     "marca": "Último intento con errores: 2026-11-17T11:50:22.985Z · leído"
+     "marca": "Último intento con errores: 2026-11-18T03:45:43.910Z · leído"
     },
     "siguiente": {
      "exito": true
@@ -337,7 +338,7 @@
     "primeraCorrida": {
      "avisosRegistrados": 13,
      "mensajes": 1,
-     "asunto": "Cosemar recolección · 13 aviso(s) · 2026-11-16"
+     "asunto": "[Cosemar-avisos-18] Cosemar recolección · 13 aviso(s) · 2026-11-16"
     },
     "segundaCorrida": {
      "mensajesTotales": 1,
