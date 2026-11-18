@@ -4,6 +4,7 @@ Fecha de corte: 2026-11-17. Rama `main`.
 
 ## Estado
 - Tablero en vivo (Notion → Claude Data artifact): https://claude.ai/artifact/FqSZ9xCaUeVFhjHQPZhtMG — check aprobado.
+- Traspaso para continuar con otra IA (estado, cifras, pendientes y prompt): https://app.notion.com/p/41c9e3e655c08148bd93e0485c7331d0
 - Borrador «Visual analysis» en `drafts/kmut6ifm93nv` (fuente: `tablero/draft/`), pendiente de Guardar/Cancelar por el usuario.
 - Motor de reglas compartido: `motor/motor.js` (copias en `tablero/store/` y `tablero/draft/`).
 - Flujos n8n (JSON de producción): `entregables/cosemar_1_ingesta.json`, `cosemar_2_avisos.json`, `cosemar_3_reproceso.json`. 12/12 pruebas e2e aprobadas en n8n local (`pruebas/e2e.js`, `pruebas/resultados_e2e.json`).
