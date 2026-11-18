@@ -19,3 +19,10 @@ Activar los 3 flujos en n8n Cloud `edgar-ortega.app.n8n.cloud`.
 
 ## Control del PC
 Computador M370-00507, carpeta `PASE_CLAUDE_CODE_PP73_2026_v2`: figura como no utilizable desde la nube (posible carpeta oculta o app de Claude desactualizada).
+
+## Actualización 18-11-2026
+- Tablero: secciones nuevas «Alzas y deuda» (recolección), «Plan de pago vigente» (Notion 17-11-2026) y «Disposición final» (3447-187-LR24).
+- Datos: `datos/historico_pagos.js` (recolección, jul-2024 a oct-2026), `datos/plan_pago.js`, `datos/disposicion_final.js` (ene-2025 a oct-2026). Planillas: `datos/planilla_deuda.py`, `datos/planilla_disposicion.py` → `entregables/`.
+- Deuda recolección a oct-2026: $24.690.339 por decretos (D.A. 3.957 no aplicado) + $45.023.996 por IPC 4,3% sin decreto.
+- Disposición final: sin diferencias de precio; sin memo de pago jul–ago 2025 y oct 2026; base de toneladas del D.A. 2.737 por verificar.
+- Tareas programadas (sin conector Google Drive hasta que el usuario lo agregue en claude.ai): Actualizar deuda (día 28, trig_01JuDoJiLtVSb8GpTxLkjxma), Borradores ciclo de pago (día 7, trig_0144c4spvPTKukqd5UWW6BPN), Reajuste IPC anual (10-jul y 10-ago, trig_0182X98CJ8K9MKHgQRu1i4wn), Disposición final (día 8, trig_01Sz5gvRK5h8ArBMAB7wifm7).
