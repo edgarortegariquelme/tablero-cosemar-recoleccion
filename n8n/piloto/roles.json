@@ -1,0 +1,146 @@
+{
+  "id": "dmaoPilotoRoles01",
+  "name": "DMAO · piloto local de control Cosemar",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  },
+  "nodes": [
+    {
+      "id": "piloto-0",
+      "name": "Inicio manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "piloto-1",
+      "name": "Solicitud",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"proyecto\":\"Cosemar\",\"operacion\":\"comprobar_claves\",\"filas\":[{\"clave\":\"EJEMPLO-01\",\"vigente\":true},{\"clave\":\"EJEMPLO-01\",\"vigente\":false}]}",
+        "options": {}
+      }
+    },
+    {
+      "id": "piloto-2",
+      "name": "Líder · asignar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "jsCode": "function asignar(solicitud) {\n  if (solicitud.proyecto !== 'Cosemar') return { estado: 'fuera_de_alcance' };\n  if (solicitud.operacion !== 'comprobar_claves') return { estado: 'requiere_aprobacion_humana' };\n  if (!Array.isArray(solicitud.filas) || solicitud.filas.length === 0 ||\n      !solicitud.filas.every(f => f && typeof f.clave === 'string' && typeof f.vigente === 'boolean')) {\n    return { estado: 'entrada_invalida' };\n  }\n  return { estado: 'asignada', tarea: 'comprobar_claves' };\n}\nreturn [{ json: asignar($('Solicitud').first().json) }];"
+      }
+    },
+    {
+      "id": "piloto-3",
+      "name": "Ejecutor · contabilizar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "function ejecutar(solicitud, orden) {\n  if (orden.estado !== 'asignada') return { ejecutada: false };\n  const porClave = new Map();\n  let vacias = 0;\n  let vigentes = 0;\n  for (const fila of solicitud.filas) {\n    if (!fila.vigente) continue;\n    vigentes++;\n    const clave = fila.clave.trim();\n    if (clave) porClave.set(clave, (porClave.get(clave) || 0) + 1);\n    else vacias++;\n  }\n  const duplicadas = [...porClave.values()].filter(n => n > 1).length;\n  return { ejecutada: true, vigentes, vacias, duplicadas };\n}\nreturn [{ json: ejecutar($('Solicitud').first().json, $('Líder · asignar').first().json) }];"
+      }
+    },
+    {
+      "id": "piloto-4",
+      "name": "Auditor · relectura",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "jsCode": "function auditar(solicitud, orden, informe) {\n  if (orden.estado !== 'asignada') return { dictamen: 'sin_ejecucion' };\n  const claves = solicitud.filas.filter(f => f.vigente).map(f => f.clave.trim()).sort();\n  let repetidas = 0;\n  for (let i = 1; i < claves.length; i++) {\n    if (claves[i] && claves[i] === claves[i - 1] && claves[i] !== claves[i - 2]) repetidas++;\n  }\n  const evidencia = { vigentes: claves.length, vacias: claves.filter(c => c === '').length, duplicadas: repetidas };\n  const coincide = informe.ejecutada === true && Object.entries(evidencia).every(([k, v]) => informe[k] === v);\n  return { dictamen: coincide ? 'verificado' : 'discrepancia', evidencia };\n}\nreturn [{ json: auditar($('Solicitud').first().json, $('Líder · asignar').first().json, $('Ejecutor · contabilizar').first().json) }];"
+      }
+    },
+    {
+      "id": "piloto-5",
+      "name": "Líder · cierre",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "jsCode": "function cerrar(orden, informe, auditoria) {\n  if (orden.estado !== 'asignada') return { estado: orden.estado, orden, informe, auditoria };\n  let estado = 'requiere_revision';\n  if (auditoria.dictamen === 'verificado') {\n    estado = auditoria.evidencia.vacias || auditoria.evidencia.duplicadas ? 'hallazgos' : 'completada';\n  }\n  return { estado, orden, informe, auditoria };\n}\nreturn [{ json: cerrar($('Líder · asignar').first().json, $('Ejecutor · contabilizar').first().json, $input.first().json) }];"
+      }
+    }
+  ],
+  "connections": {
+    "Inicio manual": {
+      "main": [
+        [
+          {
+            "node": "Solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solicitud": {
+      "main": [
+        [
+          {
+            "node": "Líder · asignar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Líder · asignar": {
+      "main": [
+        [
+          {
+            "node": "Ejecutor · contabilizar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecutor · contabilizar": {
+      "main": [
+        [
+          {
+            "node": "Auditor · relectura",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auditor · relectura": {
+      "main": [
+        [
+          {
+            "node": "Líder · cierre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

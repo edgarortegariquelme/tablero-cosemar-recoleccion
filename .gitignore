@@ -4,3 +4,5 @@ tablero/store/w_*.json
 datos/_*.json
 *.log
 tablero/draft/w_*.json
+n8n/despliegue/ids.json
+n8n/despliegue/ids.*.tmp
