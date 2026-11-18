@@ -49,7 +49,7 @@ wm = wb.create_sheet('Mensual')
 cols = [('Mes de servicio', 11), ('Año', 7), ('Estado', 15), ('Memo', 24), ('Factura', 10), ('OC', 16), ('Tramitado ($)', 15), ('Retroactivo asignado ($)', 15),
         ('Retroactivo remitido este mes ($)', 15), ('Multa descontada ($)', 13), ('Debido según decretos ($)', 16), ('Debido según bases ($)', 16),
         ('Adeudado por decretos ($)', 15), ('Adicional según bases ($)', 15), ('Deuda acumulada por decretos ($)', 17), ('Deuda acumulada según bases ($)', 17), ('Nota', 60), ('Respaldo', 12)]
-cabecera(wm, 'Debido y tramitado por mes de servicio', 'Montos brutos con IVA. Negro = fórmula; azul = dato del documento. «Tramitado» es el monto del memo de pago u OC; ningún mes tiene comprobante de pago efectivo en el expediente.', cols)
+cabecera(wm, 'Debido y tramitado por mes de servicio', 'Montos brutos con IVA. Negro = fórmula; azul = dato del documento. «Tramitado» es el monto del memo de pago u OC; el estado «Pagado» consta por confirmación del encargado (18-11-2026).', cols)
 retro_mes = {}
 for p in pagos:
     if p['ajusteRetro'] and p['ajusteRetroPagadoEn']: retro_mes[p['ajusteRetroPagadoEn']] = retro_mes.get(p['ajusteRetroPagadoEn'], 0) + p['ajusteRetro']
@@ -67,7 +67,7 @@ for i, p in enumerate(pagos):
     wm.cell(row=r, column=17, value=p['nota'] or '').alignment = Alignment(wrap_text=True, vertical='top')
     if p['respaldo']:
         x = wm.cell(row=r, column=18, value='Abrir'); x.hyperlink = p['respaldo']; x.font = Font(color='0563C1', underline='single')
-    if p['nota'] and ('por verificar' in p['nota'] or 'no se halló' in p['nota']):
+    if not p.get('pagado'):
         for c in range(1, 19): wm.cell(row=r, column=c).fill = AM
 FL = F0 + len(pagos) - 1
 rt = FL + 1
@@ -95,7 +95,7 @@ wa.cell(row=ra + 2, column=1, value='Lectura').font = B
 notas = ['Adeudado por decretos: el D.A. 3.957/2026 fija $267.940.006 desde jul-2026; las OC y facturas siguen al valor del D.A. 2.459 ($261.767.423). Incluye $7 de redondeo del retroactivo.',
          'Adicional según bases: IPC 4,3% del 2.º año (art. 9 BA), pedido por carta de Cosemar del 10-07-2026 y concordado el 14-07-2026; sin decreto (memos 1490, 2013 y 2097/2026), anexo suspendido por falta de certificado presupuestario.',
          'La multa de 60 UTM descontada en jun-2026 (D.A. 2.463 y 3.649/2026) es una deducción legítima, no deuda.',
-         'Pendiente de verificar: oct-2024 (solo memo que pide OC) y dic-2025 (el archivo del memo 274/2026 contiene el texto de oct-2025).']
+         'Pagos: 2024, 2025 y enero a septiembre de 2026 pagados según confirmación del encargado del contrato (18-11-2026). En 2026 solo se adeudan el IPC y el aumento poblacional, que se pagan según el plan de pago vigente. Octubre 2026 se paga en febrero de 2027 según ese plan.']
 for i, n in enumerate(notas):
     x = wa.cell(row=ra + 3 + i, column=1, value=n); wa.merge_cells(start_row=ra + 3 + i, start_column=1, end_row=ra + 3 + i, end_column=8); x.alignment = Alignment(wrap_text=True); wa.row_dimensions[ra + 3 + i].height = 30
 

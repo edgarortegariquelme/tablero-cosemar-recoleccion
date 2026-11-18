@@ -4,7 +4,8 @@
    "periodo": "2024-07",
    "anio": 2024,
    "mesServicio": 1,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -13,13 +14,14 @@
    "factura": "32996",
    "oc": "3447-3210-SE24",
    "respaldo": "https://drive.google.com/file/d/1muV80lYt0HArzRiknm7YcnRmE7lyRQuy/view",
-   "nota": "Primer mes. Proceso sancionatorio 1 sin multa (D.A. 6.579/2024)."
+   "nota": "Primer mes. Proceso sancionatorio 1 sin multa (D.A. 6.579/2024). Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2024-08",
    "anio": 2024,
    "mesServicio": 2,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -28,13 +30,14 @@
    "factura": "33681",
    "oc": "3447-3617-SE24",
    "respaldo": "https://drive.google.com/file/d/1rBxM8cBXTNGKc94pI9EbT1spyUDu2_iQ/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2024-09",
    "anio": 2024,
    "mesServicio": 3,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -43,13 +46,14 @@
    "factura": "34154",
    "oc": "3447-3901-SE24",
    "respaldo": "https://drive.google.com/file/d/1n0bPMjTSMPv69rBy56ggUB9DV44JR1yD/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2024-10",
    "anio": 2024,
    "mesServicio": 4,
-   "estado": "OC solicitada",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -58,13 +62,14 @@
    "factura": null,
    "oc": null,
    "respaldo": "https://drive.google.com/file/d/1sPgDKkD4LPeCHl_r2ATkpZ3opj4mo5C1/view",
-   "nota": "En Drive solo está el memo que pide la OC; no se halló el memo de pago ni la factura de octubre 2024."
+   "nota": "Memo de pago no hallado en Drive. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2024-11",
    "anio": 2024,
    "mesServicio": 5,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -73,13 +78,14 @@
    "factura": "35546",
    "oc": "3447-4672-SE24",
    "respaldo": "https://drive.google.com/file/d/14ke264VEL45bOii1RY6BDCVKsMqtu0oL/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2024-12",
    "anio": 2024,
    "mesServicio": 6,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -88,13 +94,14 @@
    "factura": "36338",
    "oc": "3447-159-SE25",
    "respaldo": "https://drive.google.com/file/d/1Y45O1_SvttmU51GlimF3KdvMYoVLHCIs/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-01",
    "anio": 2025,
    "mesServicio": 7,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -103,13 +110,14 @@
    "factura": "37637",
    "oc": "3447-683-SE25",
    "respaldo": "https://drive.google.com/file/d/1KkOY-c_XzX-MrSe8ShF5ANSD1eUHlNJQ/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-02",
    "anio": 2025,
    "mesServicio": 8,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -118,13 +126,14 @@
    "factura": "37837",
    "oc": "3447-779-SE25",
    "respaldo": "https://drive.google.com/file/d/1xYb9lRu1UMqq32ZFyF3tF7KzrM-ShB3C/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-03",
    "anio": 2025,
    "mesServicio": 9,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -133,13 +142,14 @@
    "factura": "38658",
    "oc": "3447-1169-SE25",
    "respaldo": "https://drive.google.com/file/d/1k24z2EQ36oF1JlCEKoFc2584zawQeqVh/view",
-   "nota": "El archivo se llama «MEMO 423.2025 … MARZO»; el texto es el memo 714/2025."
+   "nota": "El archivo se llama «MEMO 423.2025 … MARZO»; el texto es el memo 714/2025. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-04",
    "anio": 2025,
    "mesServicio": 10,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -148,13 +158,14 @@
    "factura": "39296",
    "oc": "3447-1504-SE25",
    "respaldo": "https://drive.google.com/file/d/1TW6731xYQNgcyaAjtQ_Pj9fcS2GZuPGe/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-05",
    "anio": 2025,
    "mesServicio": 11,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -163,13 +174,14 @@
    "factura": "40107",
    "oc": "3447-1830-SE25",
    "respaldo": "https://drive.google.com/file/d/1tvQ0Wc39QqnvOzbnmXweI-ATS6DDn51V/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-06",
    "anio": 2025,
    "mesServicio": 12,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 0,
@@ -178,13 +190,14 @@
    "factura": "40997",
    "oc": "3447-2162-SE25",
    "respaldo": "https://drive.google.com/file/d/1L6MS0v8n6AP_fhWe_mFvxSOjVkj5B2Al/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-07",
    "anio": 2025,
    "mesServicio": 13,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -193,13 +206,14 @@
    "factura": "41847",
    "oc": "3447-2488-SE25",
    "respaldo": "https://drive.google.com/file/d/1tWKUJjTWZBSiSltuzR6GWvWZ4OMxbMjk/view",
-   "nota": "El certificado de recepción cita la factura 41877; el memo, la 41847."
+   "nota": "El certificado de recepción cita la factura 41877; el memo, la 41847. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-08",
    "anio": 2025,
    "mesServicio": 14,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -208,13 +222,14 @@
    "factura": "42835",
    "oc": "3447-2881-SE25",
    "respaldo": "https://drive.google.com/file/d/1HEnqHSuRnMPa_z0GawolEDtr5XXFCXkb/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-09",
    "anio": 2025,
    "mesServicio": 15,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -223,13 +238,14 @@
    "factura": "43550",
    "oc": "3447-3325-SE25",
    "respaldo": "https://drive.google.com/file/d/1-Nb1aQC_r3MFv73iiZQgA7wRPqFHGOW-/view",
-   "nota": "El certificado de recepción repite la factura 42835 de agosto."
+   "nota": "El certificado de recepción repite la factura 42835 de agosto. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-10",
    "anio": 2025,
    "mesServicio": 16,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -238,13 +254,14 @@
    "factura": "44508",
    "oc": "3447-4438-SE25",
    "respaldo": "https://drive.google.com/file/d/149HBo1dEF57kp_mmCJ3bVzOfYA59WmON/view",
-   "nota": null
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-11",
    "anio": 2025,
    "mesServicio": 17,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -253,13 +270,14 @@
    "factura": "45444",
    "oc": "3447-4847-SE25",
    "respaldo": "https://drive.google.com/file/d/1NB78X8hXziAIN_Q6twyteLlbGOGmHw5s/view",
-   "nota": "El certificado adjunto es el de octubre 2025."
+   "nota": "El certificado adjunto es el de octubre 2025. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2025-12",
    "anio": 2025,
    "mesServicio": 18,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -268,13 +286,14 @@
    "factura": null,
    "oc": "3447-88-SE26",
    "respaldo": "https://drive.google.com/drive/folders/122zU1bsRlvC_jVNQFqdZMW2kVyYhXfzo",
-   "nota": "OC «sin reajuste». El archivo del memo 274/2026 contiene el texto del memo de octubre 2025: monto por verificar contra el memo firmado."
+   "nota": "OC «sin reajuste». El archivo del memo 274/2026 en Drive contiene el texto del memo de octubre 2025. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-01",
    "anio": 2026,
    "mesServicio": 19,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -283,13 +302,14 @@
    "factura": null,
    "oc": null,
    "respaldo": "https://drive.google.com/file/d/1zUJhueNebAnVzxceUcPTUYYIEMCNzBzw/view",
-   "nota": "Monto según matriz de pagos 2026."
+   "nota": "Monto según matriz de pagos 2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-02",
    "anio": 2026,
    "mesServicio": 20,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148948,
@@ -298,13 +318,14 @@
    "factura": null,
    "oc": null,
    "respaldo": "https://drive.google.com/file/d/1zUJhueNebAnVzxceUcPTUYYIEMCNzBzw/view",
-   "nota": "Memo de OC sin número («X»). Monto según matriz de pagos 2026."
+   "nota": "Memo de OC sin número («X»). Monto según matriz de pagos 2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-03",
    "anio": 2026,
    "mesServicio": 21,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 244618475,
    "multa": 0,
    "ajusteRetro": 17148941,
@@ -313,13 +334,14 @@
    "factura": null,
    "oc": null,
    "respaldo": "https://drive.google.com/file/d/1zUJhueNebAnVzxceUcPTUYYIEMCNzBzw/view",
-   "nota": "Faltan OC y factura individualizadas (matriz de pagos 2026)."
+   "nota": "Faltan OC y factura individualizadas (matriz de pagos 2026). Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-04",
    "anio": 2026,
    "mesServicio": 22,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -328,13 +350,14 @@
    "factura": "50602",
    "oc": "3447-1576-SE26",
    "respaldo": "https://drive.google.com/file/d/1zUJhueNebAnVzxceUcPTUYYIEMCNzBzw/view",
-   "nota": "Primer mes al valor del D.A. 2.459/2026."
+   "nota": "Primer mes al valor del D.A. 2.459/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-05",
    "anio": 2026,
    "mesServicio": 23,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -343,13 +366,14 @@
    "factura": "50762",
    "oc": "3447-1577-SE26",
    "respaldo": "https://drive.google.com/file/d/1zUJhueNebAnVzxceUcPTUYYIEMCNzBzw/view",
-   "nota": "OC 3447-1625-SE26 reemplazada por la 3447-1577-SE26."
+   "nota": "OC 3447-1625-SE26 reemplazada por la 3447-1577-SE26. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-06",
    "anio": 2026,
    "mesServicio": 24,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 4193340,
    "ajusteRetro": 0,
@@ -358,13 +382,14 @@
    "factura": "51859",
    "oc": "3447-1940-SE26",
    "respaldo": "https://drive.google.com/file/d/1HlVe7IM4cweT6WmuYU1hP8nZW8qQJzve/view",
-   "nota": "Descuenta multa de 60 UTM ($4.193.340) por D.A. 2.463 y 3.649/2026."
+   "nota": "Descuenta multa de 60 UTM ($4.193.340) por D.A. 2.463 y 3.649/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-07",
    "anio": 2026,
    "mesServicio": 25,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -373,13 +398,14 @@
    "factura": "52576",
    "oc": "3447-2357-SE26",
    "respaldo": "https://drive.google.com/file/d/1JkBJRy0KFRCXrbucmu5MEDxk9rhRmuRL/view",
-   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026."
+   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-08",
    "anio": 2026,
    "mesServicio": 26,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -388,13 +414,14 @@
    "factura": "53591",
    "oc": "3447-2586-SE26",
    "respaldo": "https://drive.google.com/file/d/1737FAKfRuAcEDcMqBVr-vgKhL7vTDdsA/view",
-   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026."
+   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-09",
    "anio": 2026,
    "mesServicio": 27,
-   "estado": "Remitido a pago",
+   "estado": "Pagado",
+   "pagado": true,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -403,13 +430,14 @@
    "factura": "54395",
    "oc": "3447-2948-SE26",
    "respaldo": "https://drive.google.com/file/d/1py1mDc2v2TbQZ4o4y3ZEyImVv8hsdV9L/view",
-   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026."
+   "nota": "Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
   },
   {
    "periodo": "2026-10",
    "anio": 2026,
    "mesServicio": 28,
    "estado": "OC solicitada",
+   "pagado": false,
    "tramitado": 261767423,
    "multa": 0,
    "ajusteRetro": 0,
@@ -418,7 +446,7 @@
    "factura": null,
    "oc": null,
    "respaldo": "https://drive.google.com/file/d/1mx8cKl4eLUxuUS_BiPfC1eBRm4rpt32-/view",
-   "nota": "OC pedida al valor del D.A. 2.459; aún sin memo de pago."
+   "nota": "OC pedida al valor del D.A. 2.459; el plan de pago programa la mensualidad para febrero de 2027."
   }
  ],
  "meta": [

@@ -30,27 +30,30 @@ const P = [
   ['2025-04', 4381.33, 77351680, 'Remitido a pago', '3447-2467-SE25', '41783', 'Memo 1378/2025', 'Memo 1486/2025', '2025-08-20', '1NMj6WNDUvATiaaPseAWtiiOt2zp8t4rT', ''],
   ['2025-05', 4351.53, 76825566, 'Remitido a pago', '3447-3047-SE25', '42650', 'Memo 1678/2025', 'Memo 1843/2025', '2025-10-15', '1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n', ''],
   ['2025-06', 4472.16, 78955269, 'Remitido a pago', '3447-3049-SE25', '42654', 'Memo 1678/2025', 'Memo 1843/2025', '2025-10-15', '1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n', ''],
-  ['2025-07', 4498.51, 79420474, 'OC solicitada', null, null, 'Memo 1820/2025', null, null, '1IUy1VShrEYU8NctStna9_nPB-1U-VVlt', 'Solo se halló el memo que pide la OC (09-10-2025): factura y memo de pago por verificar.'],
-  ['2025-08', 4365.09, 77064966, 'OC solicitada', null, null, 'Memo 1820/2025', null, null, '1IUy1VShrEYU8NctStna9_nPB-1U-VVlt', 'Solo se halló el memo que pide la OC (09-10-2025): factura y memo de pago por verificar.'],
+  ['2025-07', 4498.51, 79420474, 'OC solicitada', null, null, 'Memo 1820/2025', null, null, '1IUy1VShrEYU8NctStna9_nPB-1U-VVlt', 'En Drive solo se halló el memo que pide la OC (09-10-2025).'],
+  ['2025-08', 4365.09, 77064966, 'OC solicitada', null, null, 'Memo 1820/2025', null, null, '1IUy1VShrEYU8NctStna9_nPB-1U-VVlt', 'En Drive solo se halló el memo que pide la OC (09-10-2025).'],
   ['2025-09', 4584.59, 80940203, 'Remitido a pago', null, '45304', null, 'Memo 297-A/2026', '2026-02-26', '1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne', 'Pagado junto con oct–dic 2025 como deuda por falta de presupuesto 2025.'],
   ['2025-10', 4516.40, 79736319, 'Remitido a pago', null, '45305', null, 'Memo 297-A/2026', '2026-02-26', '1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne', ''],
   ['2025-11', 4563.19, 80562389, 'Remitido a pago', null, '46106', null, 'Memo 297-A/2026', '2026-02-26', '1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne', ''],
   ['2025-12', 5514.32, 97354438, 'Remitido a pago', null, '46104', null, 'Memo 297-A/2026', '2026-02-26', '1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne', ''],
   ['2026-01', 4684.08, 85589617, 'Remitido a pago', '3447-1438-SE26', '50348', 'Memo 1045/2026', 'Memo 1110/2026', '2026-05-29', '10bgVso1tqqtkMxxBj_bICcTmKP36QKmF', 'Factura por $85.589.617; el memo 1045 y la planilla dicen $85.589.618 (redondeo).'],
   ['2026-02', 4224.68, 77195254, 'Remitido a pago', '3447-1440-SE26', '50349', 'Memo 1045/2026', 'Memo 1113/2026', '2026-05-29', '1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ', ''],
-  ['2026-03', 4885.44, 89268958, 'Remitido a pago', '3447-1441-SE26', '50351', 'Memo 1045/2026', 'Memo 1114/2026', '2026-05-29', '1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ', 'Existe además un borrador de memo de pago de marzo del 08-11-2026 (factura 50.351): confirmar si el pago sigue pendiente.'],
+  ['2026-03', 4885.44, 89268958, 'Remitido a pago', '3447-1441-SE26', '50351', 'Memo 1045/2026', 'Memo 1114/2026', '2026-05-29', '1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ', 'Existe además un borrador de memo de pago de marzo del 08-11-2026 (factura 50.351).'],
   ['2026-04', 4483.29, 81920692, 'Remitido a pago', '3447-1443-SE26', '50352', 'Memo 1045/2026', 'Memo 1115/2026', '2026-05-29', '1wbDVDzpnxBpEhNN7tIHeCLzGqJPdbfxr', ''],
   ['2026-05', 4238.30, 77444125, 'Remitido a pago', '3447-1578-SE26', '50749', 'Memo 1142/2026', 'Memo 1261/2026', '2026-06-15', '1LOmmR2QiGO6TuTZqRYg69yH-tlYPopJK', 'La planilla de control anota el memo 1.115 como memo de pago de mayo; el memo de pago es el 1261/2026.'],
   ['2026-06', 4518.19, 82558400, 'Remitido a pago', '3447-1938-SE26', '51675', 'Memo 1382/2026', 'Memo 1523/2026', '2026-07-22', '1xGVU9AukyeUTHOHH1Fx3KrzjYiB2pTIp', 'La planilla de control dice $82.558.401 (redondeo).'],
-  ['2026-07', 4373.10, 79907251, 'Remitido a pago', '3447-2256-SE26', '52729', 'Memo 1614/2026', 'Memo 1767/2026', '2026-08-26', '1ZIUH2xC9Hkog3TwMYmi_3dpETbpjISKj', 'El archivo «1767.2026 … FACTURA 52719 JULIO» contiene otro memo (prevención de riesgos); la planilla y la matriz citan la factura 52729 (por verificar). La matriz dice $79.907.252.'],
+  ['2026-07', 4373.10, 79907251, 'Remitido a pago', '3447-2256-SE26', '52729', 'Memo 1614/2026', 'Memo 1767/2026', '2026-08-26', '1ZIUH2xC9Hkog3TwMYmi_3dpETbpjISKj', 'El archivo «1767.2026 … FACTURA 52719 JULIO» contiene otro memo (prevención de riesgos); la planilla y la matriz citan la factura 52729. La matriz dice $79.907.252.'],
   ['2026-08', 5214.00, 95272554, 'Remitido a pago', '3447-2555-SE26', '53624', 'Memo 1812/2026', 'Memo 1982/2026', '2026-09-30', '1LwoH-A7V8X7PcMKq1xHL44QAoDYc3EPw', 'El memo dice «el servicio para el mes de junio»: error de redacción, la tabla es de agosto.'],
   ['2026-09', 5047.20, 92224710, 'Remitido a pago', '3447-2865-SE26', '54243', 'Memo 2006/2026', 'Memo 2118/2026', '2026-10-21', '1_-VtKy7wzamAElHQ7phi8R1T6bVP3_gm', ''],
   ['2026-10', 4770.04, 87160317, 'OC solicitada', null, null, 'Memo 2214/2026', null, null, '1LAdb5LTmxfs3Nm-wmvVjBEiPgM0HgNcB', 'OC pedida el 05-11-2026; sin factura ni memo de pago aún.']
 ];
-const rows = P.map(([periodo, ton, tram, estado, oc, factura, memoOC, memoPago, fechaMemoPago, did, nota], i) => {
+// Confirmación del encargado del contrato (18-11-2026): pagado todo 2025 y 2026 hasta septiembre.
+const PAGADO_HASTA = '2026-09', CONFIRMA = 'Pago confirmado por el encargado del contrato (18-11-2026).';
+const rows = P.map(([periodo, ton, tram, estado0, oc, factura, memoOC, memoPago, fechaMemoPago, did, nota0], i) => {
   const t = tarifa(periodo), neto = Math.round(ton * t.tarifaNeta), debido = Math.round(neto * 1.19);
+  const pagado = periodo <= PAGADO_HASTA, estado = pagado ? 'Pagado' : estado0, nota = pagado ? [nota0, CONFIRMA].filter(Boolean).join(' ') : nota0;
   return { periodo, anio: +periodo.slice(0, 4), mesServicio: i + 1, toneladas: ton, tarifaNeta: t.tarifaNeta, actoTarifa: t.acto, debidoNeto: neto, debido, tramitado: tram, diferencia: tram - debido,
-    estado, oc, factura, memoOC, memoPago, fechaMemoPago, respaldo: u(did) || RESUMEN, nota: nota || null };
+    estado, pagado, oc, factura, memoOC, memoPago, fechaMemoPago, respaldo: u(did) || RESUMEN, nota: nota || null };
 });
 const meta = f => [{ label: 'Fuente', value: f }, { label: 'Leído', value: '18-11-2026, desde Google Drive' }, { label: 'Generado por', value: 'datos/disposicion_final.js (repositorio tablero-cosemar-recoleccion)' }];
 const out = path.join(__dirname, '..', 'tablero', 'store');
@@ -59,7 +62,7 @@ fs.writeFileSync(path.join(out, 'disposicion_final_alzas.json'), JSON.stringify(
 
 // Verificación y resumen
 const res = {};
-rows.forEach(r => { const y = res[r.anio] = res[r.anio] || { meses: 0, toneladas: 0, debido: 0, tramitado: 0, diferencia: 0, sinMemoPago: 0 }; y.meses++; y.toneladas += r.toneladas; y.debido += r.debido; y.tramitado += r.tramitado; y.diferencia += r.diferencia; if (!r.memoPago) y.sinMemoPago += r.tramitado; });
+rows.forEach(r => { const y = res[r.anio] = res[r.anio] || { meses: 0, toneladas: 0, debido: 0, tramitado: 0, diferencia: 0, sinMemoPago: 0 }; y.meses++; y.toneladas += r.toneladas; y.debido += r.debido; y.tramitado += r.tramitado; y.diferencia += r.diferencia; if (!r.pagado) y.sinMemoPago += r.tramitado; });
 Object.entries(res).forEach(([y, v]) => { v.toneladas = Math.round(v.toneladas * 100) / 100; v.promedioTon = Math.round(v.toneladas / v.meses * 100) / 100; console.log(y, JSON.stringify(v)); });
 rows.filter(r => Math.abs(r.diferencia) > 1000).forEach(r => console.log('DIFERENCIA >1000', r.periodo, r.diferencia));
 rows.filter(r => Math.abs(r.diferencia) > 0 && Math.abs(r.diferencia) <= 1000).forEach(r => console.log('redondeo', r.periodo, r.diferencia));

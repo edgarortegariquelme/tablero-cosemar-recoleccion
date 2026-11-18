@@ -57,7 +57,7 @@ for i, p in enumerate(pagos):
         wm.cell(row=r, column=15, value=f'=(YEAR(N{r})-YEAR(A{r}))*12+MONTH(N{r})-MONTH(A{r})')
     wm.cell(row=r, column=16, value=p['nota'] or '').alignment = Alignment(wrap_text=True, vertical='top')
     if p['respaldo']: x = wm.cell(row=r, column=17, value='Abrir'); x.hyperlink = p['respaldo']; x.font = LINK
-    if p['nota'] and ('verificar' in p['nota'] or not p['memoPago']):
+    if not p.get('pagado'):
         for c in range(1, 18): wm.cell(row=r, column=c).fill = AM
 FL = F0 + len(pagos) - 1; rt = FL + 1
 wm.cell(row=rt, column=1, value='Total').font = B
@@ -67,7 +67,7 @@ for c, fmt in ((3, TON), (5, CLP), (6, CLP), (7, CLP), (8, CLP)):
 # Anual
 wa = wb.create_sheet('Anual', 0)
 cab(wa, 'Disposición final Cosemar · resumen por año', 'P.P. 104/2024, ID 3447-187-LR24. Montos brutos por mes de servicio. Corte: octubre de 2026.',
-    [('Año', 10), ('Meses', 8), ('Toneladas', 12), ('Promedio t/mes', 12), ('Debido bruto ($)', 18), ('Tramitado bruto ($)', 18), ('Diferencia ($)', 14), ('Sin memo de pago ($)', 18)])
+    [('Año', 10), ('Meses', 8), ('Toneladas', 12), ('Promedio t/mes', 12), ('Debido bruto ($)', 18), ('Tramitado bruto ($)', 18), ('Diferencia ($)', 14), ('Pendiente de pago ($)', 18)])
 anios = sorted({p['anio'] for p in pagos}); M = f'Mensual!$B${F0}:$B${FL}'
 for i, y in enumerate(anios):
     r = 5 + i; wa.cell(row=r, column=1, value=y)
@@ -75,13 +75,13 @@ for i, y in enumerate(anios):
     wa.cell(row=r, column=3, value=f'=SUMIF({M},A{r},Mensual!$C${F0}:$C${FL})').number_format = TON
     wa.cell(row=r, column=4, value=f'=C{r}/B{r}').number_format = TON
     for c, col in ((5, 'F'), (6, 'G'), (7, 'H')): wa.cell(row=r, column=c, value=f'=SUMIF({M},A{r},Mensual!${col}${F0}:${col}${FL})').number_format = CLP
-    wa.cell(row=r, column=8, value=f'=SUMIFS(Mensual!$G${F0}:$G${FL},{M},A{r},Mensual!$M${F0}:$M${FL},"")').number_format = CLP
+    wa.cell(row=r, column=8, value=f'=SUMIFS(Mensual!$G${F0}:$G${FL},{M},A{r},Mensual!$I${F0}:$I${FL},"<>Pagado")').number_format = CLP
 ra = 5 + len(anios); wa.cell(row=ra, column=1, value='Total').font = B
 for c in range(2, 9):
     if c == 4: x = wa.cell(row=ra, column=4, value=f'=C{ra}/B{ra}'); x.number_format = TON; continue
     L = get_column_letter(c); x = wa.cell(row=ra, column=c, value=f'=SUM({L}5:{L}{ra-1})'); x.font = B; x.number_format = CLP if c > 4 else (TON if c == 3 else 'General')
 notas = ['Sin diferencias de precio: cada mes tramitado coincide con toneladas × tarifa vigente × 1,19 (diferencias de redondeo de $1).',
-         'Sin memo de pago: julio y agosto de 2025 (solo memo que pide OC, 1820/2025) y octubre de 2026 (OC pedida el 05-11-2026).',
+         'Pagos: todo 2025 y enero a septiembre de 2026 pagados según confirmación del encargado del contrato (18-11-2026). Pendiente: octubre de 2026 (OC pedida el 05-11-2026).',
          'El D.A. 2.737/2026 proyecta 2026 con un promedio 2025 de 4.657,85 t/mes; los documentos mensuales suman un promedio de 4.574,38 t/mes. Verificar la base usada.',
          'Oficio 2025 que pedía rebajar 35% la tarifa: no se halló anexo ni decreto; las OC y facturas 2025 están a $14.836 neto.',
          'Próximo reajuste: enero de 2027, por el IPC 2026 (art. 40 BT). Borrador de memo del 13-11-2026 con el porcentaje en blanco.']

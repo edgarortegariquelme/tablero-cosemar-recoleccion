@@ -53,7 +53,7 @@
 <article class="va" id="analisis">
   <div class="va-eyebrow">DMAO · Contrato de recolección Cosemar · P.P. 060/2023 · ID 3447-86-LR23</div>
   <h2 id="titular" data-draw="va_titular" data-source="c_portada c_pagos">—</h2>
-  <p>El libro de control registra <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio, de los cuales <b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> no tienen monto cargado. La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
+  <p>En el libro de control quedan <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago sin pago registrado, en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio (<b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> sin monto cargado). La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
   <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
 
   <section id="alzas" class="va-sec">
@@ -118,12 +118,12 @@
   <section id="disposicion" class="va-sec">
   <div class="va-eyebrow">Contrato de disposición final · P.P. 104/2024 · ID 3447-187-LR24 · contrato distinto del de recolección</div>
   <h3 id="h-df">Disposición final: lo tramitado calza con las toneladas, pero el pago llega tarde</h3>
-  <p>Entre enero de 2025 y <b data-draw="vf_ultimo" data-source="c_df_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vf_tram" data-source="c_df_resumen" data-field="tramitado" data-row="0">—</b> por <b data-draw="vf_ton" data-source="c_df_resumen" data-field="toneladas" data-row="0">—</b> toneladas, y cada mes coincide con toneladas × tarifa vigente × 1,19 (diferencia total <b data-draw="vf_dif" data-source="c_df_resumen" data-field="diferencia" data-row="0">—</b>). <b class="va-deuda" data-draw="vf_sinmemo" data-source="c_df_resumen" data-field="mesesSinMemo" data-row="0">—</b> meses no tienen memo de pago (<b class="va-deuda" data-draw="vf_sinmemomonto" data-source="c_df_resumen" data-field="sinMemo" data-row="0">—</b>), y el memo de pago llegó hasta <b data-draw="vf_maxlag" data-source="c_df_resumen" data-field="maxAtraso" data-row="0">—</b> meses después del servicio. La tarifa vigente es <b data-draw="vf_tarifa" data-source="c_df_resumen" data-field="tarifaVigente" data-row="0">—</b> neto por tonelada.</p>
+  <p>Entre enero de 2025 y <b data-draw="vf_ultimo" data-source="c_df_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vf_tram" data-source="c_df_resumen" data-field="tramitado" data-row="0">—</b> por <b data-draw="vf_ton" data-source="c_df_resumen" data-field="toneladas" data-row="0">—</b> toneladas, y cada mes coincide con toneladas × tarifa vigente × 1,19 (diferencia total <b data-draw="vf_dif" data-source="c_df_resumen" data-field="diferencia" data-row="0">—</b>). <b class="va-deuda" data-draw="vf_sinmemo" data-source="c_df_resumen" data-field="mesesSinMemo" data-row="0">—</b> mes(es) siguen pendientes de pago (<b class="va-deuda" data-draw="vf_sinmemomonto" data-source="c_df_resumen" data-field="sinMemo" data-row="0">—</b>); el resto está pagado según el encargado del contrato (18-11-2026). En 2025 el memo de pago llegó hasta <b data-draw="vf_maxlag" data-source="c_df_resumen" data-field="maxAtraso" data-row="0">—</b> meses después del servicio. La tarifa vigente es <b data-draw="vf_tarifa" data-source="c_df_resumen" data-field="tarifaVigente" data-row="0">—</b> neto por tonelada.</p>
 
   <h4 id="h-df-pagos">Monto de cada mes de servicio y meses hasta el memo de pago</h4>
-  <p class="va-muted">Barras: monto bruto tramitado. Rojo: mes sin memo de pago. El número sobre cada barra son los meses entre el servicio y el memo de pago; las facturas vencen a 30 días.</p>
+  <p class="va-muted">Barras: monto bruto tramitado. Rojo: mes pendiente de pago. El número sobre cada barra son los meses entre el servicio y el memo de pago; las facturas vencen a 30 días.</p>
   <div id="graf-df-pagos" data-draw="vf_pagos" data-source="c_df_mes">—</div>
-  <div class="va-legend"><span><span class="va-key" data-draw="vf_k0"></span>Con memo de pago</span><span><span class="va-key va-k-deuda" style="opacity:.8"></span>Sin memo de pago</span></div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vf_k0"></span>Pagado</span><span><span class="va-key va-k-deuda" style="opacity:.8"></span>Pendiente de pago</span></div>
 
   <h4 id="h-df-ton">Toneladas por mes frente al promedio que proyectan los decretos</h4>
   <p class="va-muted">Línea continua: promedio real del año según los documentos de cada mes. Línea punteada: promedio que el acto usa para proyectar el gasto (D.A. 2.737/2026 para 2025 y borrador del reajuste 2027 para 2026).</p>
@@ -133,7 +133,7 @@
   <h4 id="h-df-anual">Resumen por año</h4>
   <div class="va-wrap">
     <table class="va-tbl" id="tbl-df-anual" data-source="c_df_anual" data-row-key="clave">
-      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="toneladas">Toneladas</th><th data-field="promedio">Promedio t/mes</th><th data-field="proyeccion">Promedio en el acto</th><th data-field="tramitado">Tramitado</th><th data-field="diferencia">Diferencia con toneladas × tarifa</th><th data-field="sinMemo">Sin memo de pago</th><th data-field="atrasoMedio">Meses hasta memo de pago (promedio)</th></tr></thead>
+      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="toneladas">Toneladas</th><th data-field="promedio">Promedio t/mes</th><th data-field="proyeccion">Promedio en el acto</th><th data-field="tramitado">Tramitado</th><th data-field="diferencia">Diferencia con toneladas × tarifa</th><th data-field="sinMemo">Pendiente de pago</th><th data-field="atrasoMedio">Meses hasta memo de pago (promedio)</th></tr></thead>
       <tbody data-draw="vf_anual"></tbody>
     </table>
   </div>
@@ -148,7 +148,7 @@
   </section>
 
   <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
-  <p class="va-muted">Ningún mes llega a «Pago efectivo» con comprobante, y la revisión de sanciones antes del pago no consta en ningún mes.</p>
+  <p class="va-muted">Los pagos de diciembre de 2025 a septiembre de 2026 constan por confirmación del encargado del contrato (18-11-2026), sin comprobante de egreso de DAF. La revisión de sanciones antes del pago no consta en ningún mes.</p>
   <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
   <div class="va-legend"><span><span class="va-key va-k-ok"></span>Acreditado</span><span><span class="va-key va-k-warn"></span>Por verificar</span><span><span class="va-key va-k-none"></span>Sin antecedentes</span></div>
 

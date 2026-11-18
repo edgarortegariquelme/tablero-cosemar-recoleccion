@@ -427,13 +427,13 @@
       return pagos.slice().sort(function (a, b) { return a.periodo < b.periodo ? -1 : 1; }).map(function (p) {
         var lag = p.fechaMemoPago ? (+p.fechaMemoPago.slice(0, 4) - +p.periodo.slice(0, 4)) * 12 + (+p.fechaMemoPago.slice(5, 7) - +p.periodo.slice(5, 7)) : null;
         return { periodo: p.periodo, anio: p.anio, toneladas: Number(p.toneladas), tarifaNeta: p.tarifaNeta, debido: p.debido, tramitado: p.tramitado, diferencia: p.tramitado - p.debido,
-          estado: p.estado, memoPago: p.memoPago, factura: p.factura, oc: p.oc, atraso: lag, sinMemo: !p.memoPago, respaldo: p.respaldo, nota: p.nota };
+          estado: p.estado, memoPago: p.memoPago, factura: p.factura, oc: p.oc, atraso: lag, sinMemo: !p.pagado, respaldo: p.respaldo, nota: p.nota };
       });
     }
   });
   dash.calc('c_df_anual', {
     inputs: ['c_df_mes', 'df_alzas'], title: 'Disposición final por año',
-    description: 'Suma por año toneladas, tramitado, diferencia y montos sin memo de pago; promedio de toneladas por mes, promedio usado para proyectar en el acto de ese año y atraso medio del memo de pago. Agrega una fila Total.',
+    description: 'Suma por año toneladas, tramitado, diferencia y montos pendientes de pago; promedio de toneladas por mes, promedio usado para proyectar en el acto de ese año y atraso medio del memo de pago. Agrega una fila Total.',
     fn: function (meses, actos) {
       var by = {}, orden = [], f = function (k) { return { clave: k, meses: 0, toneladas: 0, tramitado: 0, diferencia: 0, sinMemo: 0, _lag: 0, _nlag: 0 }; }, tot = f('Total');
       meses.forEach(function (m) { var k = String(m.anio); if (!by[k]) { by[k] = f(k); orden.push(k); }
@@ -447,7 +447,7 @@
   });
   dash.calc('c_df_resumen', {
     inputs: ['c_df_mes', 'df_alzas'], title: 'Disposición final: resumen',
-    description: 'Último mes registrado, total tramitado y toneladas, diferencia con toneladas × tarifa, meses y monto sin memo de pago, atraso máximo del memo de pago y tarifa vigente del último decreto.',
+    description: 'Último mes registrado, total tramitado y toneladas, diferencia con toneladas × tarifa, meses y monto pendientes de pago, atraso máximo del memo de pago y tarifa vigente del último decreto.',
     fn: function (meses, actos) {
       if (!meses.length) return [];
       var s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); }, sm = meses.filter(function (m) { return m.sinMemo; });
@@ -476,11 +476,11 @@
     svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.tramitado); }).attr('height', function (p) { return H - m.b - y(p.tramitado); })
       .style('fill', function (p) { return p.sinMemo ? 'var(--color-bad)' : dash.colors[0]; }).style('opacity', function (p) { return p.sinMemo ? 0.75 : 0.85; });
     if (x.bandwidth() > 12) svg.append('g').selectAll('text').data(ms).join('text').attr('class', function (p) { return 'va-lab' + (p.atraso > 2 ? ' va-bad' : ''); }).attr('text-anchor', 'middle')
-      .attr('x', function (p) { return x(p.periodo) + x.bandwidth() / 2; }).attr('y', function (p) { return y(p.tramitado) - 4; }).text(function (p) { return p.sinMemo ? 'sin memo' : p.atraso + ' m'; })
+      .attr('x', function (p) { return x(p.periodo) + x.bandwidth() / 2; }).attr('y', function (p) { return y(p.tramitado) - 4; }).text(function (p) { return p.sinMemo ? 'pendiente' : p.atraso == null ? 'pagado' : p.atraso + ' m'; })
       .style('font-size', x.bandwidth() < 26 ? '9px' : null);
     var t = tip(box);
     svg.append('g').selectAll('rect.h').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
-      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · ' + p.toneladas.toLocaleString('es-CL') + ' t × $' + M.fmt(p.tarifaNeta) + ' · tramitado ' + clp(p.tramitado) + (p.diferencia ? ' (dif. ' + clp(p.diferencia) + ')' : '') + ' · ' + (p.memoPago ? p.memoPago + ', ' + p.atraso + ' meses después' : 'sin memo de pago') + (p.nota ? ' · ' + p.nota : '')); })
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · ' + p.toneladas.toLocaleString('es-CL') + ' t × $' + M.fmt(p.tarifaNeta) + ' · tramitado ' + clp(p.tramitado) + (p.diferencia ? ' (dif. ' + clp(p.diferencia) + ')' : '') + ' · ' + (p.memoPago ? p.memoPago + ', ' + p.atraso + ' meses después' : 'memo de pago no hallado') + ' · ' + p.estado + (p.nota ? ' · ' + p.nota : '')); })
       .on('pointerleave', function () { t.attr('hidden', ''); });
   });
 

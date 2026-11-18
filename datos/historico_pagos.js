@@ -20,7 +20,7 @@ const P = [
   ['2024-07', B0, 'Remitido a pago', 'Memo 1423/2024', '32996', '3447-3210-SE24', '1muV80lYt0HArzRiknm7YcnRmE7lyRQuy', 'Primer mes. Proceso sancionatorio 1 sin multa (D.A. 6.579/2024).'],
   ['2024-08', B0, 'Remitido a pago', 'Memo 1596/2024', '33681', '3447-3617-SE24', '1rBxM8cBXTNGKc94pI9EbT1spyUDu2_iQ', ''],
   ['2024-09', B0, 'Remitido a pago', 'Memo 1844/2024', '34154', '3447-3901-SE24', '1n0bPMjTSMPv69rBy56ggUB9DV44JR1yD', ''],
-  ['2024-10', B0, 'OC solicitada', 'Memo 1011/2024 (pide OC)', null, null, '1sPgDKkD4LPeCHl_r2ATkpZ3opj4mo5C1', 'En Drive solo está el memo que pide la OC; no se halló el memo de pago ni la factura de octubre 2024.'],
+  ['2024-10', B0, 'Remitido a pago', 'Memo 1011/2024 (pide OC)', null, null, '1sPgDKkD4LPeCHl_r2ATkpZ3opj4mo5C1', 'Memo de pago no hallado en Drive.'],
   ['2024-11', B0, 'Remitido a pago', 'Memo 2107/2024', '35546', '3447-4672-SE24', '14ke264VEL45bOii1RY6BDCVKsMqtu0oL', ''],
   ['2024-12', B0, 'Remitido a pago', 'Memo 138/2025', '36338', '3447-159-SE25', '1Y45O1_SvttmU51GlimF3KdvMYoVLHCIs', ''],
   ['2025-01', B0, 'Remitido a pago', 'Memo 457/2025', '37637', '3447-683-SE25', '1KkOY-c_XzX-MrSe8ShF5ANSD1eUHlNJQ', ''],
@@ -34,7 +34,7 @@ const P = [
   ['2025-09', B0, 'Remitido a pago', 'Memo 1876/2025', '43550', '3447-3325-SE25', '1-Nb1aQC_r3MFv73iiZQgA7wRPqFHGOW-', 'El certificado de recepción repite la factura 42835 de agosto.'],
   ['2025-10', B0, 'Remitido a pago', 'Memo 2083/2025', '44508', '3447-4438-SE25', '149HBo1dEF57kp_mmCJ3bVzOfYA59WmON', ''],
   ['2025-11', B0, 'Remitido a pago', 'Memo 2264/2025', '45444', '3447-4847-SE25', '1NB78X8hXziAIN_Q6twyteLlbGOGmHw5s', 'El certificado adjunto es el de octubre 2025.'],
-  ['2025-12', B0, 'Remitido a pago', 'Memo 274/2026', null, '3447-88-SE26', null, 'OC «sin reajuste». El archivo del memo 274/2026 contiene el texto del memo de octubre 2025: monto por verificar contra el memo firmado.'],
+  ['2025-12', B0, 'Remitido a pago', 'Memo 274/2026', null, '3447-88-SE26', null, 'OC «sin reajuste». El archivo del memo 274/2026 en Drive contiene el texto del memo de octubre 2025.'],
   ['2026-01', B0, 'Remitido a pago', 'Memo 408/2026', null, null, null, 'Monto según matriz de pagos 2026.'],
   ['2026-02', B0, 'Remitido a pago', 'Memo 642/2026', null, null, null, 'Memo de OC sin número («X»). Monto según matriz de pagos 2026.'],
   ['2026-03', B0, 'Remitido a pago', 'Memo 961/2026', null, null, null, 'Faltan OC y factura individualizadas (matriz de pagos 2026).'],
@@ -44,15 +44,19 @@ const P = [
   ['2026-07', B1, 'Remitido a pago', 'Memo 1797/2026', '52576', '3447-2357-SE26', '1JkBJRy0KFRCXrbucmu5MEDxk9rhRmuRL', 'Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026.'],
   ['2026-08', B1, 'Remitido a pago', 'Memo 1964/2026', '53591', '3447-2586-SE26', '1737FAKfRuAcEDcMqBVr-vgKhL7vTDdsA', 'Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026.'],
   ['2026-09', B1, 'Remitido a pago', 'Memo 2111/2026', '54395', '3447-2948-SE26', '1py1mDc2v2TbQZ4o4y3ZEyImVv8hsdV9L', 'Facturado al valor del D.A. 2.459 aunque rige el D.A. 3.957/2026.'],
-  ['2026-10', B1, 'OC solicitada', 'Memo 2211/2026 (pide OC)', null, null, '1mx8cKl4eLUxuUS_BiPfC1eBRm4rpt32-', 'OC pedida al valor del D.A. 2.459; aún sin memo de pago.']
+  ['2026-10', B1, 'OC solicitada', 'Memo 2211/2026 (pide OC)', null, null, '1mx8cKl4eLUxuUS_BiPfC1eBRm4rpt32-', 'OC pedida al valor del D.A. 2.459; el plan de pago programa la mensualidad para febrero de 2027.']
 ];
 const MULTAS = { '2026-06': 4193340 };
 
-const rows = P.map(([periodo, tramitado, estado, memo, factura, oc, id, nota], i) => ({
-  periodo, anio: Number(periodo.slice(0, 4)), mesServicio: i + 1, estado, tramitado, multa: MULTAS[periodo] || 0,
+// Confirmación del encargado del contrato (18-11-2026): todo lo de 2024 y 2025 está pagado, y en 2026 las mensualidades hasta septiembre;
+// en 2026 solo se adeudan el IPC y el aumento poblacional, que se pagan según el plan de pago.
+const PAGADO_HASTA = '2026-09', CONFIRMA = 'Pago confirmado por el encargado del contrato (18-11-2026).';
+const rows = P.map(([periodo, tramitado, estado0, memo, factura, oc, id, nota0], i) => { const pagado = periodo <= PAGADO_HASTA; const estado = pagado ? 'Pagado' : estado0;
+  const nota = pagado ? [nota0, CONFIRMA].filter(Boolean).join(' ') : nota0; return ({
+  periodo, anio: Number(periodo.slice(0, 4)), mesServicio: i + 1, estado, pagado, tramitado, multa: MULTAS[periodo] || 0,
   ajusteRetro: retro[periodo] || 0, ajusteRetroPagadoEn: retro[periodo] ? '2026-06' : null,
   memo, factura, oc, respaldo: id ? u(id) : (periodo >= '2026-01' && periodo <= '2026-05' ? MATRIZ_2026 : CARPETA_2026), nota: nota || null
-}));
+}); });
 const suma = rows.reduce((t, r) => t + r.ajusteRetro, 0);
 if (suma !== RETRO_TOTAL) throw new Error('El retroactivo asignado no cuadra: ' + suma);
 

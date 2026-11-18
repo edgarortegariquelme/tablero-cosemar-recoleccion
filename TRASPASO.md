@@ -26,3 +26,8 @@ Computador M370-00507, carpeta `PASE_CLAUDE_CODE_PP73_2026_v2`: figura como no u
 - Deuda recolección a oct-2026: $24.690.339 por decretos (D.A. 3.957 no aplicado) + $45.023.996 por IPC 4,3% sin decreto.
 - Disposición final: sin diferencias de precio; sin memo de pago jul–ago 2025 y oct 2026; base de toneladas del D.A. 2.737 por verificar.
 - Tareas programadas (sin conector Google Drive hasta que el usuario lo agregue en claude.ai): Actualizar deuda (día 28, trig_01JuDoJiLtVSb8GpTxLkjxma), Borradores ciclo de pago (día 7, trig_0144c4spvPTKukqd5UWW6BPN), Reajuste IPC anual (10-jul y 10-ago, trig_0182X98CJ8K9MKHgQRu1i4wn), Disposición final (día 8, trig_01Sz5gvRK5h8ArBMAB7wifm7).
+
+## Actualización 18-11-2026 (tarde)
+- Confirmación del encargado: pagado todo 2024 y 2025 (ambos contratos) y las mensualidades de 2026 hasta septiembre. En 2026 solo se adeudan el IPC 4,3% y el aumento poblacional del D.A. 3.957, según el plan de pago.
+- Constancia en Notion: https://app.notion.com/p/41c9e3e655c0811cb8e6d6e6afb7724c · 11 hitos «pago» agregados al Libro de control (dic-2025 a sep-2026 y retroactivo D.A. 2.459), verificación «Reportado».
+- Pendiente de pago: octubre 2026 en ambos contratos (recolección según plan, en febrero de 2027).
