@@ -98,6 +98,8 @@
 .tl-item { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); margin: var(--cds-gap-sm) 0; background: var(--color-panel); }
 .tl-item summary { margin: 0 !important; }
 .tl-item summary .va-muted { font-weight: 400; }
+.fl-sin { display: inline-block; margin-bottom: 4px; font-size: var(--cds-font-size-caption); }
+.fl-foto { display: block; width: 96px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
 @media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
 </style>
 
@@ -193,7 +195,7 @@
   <section class="va-tab" id="tab-fl">
   <h3 id="h-fl">Flota del contrato: estado y documentos al día</h3>
   <div id="fl-resumen" data-draw="vf_resumen" data-source="flota">—</div>
-  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. «Foto» abre el registro fotográfico de la flota.</p>
+  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. La foto de cada móvil se abre al tocarla.</p>
   <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso de circulación</th><th>SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
   <p class="va-muted">Contrato: seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000), vence el 31-07-2027. Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF, con endoso de 419,57 UF del 29-10-2026), vence el 28-10-2029.</p>
   <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
@@ -208,6 +210,11 @@
   <div id="pe-resumen" data-draw="vp2_resumen" data-source="personal resumenes">—</div>
   <p class="va-muted">Cifras agregadas del estado de pago (EDP) de Cosemar del 14-10-2026 y del informe comparativo de sueldos base. El tablero no publica nombres ni RUT.</p>
   <div class="va-wrap"><table class="va-tbl" id="tbl-personal" data-source="personal" data-row-key="cargo"><thead><tr><th>Cargo</th><th class="va-r">Dotación</th><th class="va-r">Oferta</th><th class="va-r">Sueldo base julio 2026</th><th>Nota</th></tr></thead><tbody data-draw="vp2_tabla"></tbody></table></div>
+  <h4 id="h-pe-impo">Imposiciones y libro de remuneraciones por mes</h4>
+  <p class="va-muted">Comprobantes de pago de cotizaciones (PREVIRED) y libros de remuneraciones que Cosemar entrega con cada estado de pago.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-impo" data-source="imposiciones" data-row-key="periodo"><thead><tr><th>Mes</th><th>Estado</th><th>Cotizaciones</th><th>Remuneraciones</th></tr></thead><tbody data-draw="vp2_impo"></tbody></table></div>
+  <h4 id="h-pe-f30">Certificados de cumplimiento laboral</h4>
+  <ul class="va-ul" id="pe-f30" data-draw="vp2_f30" data-source="resumenes"></ul>
   <h4 id="h-pe-pend">Lo que falta acreditar</h4>
   <ul class="va-ul" id="pe-pend" data-draw="vp2_pend" data-source="resumenes"></ul>
   </section>

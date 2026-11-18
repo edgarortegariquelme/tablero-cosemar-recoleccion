@@ -1,0 +1,26 @@
+{
+ "construido": "2026-11-18T15:16:13.312Z",
+ "huella": "83cb3a1d668f1f9775ebbf645626aa675a666959",
+ "libro": "Semilla del repositorio + pagos confirmados",
+ "archivos": {
+  "pagos_contrato": "data/pagos_contrato.json",
+  "alzas": "data/alzas_contrato.json",
+  "plan_pago": "data/plan_pago.json",
+  "df_pagos": "data/disposicion_final_pagos.json",
+  "df_alzas": "data/disposicion_final_alzas.json",
+  "catalogo": "data/catalogo.json",
+  "manifolds": "data/manifolds.json",
+  "correos": "data/correos.json",
+  "flota": "data/flota.json",
+  "personal": "data/personal.json",
+  "subdere": "data/subdere.json",
+  "antecedentes": "data/antecedentes.json",
+  "ciclo_fechas": "data/ciclo_fechas.json",
+  "resumenes": "data/resumenes.json",
+  "imposiciones": "data/imposiciones.json",
+  "libro_san": "data/libro_san.json",
+  "libro_pag": "data/libro_pag.json",
+  "libro_ven": "data/libro_ven.json",
+  "libro_sis": "data/libro_sis.json"
+ }
+}

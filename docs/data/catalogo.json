@@ -1,0 +1,1480 @@
+{
+ "contrato": {
+  "nombre": "Servicio de recolección, transporte y disposición final de RSD · P.P. 060/2023",
+  "id": "3447-86-LR23",
+  "proveedor": "Cosemar SpA · RUT 96.827.370-1",
+  "inicio": "2024-07-01",
+  "termino": "2029-06-30",
+  "adjudicacion": "D.A. 4.824/2024",
+  "aprobacion": "D.A. 5.665/2024",
+  "alcance": "Este tablero cubre el contrato de recolección 3447-86-LR23. La disposición final se controla por el contrato separado 3447-187-LR24 (Relleno Santa Inés); solo se cruza la conciliación de tonelaje (BT 124–125)."
+ },
+ "fuentes": {
+  "bases": {
+   "n": "Bases administrativas y técnicas P.P. 060/2023 (versión legible, 127 pp.)",
+   "u": "https://drive.google.com/file/d/1TknaBBbdBm8PIJVN_lpM3JcyR6h2Y8D7/view"
+  },
+  "basesDA": {
+   "n": "Bases aprobadas por D.A. 6.424/2023",
+   "u": "https://drive.google.com/file/d/1J4Lv8tlB89BBV4zbpJRV_vY77kzpmyg4/view"
+  },
+  "contrato": {
+   "n": "Contrato aprobado por D.A. 5.665/2024",
+   "u": "https://drive.google.com/file/d/1FbmAP0IpXkvuVtxjyAaSsYGKmltIKTCa/view"
+  },
+  "da7337": {
+   "n": "D.A. 7.337/2023 (modifica bases), en Providencia 6981",
+   "u": "https://drive.google.com/file/d/1NPisD82ZlPaCyW9hiY6zyRDylfg49k75/view"
+  },
+  "flujo": {
+   "n": "FLUJOGRAMA COSEMAR RECOLECCION.xlsx (mapa del flujo actual)",
+   "u": "https://drive.google.com/file/d/15b5Li0NNyiQjxco9VcuVw-8TGuvsJ1CN/view"
+  },
+  "venc": {
+   "n": "Control vencimientos COSEMAR (planilla)",
+   "u": "https://docs.google.com/spreadsheets/d/1tHM807N-TxxC-WTic12y5tgCJoNP0KEcBCvgX-dgE5w/edit"
+  },
+  "inventario": {
+   "n": "Inventario maestro COSEMAR (corte 22-09-2026)",
+   "u": "https://docs.google.com/spreadsheets/d/1sob4ZvqNh1eKxaQDtyK-hrGhH5ZWoGx9/edit"
+  },
+  "multas": {
+   "n": "Carpeta Drive · Multas (procesos sancionatorios)",
+   "u": "https://drive.google.com/drive/folders/1S6PzQeBg6BWSCQnIdfaokWU-9OXF3Fx-"
+  },
+  "pagos": {
+   "n": "Carpeta Drive · 2. Pagos servicios 2026",
+   "u": "https://drive.google.com/drive/folders/122zU1bsRlvC_jVNQFqdZMW2kVyYhXfzo"
+  },
+  "pagosSep": {
+   "n": "Carpeta Drive · 9. Septiembre 2026",
+   "u": "https://drive.google.com/drive/folders/1eJrvdI2lkm6YtU-eR4rvDV6ipN-_BfVH"
+  },
+  "pagosOct": {
+   "n": "Carpeta Drive · 10. Octubre 2026",
+   "u": "https://drive.google.com/drive/folders/1204ZW0LRhGlJkoaRyah8wFf6u0UYuTtS"
+  },
+  "polizas": {
+   "n": "Carpeta Drive · 3. Pólizas",
+   "u": "https://drive.google.com/drive/folders/1new6tELuK_9HDRqRkvCQaXYunKtBB-zy"
+  },
+  "fiscal": {
+   "n": "Carpeta Drive · Fiscalización al contrato",
+   "u": "https://drive.google.com/drive/folders/182QnsD9zNaSZkIz_5HPbTvRomvymlgE2"
+  },
+  "expDrive": {
+   "n": "Carpeta Drive · Expediente recolección 3447-86-LR23",
+   "u": "https://drive.google.com/drive/folders/11kjK9ibJ3DTL4CQU0tzBPuLHQD9zbOmm"
+  },
+  "poliza": {
+   "n": "Póliza Continental 224103598 (fiel cumplimiento)",
+   "u": "https://drive.google.com/file/d/1NmcAB7dy23GgTSmaz_sn_86wt6apTuc7/view"
+  },
+  "endoso355": {
+   "n": "Endoso 225146034 (+UF 355) y carta 17-12-2025",
+   "u": "https://drive.google.com/file/d/1UM8LpPLOgAh5P_q2vH9xbOarshxkpxic/view"
+  },
+  "rc": {
+   "n": "Póliza RC Continental 226102080",
+   "u": "https://drive.google.com/file/d/13Tjf0WsRN6Ouj3f9bMpjG8rmijlpf9Cq/view"
+  },
+  "nContrato": {
+   "n": "Notion · Contrato COSEMAR Recolección (Contratos)",
+   "u": "https://app.notion.com/p/4159e3e655c0810a974aec33d1bd63d4"
+  },
+  "nExp": {
+   "n": "Notion · Expediente canónico (Trabajo municipal contrato COSEMAR)",
+   "u": "https://app.notion.com/p/3ed9e3e655c081ed8dc1d316d74108fb"
+  },
+  "nTraz": {
+   "n": "Notion · Trazabilidad de trámites DMAO",
+   "u": "https://app.notion.com/p/4159e3e655c0816d9846e76116cb12ab"
+  },
+  "nGar": {
+   "n": "Notion · Garantía COSEMAR · Endoso 226139451",
+   "u": "https://app.notion.com/p/4089e3e655c08176a812c95ecd59b8f8"
+  },
+  "nDiag": {
+   "n": "Notion · Diagnóstico e integración municipal 09-10-2026",
+   "u": "https://app.notion.com/p/3f49e3e655c081e19dd2c48f65282d6e"
+  }
+ },
+ "precios": [
+  {
+   "desde": "2026-04",
+   "neto": 219972624,
+   "bruto": 261767423,
+   "acto": "D.A. 2.459/2026",
+   "ejecutado": true,
+   "respaldo": "https://app.notion.com/p/4159e3e655c0819cb21ddee46f0a5239"
+  },
+  {
+   "desde": "2026-07",
+   "neto": 225159669,
+   "bruto": 267940006,
+   "acto": "D.A. 3.957/2026",
+   "ejecutado": false,
+   "respaldo": "https://app.notion.com/p/4159e3e655c081eabe14fccfe1d8c7ca",
+   "nota": "Decretado el 02-07-2026, no ejecutado: OC y pagos siguen al valor del D.A. 2.459 por déficit presupuestario informado por DAF (22-10-2026)."
+  }
+ ],
+ "obligaciones": [
+  {
+   "id": "OB-01",
+   "titulo": "Solicitud y emisión mensual de la orden de compra",
+   "clausula": "BA 154",
+   "pagina": 48,
+   "frecuencia": "Mensual",
+   "plazo": "Tras el término del mes de servicio (uso DMAO: días 1–5)",
+   "evidencia": "Memo correlativo que solicita OC con V°B° DAF; OC emitida",
+   "criterio": "Memo numerado y OC del período con ítems y valor vigente",
+   "accion": "Registrar diferencia y reiterar a DAF",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-02",
+   "titulo": "Aceptación de la OC por Cosemar",
+   "clausula": "BA 155–156",
+   "pagina": 48,
+   "frecuencia": "Mensual",
+   "plazo": "3 días hábiles desde el envío de la OC",
+   "evidencia": "Constancia de aceptación en Mercado Público",
+   "criterio": "Aceptada dentro de plazo; si no, DAF puede cancelarla a solicitud de la UT",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-03",
+   "titulo": "Emisión de la factura por mes vencido",
+   "clausula": "BA 157–158",
+   "pagina": 49,
+   "frecuencia": "Mensual",
+   "plazo": "5 días corridos siguientes al término del mes",
+   "evidencia": "Factura a nombre de la Municipalidad, RUT 69.265.100-6",
+   "criterio": "Factura posterior a la OC del período y por el valor vigente",
+   "accion": "Registrar diferencia; pedir rectificación o nota de crédito",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-04",
+   "titulo": "Entrega de factura con antecedentes para el pago",
+   "clausula": "BA 121, 159 y 163",
+   "pagina": 41,
+   "frecuencia": "Mensual",
+   "plazo": "BA 121: 7 días corridos · BA 159: 7 días hábiles (discrepancia conservada)",
+   "evidencia": "Carpeta: factura, OC con recepción conforme, certificado laboral (≤30 días), pagos previsionales, listado de personal, habilidad Mercado Público, residencia, remuneraciones",
+   "criterio": "Carpeta completa por mes de servicio; cada faltante se registra como subsanación",
+   "accion": "Devolver con observaciones; no derivar a pago hasta subsanar",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "nota": "BA 121 y BA 159/123(v) difieren en el cómputo; falta criterio formal."
+  },
+  {
+   "id": "OB-05",
+   "titulo": "Certificado de antecedentes laborales y previsionales o de cumplimiento (F30 / F30-1)",
+   "clausula": "BA 163",
+   "pagina": 49,
+   "frecuencia": "Mensual",
+   "plazo": "Antigüedad máxima 30 días respecto de la facturación",
+   "evidencia": "Certificado DT del período",
+   "criterio": "Uno u otro certificado vigente («o», no ambos)",
+   "accion": "Observar el estado de pago",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "nota": "La denominación «F30-12» informada por Edgar sigue por aclarar."
+  },
+  {
+   "id": "OB-06",
+   "titulo": "Certificados de pago de previsión, salud y cesantía y listado de personal",
+   "clausula": "BA 163 · BT 75",
+   "pagina": 50,
+   "frecuencia": "Mensual",
+   "plazo": "Mes inmediatamente anterior al pago solicitado",
+   "evidencia": "Planillas de cotizaciones y listado",
+   "criterio": "Coinciden con la dotación informada",
+   "accion": "Observar el estado de pago; multa BA 169 por atraso",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "personal": true
+  },
+  {
+   "id": "OB-07",
+   "titulo": "Certificado de habilidad en el Registro de Proveedores",
+   "clausula": "BA 163",
+   "pagina": 50,
+   "frecuencia": "Mensual",
+   "plazo": "Con cada estado de pago",
+   "evidencia": "Certificado estado «Hábil»",
+   "criterio": "Hábil a la fecha del pago",
+   "accion": "Observar el estado de pago",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-08",
+   "titulo": "Acreditación del porcentaje de trabajadores locales ofertado",
+   "clausula": "BA 163",
+   "pagina": 50,
+   "frecuencia": "Mensual",
+   "plazo": "Con cada estado de pago",
+   "evidencia": "Certificados de residencia u otro respaldo aceptado",
+   "criterio": "Porcentaje ≥ ofertado",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Pago",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "personal": true,
+   "nota": "Falta el porcentaje ofertado por Cosemar (oferta técnica)."
+  },
+  {
+   "id": "OB-09",
+   "titulo": "Listado de remuneraciones de conductores y peonetas; reajuste semestral de sueldos base",
+   "clausula": "BA 153 y 163",
+   "pagina": 48,
+   "frecuencia": "Mensual; reajuste en enero y julio",
+   "plazo": "Enero y julio",
+   "evidencia": "Listado de remuneraciones con reajustabilidad",
+   "criterio": "Sueldo base reajustado por IPC acumulado; nunca a la baja",
+   "accion": "Hallazgo; multa BA 169 por reajustabilidad menor",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "personal": true
+  },
+  {
+   "id": "OB-10",
+   "titulo": "Recepción conforme del servicio antes de pagar",
+   "clausula": "BA 160 y 162",
+   "pagina": 49,
+   "frecuencia": "Mensual",
+   "plazo": "Pago en máximo 30 días corridos desde la recepción conforme",
+   "evidencia": "Certificado de recepción conforme firmado y timbrado; informes GPS y de trabajos con fotografías (Hernán)",
+   "criterio": "Certificado del período con respaldo del ITS",
+   "accion": "No derivar a pago",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-11",
+   "titulo": "Revisión de procesos sancionatorios y descuentos antes de derivar a pago",
+   "clausula": "BA 163 y 187–190",
+   "pagina": 57,
+   "frecuencia": "Mensual",
+   "plazo": "Antes del memo de pago",
+   "evidencia": "Constancia de revisión de procesos abiertos y cerrados; instrucción de descuento si hay multa firme",
+   "criterio": "Toda multa firme se descuenta una sola vez en el estado de pago más próximo",
+   "accion": "Detener el memo de pago hasta registrar la revisión",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-12",
+   "titulo": "Evidencias del plan de educación ambiental con la facturación mensual",
+   "clausula": "BA 121 N°8 · BT 14",
+   "pagina": 41,
+   "frecuencia": "Mensual",
+   "plazo": "Con la facturación",
+   "evidencia": "Informes, fotografías y asistencia por actividad",
+   "criterio": "Evidencia por actividad, no solo títulos de charlas",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-13",
+   "titulo": "Conciliación mensual de pesajes y tonelaje",
+   "clausula": "BT 124–125",
+   "pagina": 95,
+   "frecuencia": "Mensual",
+   "plazo": "Antes del pago",
+   "evidencia": "Conciliación relleno–municipio de la flota del contrato",
+   "criterio": "Tonelaje conciliado sin vehículos ajenos",
+   "accion": "Registrar diferencia",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "nota": "Fuente de pesajes aún no conectada (tickets del relleno)."
+  },
+  {
+   "id": "OB-14",
+   "titulo": "Declaración mensual RETC y comprobante",
+   "clausula": "BT 141–142",
+   "pagina": 97,
+   "frecuencia": "Mensual",
+   "plazo": "Mensual",
+   "evidencia": "Comprobante de recepción RETC",
+   "criterio": "Declaración del mes entregada",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-15",
+   "titulo": "Precio mensual vigente y reajuste anual por IPC",
+   "clausula": "BA 9 · Contrato cl. CUARTO",
+   "pagina": 4,
+   "frecuencia": "Anual",
+   "plazo": "Informe de la empresa a la UT; se formaliza por decreto y anexo",
+   "evidencia": "Decreto alcaldicio, anexo de contrato, certificado presupuestario",
+   "criterio": "Se paga el valor del último acto ejecutado; un reajuste no se aplica dos veces",
+   "accion": "Registrar diferencia entre valor decretado y valor tramitado",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2026-04-01",
+     "hasta": "2026-06-30",
+     "exigencia": "$219.972.624 neto / $261.767.423 bruto",
+     "acto": "D.A. 2.459/2026 (IPC 4,1% + 1.317 viviendas)"
+    },
+    {
+     "desde": "2026-07-01",
+     "hasta": null,
+     "exigencia": "$225.159.669 neto / $267.940.006 bruto",
+     "acto": "D.A. 3.957/2026 (1.116 viviendas) · decretado, no ejecutado"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-16",
+   "titulo": "Aumento por crecimiento poblacional (viviendas)",
+   "clausula": "BA 9",
+   "pagina": 4,
+   "frecuencia": "Cuando proceda",
+   "plazo": "Según acto",
+   "evidencia": "Decreto y anexo; cálculo por viviendas",
+   "criterio": "Incremento incluido una sola vez en factura o ajuste posterior",
+   "accion": "Registrar diferencia",
+   "modulo": "Pago",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2026-04-01",
+     "hasta": null,
+     "exigencia": "+$5.982.849 neto (1.317 viviendas)",
+     "acto": "D.A. 2.459/2026"
+    },
+    {
+     "desde": "2026-07-01",
+     "hasta": null,
+     "exigencia": "+$5.187.045 neto (1.116 viviendas)",
+     "acto": "D.A. 3.957/2026"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-17",
+   "titulo": "Garantía de fiel cumplimiento vigente y suficiente",
+   "clausula": "BA 115 h), 198 y 200",
+   "pagina": 60,
+   "frecuencia": "Permanente; se actualiza con cada ampliación",
+   "plazo": "Contrato más 120 días; 5% del monto total",
+   "evidencia": "Póliza y endosos; revisión de Jurídico; custodia en Tesorería",
+   "criterio": "Capital exigido según la ampliación vigente y vencimiento posterior al término contractual (30-06-2029)",
+   "accion": "Oficio a Cosemar para actualizar; BA 191 si hay cobro",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": "2025-12-08",
+     "exigencia": "UF 19.605",
+     "acto": "Póliza 224103598"
+    },
+    {
+     "desde": "2025-12-09",
+     "hasta": "2026-10-18",
+     "exigencia": "UF 19.960",
+     "acto": "Endoso 225146034 (+UF 355)"
+    },
+    {
+     "desde": "2026-10-19",
+     "hasta": null,
+     "exigencia": "UF 20.379,57",
+     "acto": "Endoso 226139451 (+UF 419,57) · en revisión formal"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-18",
+   "titulo": "Seguro de responsabilidad civil vigente",
+   "clausula": "BA 125–128 y 134",
+   "pagina": 45,
+   "frecuencia": "Renovación anual",
+   "plazo": "Todo el contrato más 90 días",
+   "evidencia": "Póliza vigente, UF 2.000",
+   "criterio": "Póliza vigente a la fecha, a favor de la Municipalidad",
+   "accion": "Requerir renovación; BA 126 (resolución del contrato)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2025-07-31",
+     "hasta": "2026-07-31",
+     "exigencia": "UF 2.000 · póliza 225102411"
+    },
+    {
+     "desde": "2026-07-31",
+     "hasta": "2027-07-31",
+     "exigencia": "UF 2.000 · póliza 226102080"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-19",
+   "titulo": "Informes trimestrales de instalaciones de Cosemar",
+   "clausula": "Flujograma DMAO · BA 120",
+   "pagina": 41,
+   "frecuencia": "Trimestral",
+   "plazo": "Trimestral",
+   "evidencia": "Informe trimestral de instalaciones",
+   "criterio": "Informe del trimestre recibido y revisado",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "flujo",
+   "nota": "El ciclo consta en el flujograma; falta ubicar la cláusula exacta y los informes."
+  },
+  {
+   "id": "OB-20",
+   "titulo": "Documentación vehicular vigente: revisión técnica",
+   "clausula": "BA 123 y) · BT 95",
+   "pagina": 44,
+   "frecuencia": "Por vehículo",
+   "plazo": "Antes del vencimiento",
+   "evidencia": "Certificado de revisión técnica por patente",
+   "criterio": "Vigente a la fecha de operación",
+   "accion": "Manifold; multa BA 169 (caso PS03, 5 UTM)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-21",
+   "titulo": "Documentación vehicular vigente: permiso de circulación",
+   "clausula": "BA 123 y) · BT 95",
+   "pagina": 44,
+   "frecuencia": "Anual por vehículo",
+   "plazo": "Antes del vencimiento",
+   "evidencia": "Permiso de circulación por patente",
+   "criterio": "Vigente",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-22",
+   "titulo": "Documentación vehicular vigente: seguro obligatorio (SOAP)",
+   "clausula": "BA 123 y) · BT 95",
+   "pagina": 44,
+   "frecuencia": "Anual por vehículo",
+   "plazo": "Antes del vencimiento",
+   "evidencia": "SOAP por patente",
+   "criterio": "Vigente",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-23",
+   "titulo": "Identificación y gráfica de los vehículos",
+   "clausula": "BA 169 (identificación inadecuada)",
+   "pagina": 53,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Registro fotográfico",
+   "criterio": "Gráfica aprobada por el ITS",
+   "accion": "Manifold (caso PS02)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-24",
+   "titulo": "Equipos de comunicación y localización (GPS) operativos",
+   "clausula": "BA 169 · BT 95",
+   "pagina": 53,
+   "frecuencia": "Diaria",
+   "plazo": "—",
+   "evidencia": "Informe de seguimiento GPS (Hernán)",
+   "criterio": "Sin días de falta",
+   "accion": "Manifold; multa por día de falta",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-25",
+   "titulo": "Flota informada en el plan de trabajo; reemplazos autorizados",
+   "clausula": "BA 124 a) · BT 30",
+   "pagina": 44,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Plan de trabajo y listado de flota",
+   "criterio": "Solo operan equipos asociados al contrato",
+   "accion": "Manifold (caso PS06)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-26",
+   "titulo": "Programa de mantención de equipos",
+   "clausula": "BT 23",
+   "pagina": 78,
+   "frecuencia": "Mensual",
+   "plazo": "Mensual",
+   "evidencia": "Control mensual de equipo por móvil",
+   "criterio": "Controles del mes entregados",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-27",
+   "titulo": "Ejecución completa de las rutas de recolección",
+   "clausula": "BA 169 N°1 · BT 9",
+   "pagina": 51,
+   "frecuencia": "Diaria",
+   "plazo": "—",
+   "evidencia": "GPS y fiscalización en terreno",
+   "criterio": "Ruta realizada completa",
+   "accion": "Manifold; multa 30 UTM por ruta",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-28",
+   "titulo": "No modificar unilateralmente el servicio ni el plan de trabajo",
+   "clausula": "BA 124 a)",
+   "pagina": 44,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Plan de trabajo aprobado y comunicaciones",
+   "criterio": "Todo cambio cuenta con autorización de la UT",
+   "accion": "Manifold (caso PS05)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-29",
+   "titulo": "Servicio de contingencia y continuidad",
+   "clausula": "BT 30–32",
+   "pagina": 79,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Reporte de flota y reemplazos",
+   "criterio": "Sin interrupción por fallas o falta de personal",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-30",
+   "titulo": "Lavado de equipos y contenedores en instalaciones adecuadas",
+   "clausula": "BT 25",
+   "pagina": 78,
+   "frecuencia": "Según plan",
+   "plazo": "—",
+   "evidencia": "Informes de lavado y resolución de aguas",
+   "criterio": "Lavado conforme (caso PS04)",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-31",
+   "titulo": "Informe mensual de dotación, contrataciones, finiquitos, feriados y móviles",
+   "clausula": "BA 122 · BT 83",
+   "pagina": 41,
+   "frecuencia": "Mensual",
+   "plazo": "Primeros 5 días corridos del mes",
+   "evidencia": "Listado de personal y móviles",
+   "criterio": "Entregado en plazo",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases",
+   "personal": true
+  },
+  {
+   "id": "OB-32",
+   "titulo": "Base de operaciones conforme al D.S. 594/1999",
+   "clausula": "BA 120 y 169",
+   "pagina": 41,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Inspección de instalaciones; resolución sanitaria",
+   "criterio": "Vestuario, casilleros, servicios higiénicos y duchas",
+   "accion": "Manifold (requerimiento REQ07); multa BA 169",
+   "modulo": "Monitoreo",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-33",
+   "titulo": "Uniformes y elementos de protección personal",
+   "clausula": "BA 169",
+   "pagina": 55,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Inspección en terreno",
+   "criterio": "Personal con uniforme y EPP",
+   "accion": "Manifold; multa por trabajador",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-34",
+   "titulo": "Ejecutivo responsable y representante técnico",
+   "clausula": "BA 117 y 119",
+   "pagina": 40,
+   "frecuencia": "Permanente",
+   "plazo": "—",
+   "evidencia": "Designación y datos de contacto",
+   "criterio": "Contacto vigente",
+   "accion": "Abrir hallazgo con folio de manifold y cláusula; comunicar a Cosemar (BA 176)",
+   "modulo": "Monitoreo",
+   "cobertura": "pendiente_configurar",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-35",
+   "titulo": "Notificación de la infracción a Cosemar",
+   "clausula": "BA 176 y 180–182",
+   "pagina": 56,
+   "frecuencia": "Por hallazgo",
+   "plazo": "Se entiende practicada 24 horas después",
+   "evidencia": "Folio de manifold, correo u oficio",
+   "criterio": "Indica infracción, hechos y monto",
+   "accion": "Completar la notificación antes de computar plazos",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-36",
+   "titulo": "Descargos de la empresa",
+   "clausula": "BA 177",
+   "pagina": 56,
+   "frecuencia": "Por proceso",
+   "plazo": "5 días hábiles desde la notificación",
+   "evidencia": "Carta o correo de descargos",
+   "criterio": "Recibidos en plazo",
+   "accion": "Sin descargos: decreto directo (BA 178)",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-37",
+   "titulo": "Resolución de los descargos por decreto",
+   "clausula": "BA 172 y 179",
+   "pagina": 56,
+   "frecuencia": "Por proceso",
+   "plazo": "20 días hábiles desde la recepción de los descargos",
+   "evidencia": "Informe fundado con firma y timbre del Director; decreto",
+   "criterio": "Decreto dictado y notificado en plazo",
+   "accion": "Escalar a la Unidad Técnica",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-38",
+   "titulo": "Recurso de reposición",
+   "clausula": "BA 183–185",
+   "pagina": 57,
+   "frecuencia": "Por proceso",
+   "plazo": "5 días hábiles desde la notificación del decreto en la ficha de contrato",
+   "evidencia": "Recurso por «Gestión de Sanciones» de Mercado Público",
+   "criterio": "Presentado en plazo y por la vía indicada",
+   "accion": "Vencido el plazo: multa firme (BA 187)",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-39",
+   "titulo": "Resolución de la reposición",
+   "clausula": "BA 186",
+   "pagina": 57,
+   "frecuencia": "Por proceso",
+   "plazo": "20 días hábiles",
+   "evidencia": "Informe, visados de Jurídico y Alcaldía, decreto final",
+   "criterio": "Decreto final publicado",
+   "accion": "Escalar",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  },
+  {
+   "id": "OB-40",
+   "titulo": "Cobro de la multa firme",
+   "clausula": "BA 171 y 187–190",
+   "pagina": 57,
+   "frecuencia": "Por proceso",
+   "plazo": "Estado de pago más próximo; cobro directo en 10 días hábiles",
+   "evidencia": "Instrucción de descuento y estado de pago que lo acredita; UTM a la fecha en que se cursó",
+   "criterio": "Descuento efectivo acreditado una sola vez",
+   "accion": "BA 191: ejecutar garantía si no se paga",
+   "modulo": "Sanción",
+   "cobertura": "ok",
+   "vigencias": [
+    {
+     "desde": "2024-07-01",
+     "hasta": null,
+     "exigencia": "Texto de bases sin modificación identificada"
+    }
+   ],
+   "fuente": "bases"
+  }
+ ],
+ "sanciones": {
+  "PS01": {
+   "titulo": "Apoyo en rutas con equipos de escombros y voluminosos",
+   "obligacion": "OB-27",
+   "sector": "Rutas de recolección",
+   "carpeta": "1. FEB 2026 APOYO RUTAS EQUIPOS ESCOM Y VOL (sin efecto)"
+  },
+  "PS02": {
+   "titulo": "Gráfica e identificación de camiones recolectores",
+   "obligacion": "OB-23",
+   "sector": "Flota",
+   "carpeta": "2. FEB 2026 GRAFICA CAMIONES RECOLECTORES (en evaluacion)"
+  },
+  "PS03": {
+   "titulo": "Camión con documentación vencida (móvil 980)",
+   "obligacion": "OB-20",
+   "sector": "Flota",
+   "patente": "TPPW41-0",
+   "carpeta": "3. FEB 2026 CAMION CON DOCUMENTACION VENCIDA (confirmada)"
+  },
+  "PS04": {
+   "titulo": "Lavado deficiente de equipos",
+   "obligacion": "OB-30",
+   "sector": "Instalaciones",
+   "carpeta": "4. FEB LAVADO DEFICIENTE EQUIPOS (sin efecto)"
+  },
+  "PS05": {
+   "titulo": "Modificación unilateral del plan de trabajo (inicio domingo 5 de abril)",
+   "obligacion": "OB-28",
+   "sector": "Rutas de recolección",
+   "carpeta": "5. MODIFICACION UNILATERAL DE PLAN DE TRABAJO (decretando)"
+  },
+  "PS06": {
+   "titulo": "Camión no informado en el plan de trabajo (móvil 1473)",
+   "obligacion": "OB-25",
+   "sector": "Flota",
+   "carpeta": "6. CAMION NO INFORMADO EN PLAN TRABAJO"
+  },
+  "REQ07": {
+   "titulo": "Requerimiento de resolución sanitaria de instalaciones",
+   "obligacion": "OB-32",
+   "sector": "Instalaciones",
+   "carpeta": "7. RESOLUCION SANITARIA INSTALACIONES"
+  }
+ },
+ "flujos": [
+  {
+   "id": "monitoreo",
+   "titulo": "Monitoreo y fiscalización",
+   "ramas": [
+    {
+     "nombre": "Arranque",
+     "pasos": [
+      {
+       "id": "m0",
+       "t": "Carpeta de arranque del contrato",
+       "d": "Bases, decretos de aprobación y adjudicación, contrato, decretos de aumento poblacional e IPC",
+       "vista": "obligaciones",
+       "filtro": {}
+      }
+     ]
+    },
+    {
+     "nombre": "Rama documental · vigila Edgar",
+     "pasos": [
+      {
+       "id": "m1",
+       "t": "Garantía de fiel cumplimiento",
+       "d": "Ciclos de renovación y endosos",
+       "vista": "vencimientos",
+       "filtro": {
+        "entidad": "GAR-FC"
+       },
+       "obl": "OB-17"
+      },
+      {
+       "id": "m2",
+       "t": "Seguro de responsabilidad civil",
+       "d": "Revisión anual",
+       "vista": "vencimientos",
+       "filtro": {
+        "entidad": "SEG-RC"
+       },
+       "obl": "OB-18"
+      },
+      {
+       "id": "m3",
+       "t": "Renovaciones y caducidades",
+       "d": "Avisos de vencimiento con respaldo",
+       "vista": "vencimientos",
+       "filtro": {
+        "estado": "por vencer"
+       }
+      },
+      {
+       "id": "m4",
+       "t": "Informes trimestrales de instalaciones",
+       "d": "Ciclo de revisión",
+       "vista": "obligaciones",
+       "filtro": {
+        "id": "OB-19"
+       },
+       "obl": "OB-19"
+      }
+     ]
+    },
+    {
+     "nombre": "Rama de inspección en terreno · Hernán",
+     "pasos": [
+      {
+       "id": "m5",
+       "t": "Rutas",
+       "d": "Ejecución y cambios del plan",
+       "vista": "obligaciones",
+       "filtro": {
+        "id": "OB-27"
+       },
+       "obl": "OB-27"
+      },
+      {
+       "id": "m6",
+       "t": "Flota",
+       "d": "Revisión técnica, permiso, SOAP, gráfica, GPS",
+       "vista": "vencimientos",
+       "filtro": {
+        "grupo": "flota"
+       },
+       "obl": "OB-20"
+      },
+      {
+       "id": "m7",
+       "t": "Personal",
+       "d": "Dotación, EPP, obligaciones laborales",
+       "vista": "obligaciones",
+       "filtro": {
+        "id": "OB-31"
+       },
+       "obl": "OB-31"
+      },
+      {
+       "id": "m8",
+       "t": "Instalaciones",
+       "d": "D.S. 594, resolución de aguas de lavado",
+       "vista": "obligaciones",
+       "filtro": {
+        "id": "OB-32"
+       },
+       "obl": "OB-32"
+      }
+     ]
+    },
+    {
+     "nombre": "Registro y seguimiento",
+     "pasos": [
+      {
+       "id": "m9",
+       "t": "Registro de control",
+       "d": "Fecha, ítem, evidencia, resultado y seguimiento",
+       "vista": "linea",
+       "filtro": {}
+      },
+      {
+       "id": "m10",
+       "t": "Observación → hallazgo",
+       "d": "Folio de manifold y cláusula",
+       "vista": "sanciones",
+       "filtro": {
+        "hito": "manifold"
+       }
+      },
+      {
+       "id": "m11",
+       "t": "Comunicación a Cosemar",
+       "d": "Correo con el manifold foliado",
+       "vista": "sanciones",
+       "filtro": {
+        "hito": "comunicacion_empresa"
+       }
+      },
+      {
+       "id": "m12",
+       "t": "Respuesta de la empresa",
+       "d": "Descargos",
+       "vista": "sanciones",
+       "filtro": {
+        "hito": "respuesta_empresa"
+       }
+      },
+      {
+       "id": "m13",
+       "t": "Evaluación",
+       "d": "Cierre respaldado o propuesta de multa",
+       "vista": "sanciones",
+       "filtro": {
+        "hito": "informe_evaluacion"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pago",
+   "titulo": "Pago mensual",
+   "ramas": [
+    {
+     "nombre": "Orden de compra",
+     "pasos": [
+      {
+       "id": "p1",
+       "t": "1 · Memo solicita OC",
+       "d": "Memo tipo con número correlativo",
+       "hito": "memo_oc"
+      },
+      {
+       "id": "p2",
+       "t": "2 · Visto bueno y derivación a DAF",
+       "d": "Por libro o por sistema",
+       "hito": "vb_daf"
+      },
+      {
+       "id": "p3",
+       "t": "3 · OC emitida",
+       "d": "DAF",
+       "hito": "oc_emitida"
+      },
+      {
+       "id": "p4",
+       "t": "4 · Cosemar recibe y acepta la OC",
+       "d": "Por correo / Mercado Público · 3 días hábiles",
+       "hito": "oc_aceptada"
+      }
+     ]
+    },
+    {
+     "nombre": "Expediente del mes de servicio",
+     "pasos": [
+      {
+       "id": "p5",
+       "t": "5 · Factura con carpeta de antecedentes",
+       "d": "F30, personal, imposiciones, informe empresa, ambientalista, habilidad, residencia",
+       "hito": "factura"
+      },
+      {
+       "id": "p6",
+       "t": "6a · Informe de seguimiento GPS",
+       "d": "Hernán, por Gmail",
+       "hito": "informe_gps"
+      },
+      {
+       "id": "p7",
+       "t": "6b · Informe de trabajos con fotografías",
+       "d": "Hernán, por Gmail",
+       "hito": "informe_trabajos"
+      },
+      {
+       "id": "p8",
+       "t": "Cotejo, diferencias y subsanaciones",
+       "d": "Orden OC–factura; recepción conforme",
+       "hito": "recepcion_conforme"
+      }
+     ]
+    },
+    {
+     "nombre": "Derivación a pago",
+     "pasos": [
+      {
+       "id": "p9",
+       "t": "Revisión de procesos sancionatorios",
+       "d": "Abiertos y cerrados; visación y descuentos",
+       "hito": "revision_sanciones"
+      },
+      {
+       "id": "p10",
+       "t": "7 · Memo pide pago de factura",
+       "d": "Edgar, con número de memo",
+       "hito": "memo_pago"
+      },
+      {
+       "id": "p11",
+       "t": "Pago efectivo",
+       "d": "Comprobante",
+       "hito": "pago"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sancion",
+   "titulo": "Proceso sancionatorio",
+   "ramas": [
+    {
+     "nombre": "Inicio",
+     "pasos": [
+      {
+       "id": "s1",
+       "t": "1 · Folio de manifold",
+       "d": "Hernán identifica la falla",
+       "hito": "manifold"
+      },
+      {
+       "id": "s2",
+       "t": "2 · Comunicación a Cosemar",
+       "d": "Correo con manifold foliado · 5 días hábiles de descargos",
+       "hito": "comunicacion_empresa"
+      },
+      {
+       "id": "s3",
+       "t": "Respuesta de la empresa",
+       "d": "Descargos",
+       "hito": "respuesta_empresa"
+      },
+      {
+       "id": "s4",
+       "t": "3 · Evaluación de la respuesta",
+       "d": "Informe",
+       "hito": "informe_evaluacion"
+      },
+      {
+       "id": "s4b",
+       "t": "Cierre respaldado",
+       "d": "Sin multa",
+       "hito": "cierre_sin_multa"
+      }
+     ]
+    },
+    {
+     "nombre": "Propuesta de multa y decreto",
+     "pasos": [
+      {
+       "id": "s5",
+       "t": "5 · Informe técnico",
+       "d": "Tipificación y pruebas",
+       "hito": "informe_tecnico"
+      },
+      {
+       "id": "s5b",
+       "t": "Revisión de Edgar",
+       "d": "Forma y fondo; visado",
+       "hito": "revision_edgar"
+      },
+      {
+       "id": "s6",
+       "t": "6 · Memo a Secretaría Municipal",
+       "d": "Solicita decretar",
+       "hito": "memo_secmun"
+      },
+      {
+       "id": "s7",
+       "t": "7 · Visado de Alcaldía",
+       "d": "",
+       "hito": "visado_alcaldia"
+      },
+      {
+       "id": "s7b",
+       "t": "Remisión a Secretaría Municipal",
+       "d": "",
+       "hito": "remision_secmun"
+      },
+      {
+       "id": "s8",
+       "t": "8 · Borrador de decreto",
+       "d": "Secretaría Municipal",
+       "hito": "borrador_decreto"
+      },
+      {
+       "id": "s9",
+       "t": "9 · Revisión de Control",
+       "d": "",
+       "hito": "revision_control"
+      },
+      {
+       "id": "s9b",
+       "t": "Decreto que aplica multa",
+       "d": "",
+       "hito": "decreto_multa"
+      },
+      {
+       "id": "s10",
+       "t": "10 · Publicación en Mercado Público",
+       "d": "Ficha de contrato",
+       "hito": "publicacion_mp"
+      },
+      {
+       "id": "s11",
+       "t": "11 · Notificación a Cosemar",
+       "d": "Oficio y correo · 5 días hábiles de reposición",
+       "hito": "notificacion"
+      }
+     ]
+    },
+    {
+     "nombre": "Con reposición",
+     "pasos": [
+      {
+       "id": "s12",
+       "t": "12 · Reposición recibida",
+       "d": "",
+       "hito": "reposicion_recibida"
+      },
+      {
+       "id": "s12b",
+       "t": "Análisis",
+       "d": "Mantener, reducir o acoger",
+       "hito": "analisis_reposicion"
+      },
+      {
+       "id": "s13",
+       "t": "13 · Memo con informe",
+       "d": "",
+       "hito": "memo_reposicion"
+      },
+      {
+       "id": "s14",
+       "t": "14 · Visado de Jurídico",
+       "d": "",
+       "hito": "visado_juridico"
+      },
+      {
+       "id": "s14b",
+       "t": "Visado de Alcaldía",
+       "d": "",
+       "hito": "visado_alcaldia_rep"
+      },
+      {
+       "id": "s15",
+       "t": "15 · Decreto final",
+       "d": "",
+       "hito": "decreto_final"
+      },
+      {
+       "id": "s17",
+       "t": "17 · Comunicación a Cosemar",
+       "d": "Oficio y correo",
+       "hito": "comunicacion_final"
+      }
+     ]
+    },
+    {
+     "nombre": "Sin reposición",
+     "pasos": [
+      {
+       "id": "s18",
+       "t": "Constancia de que no hubo reposición",
+       "d": "Antecedente que permite avanzar a cobro (BA 187)",
+       "hito": "sin_reposicion"
+      }
+     ]
+    },
+    {
+     "nombre": "Cobro",
+     "pasos": [
+      {
+       "id": "s16",
+       "t": "16 · Derivación a cobro",
+       "d": "Instrucción de descuento",
+       "hito": "derivacion_cobro"
+      },
+      {
+       "id": "s19",
+       "t": "Cobro o descuento efectivo",
+       "d": "Estado de pago que lo acredita",
+       "hito": "cobro_efectivo"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "limites": [
+  "La tabla de multas del BA 169 (pp. 51–55) no se extrae limpia del PDF: los montos por infracción requieren lectura visual antes de usarlos en una propuesta.",
+  "Las bases técnicas se leyeron por artículo hasta el BT 34; las citas BT 75, 83, 95, 124–125 y 141–142 provienen del checklist ya contrastado en Notion (11-11-2026).",
+  "El D.A. 7.776/2023 no se recuperó íntegro; aclaraciones y anexos posteriores no están verificados.",
+  "Los expedientes sancionatorios y de pago de enero–agosto se reconstruyeron desde el Inventario maestro (corte 22-09-2026): las fechas son de archivo, no del acto."
+ ]
+}

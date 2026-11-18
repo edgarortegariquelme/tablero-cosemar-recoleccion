@@ -1,0 +1,30 @@
+name: Actualizar app Cosemar
+on:
+  schedule:
+    - cron: '17 * * * *'   # cada hora
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['datos/**', 'tablero/draft/**', 'tablero/store/*.json']
+permissions:
+  contents: write
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Exportar libro de control desde Notion
+        env: { NOTION_TOKEN: '${{ secrets.NOTION_TOKEN }}' }
+        run: node datos/exportar_notion.js
+      - name: Regenerar datos y construir la app
+        run: |
+          node datos/operacion.js
+          node datos/construir_app.js
+      - name: Guardar cambios
+        run: |
+          git config user.name "app-cosemar"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs
+          git diff --cached --quiet || (git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)" && git push)

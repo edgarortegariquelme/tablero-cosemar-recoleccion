@@ -316,9 +316,10 @@
     var hoy = hoyCL();
     el.replaceChildren.apply(el, filas('flota').map(function (x) {
       var rt = docEstado(x.rt, hoy), pc = docEstado(x.permiso, hoy), so = docEstado(x.soap, hoy);
-      return h('tr', null, [h('td', null, [h('b', { text: x.movil }), h('div', { cls: 'va-muted', text: x.patente })]), h('td', { text: x.tipo + ' · ' + x.modelo }),
+      var foto = x.fotoId ? h('a', { href: x.foto, target: '_blank', rel: 'noopener', title: 'Abrir foto del móvil ' + x.movil }, [h('img', { cls: 'fl-foto', src: 'https://drive.google.com/thumbnail?id=' + x.fotoId + '&sz=w240', alt: 'Móvil ' + x.movil + ', patente ' + x.patente, loading: 'lazy', onerror: function () { this.replaceWith(h('span', { cls: 'fl-sin', text: 'Ver foto' })); } })]) : null;
+      return h('tr', null, [h('td', null, [foto, h('b', { text: x.movil }), h('div', { cls: 'va-muted', text: x.patente })]), h('td', { text: x.tipo + ' · ' + x.modelo }),
         h('td', null, [chip(x.estado, /^Operativo/.test(x.estado) ? 'ok' : 'warn')]), h('td', null, [chip(rt[0], rt[1]), x.rtOtraFuente ? h('div', { cls: 'va-muted', text: 'La ficha de flota dice ' + fCL(x.rtOtraFuente) }) : null]),
-        h('td', null, [chip(pc[0], pc[1])]), h('td', null, [chip(so[0], so[1]), h('div', { cls: 'va-muted', text: x.aseguradora })]), h('td', null, [x.nota || '', ' ', h('a', { href: x.foto, target: '_blank', rel: 'noopener', text: 'Foto' })])]);
+        h('td', null, [chip(pc[0], pc[1])]), h('td', null, [chip(so[0], so[1]), h('div', { cls: 'va-muted', text: x.aseguradora })]), h('td', { text: x.nota || '' })]);
     }));
   });
 
@@ -331,7 +332,7 @@
     el.replaceChildren(h('div', { cls: 'va-cards' }, [card('Dotación total', String(r.total), 'Choferes y peonetas: ' + dot + ' frente a ' + ofer + ' ofertados. ' + (r.periodoEdp || '') + '.'),
       card('Movimientos del mes', '+' + r.contratados + ' / −' + r.desvinculados, 'Contrataciones y desvinculaciones informadas en el EDP.'),
       card('Reajuste de sueldos', pct(r.reajusteJul2026 || 0), 'Sueldo base de enero a julio de 2026. ' + (r.reajusteBases || '')),
-      card('Último pago de sueldos acreditado', r.ultimoPagoSueldos ? fCL(r.ultimoPagoSueldos) : 'Sin respaldo', 'No hay liquidaciones ni comprobante de transferencia en el expediente.')]));
+      card('Último pago acreditado', r.ultimoPagoPeriodo ? mesL(r.ultimoPagoPeriodo) : 'Sin respaldo', r.ultimoPagoTxt || 'No hay comprobantes en el expediente.')]));
   });
   dash.draw('vp2_tabla', function (el) {
     if (!listo(el, ['personal'])) return;
@@ -341,6 +342,21 @@
     if (!listo(el, ['resumenes'])) return;
     var r = filas('resumenes').filter(function (x) { return x.clave === 'personal'; })[0] || {};
     el.replaceChildren.apply(el, (r.pendientes || []).map(function (t) { return h('li', { text: t }); }));
+  });
+
+
+  dash.draw('vp2_impo', function (el) {
+    if (!listo(el, ['imposiciones'])) return;
+    el.replaceChildren.apply(el, filas('imposiciones').slice().reverse().map(function (x) {
+      return h('tr', null, [h('td', { text: mesL(x.periodo) }), h('td', null, [chip(x.estado, x.estado === 'Acreditado' ? 'ok' : x.cotizaciones ? 'warn' : 'bad')]),
+        h('td', null, [x.cotizaciones ? h('a', { href: x.cotizaciones, target: '_blank', rel: 'noopener', text: 'Comprobante' }) : '—', x.fechaPago ? h('div', { cls: 'va-muted', text: 'PREVIRED ' + fCL(x.fechaPago) }) : null]),
+        h('td', null, [x.libro ? h('a', { href: x.libro, target: '_blank', rel: 'noopener', text: 'Libro' }) : '—'])]);
+    }));
+  });
+  dash.draw('vp2_f30', function (el) {
+    if (!listo(el, ['resumenes'])) return;
+    var r = filas('resumenes').filter(function (x) { return x.clave === 'imposiciones'; })[0] || {};
+    el.replaceChildren.apply(el, (r.f30 || []).slice().reverse().map(function (f) { return h('li', null, [h('b', { text: fCL(f.fecha) + ' · ' }), f.doc + ' ', h('a', { href: f.enlace, target: '_blank', rel: 'noopener', text: 'abrir' })]); }));
   });
 
   // ---------- Bono SUBDERE ----------

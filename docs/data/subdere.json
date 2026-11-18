@@ -1,0 +1,77 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "concepto": "Contratados: pago anual",
+   "trabajadores": 51,
+   "nominal": 57171051,
+   "respaldado": 57171051,
+   "fecha": "2026-05-18",
+   "estado": "Firmado"
+  },
+  {
+   "concepto": "Plazo fijo: ingreso a abril",
+   "trabajadores": 12,
+   "nominal": 3568555,
+   "respaldado": 3568555,
+   "fecha": "2026-05-16",
+   "estado": "Firmado"
+  },
+  {
+   "concepto": "Plazo fijo: mayo",
+   "trabajadores": 12,
+   "nominal": 1330262,
+   "respaldado": 1330262,
+   "fecha": "2026-06-02",
+   "estado": "Firmado"
+  },
+  {
+   "concepto": "Plazo fijo: junio",
+   "trabajadores": 12,
+   "nominal": 1345200,
+   "respaldado": 1345200,
+   "fecha": "2026-07-01",
+   "estado": "Firmado; remitido a Control el 30-09"
+  },
+  {
+   "concepto": "Plazo fijo: julio",
+   "trabajadores": 12,
+   "nominal": 1345200,
+   "respaldado": 1345200,
+   "fecha": "2026-08-01",
+   "estado": "Firmado; remitido a Control el 30-09"
+  },
+  {
+   "concepto": "Plazo fijo: agosto",
+   "trabajadores": 12,
+   "nominal": 1345200,
+   "respaldado": 1345200,
+   "fecha": "2026-09-01",
+   "estado": "Firmado; remitido a Control el 30-09"
+  },
+  {
+   "concepto": "Plazo fijo: septiembre",
+   "trabajadores": 12,
+   "nominal": 1345200,
+   "respaldado": 1345200,
+   "fecha": "2026-10-01",
+   "estado": "Firmado; sin aprobación localizada"
+  },
+  {
+   "concepto": "Plazo fijo: octubre",
+   "trabajadores": 12,
+   "nominal": 1345212,
+   "respaldado": 1345212,
+   "fecha": "2026-11-01",
+   "estado": "Copia firmada; falta el original"
+  },
+  {
+   "concepto": "Finiquitados: proporcional",
+   "trabajadores": 8,
+   "nominal": 1670309,
+   "respaldado": 1206951,
+   "fecha": "2026-06-01",
+   "estado": "Solo 4 de 8 firmados"
+  }
+ ]
+}

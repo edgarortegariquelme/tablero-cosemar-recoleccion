@@ -1,0 +1,123 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "clave": "correos",
+   "contactos": [
+    "Hernán Gómez (ITS)",
+    "Jesús Chinchayán (jefatura de proyecto Cosemar)",
+    "Edgar Ortega (encargado del contrato)",
+    "Teresa Donoso (administrativa Cosemar)",
+    "René Gutiérrez (Cosemar)",
+    "Alejandra Marzán (Cosemar)",
+    "Rodrigo Barril (relleno sanitario)"
+   ]
+  },
+  {
+   "clave": "flota",
+   "contrato": [
+    {
+     "documento": "Seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000)",
+     "vence": "2027-07-31"
+    },
+    {
+     "documento": "Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF; endoso por 419,57 UF el 29-10-2026)",
+     "vence": "2029-10-28"
+    }
+   ],
+   "otros": "El EDP también lista tres camionetas de apoyo (904, 986, 987) sin documentos en la planilla.",
+   "fuentes": {
+    "vencimientos": "https://docs.google.com/spreadsheets/d/1tHM807N-TxxC-WTic12y5tgCJoNP0KEcBCvgX-dgE5w/edit",
+    "estado": "https://mail.google.com/mail/u/0/#all/1a1c29df4f6d7d7c",
+    "ficha": "https://drive.google.com/file/d/1hxwOOry6aPjS6QpeY4ETbQ43ThyvbVEw/view",
+    "fotos": "https://drive.google.com/file/d/10HobGdquVTe-47SqMluy_nO2MFBa4kRo/view"
+   }
+  },
+  {
+   "clave": "personal",
+   "total": 74,
+   "periodoEdp": "Agosto de 2026 según la carta del EDP (el correo dice septiembre)",
+   "contratados": 4,
+   "desvinculados": 2,
+   "enFeriado": 46,
+   "ultimoPagoSueldos": "2026-08-11",
+   "ultimoPagoPeriodo": "2026-07",
+   "ultimoPagoTxt": "Cotizaciones previsionales de julio de 2026 pagadas por PREVIRED el 11-08-2026, con libro de remuneraciones de julio.",
+   "reajusteJul2026": 0.028,
+   "sueldoAl": "julio de 2026",
+   "reajusteBases": "BA 153: reajuste de sueldos base cada 6 meses (enero y julio) por IPC acumulado.",
+   "pendientes": [
+    "Comprobantes de cotizaciones y libros de remuneraciones de agosto, septiembre y octubre de 2026: no están en Drive.",
+    "F30-1 actualizado: el último es del 17-02-2026 (F30 del 10-06-2026).",
+    "Anexos de contrato del reajuste de julio de 2026: el informe comparativo muestra el alza, pero no se adjuntaron los anexos firmados.",
+    "Feriado legal: el EDP lista 46 personas sin aclarar si lo usaron en el mes. Días administrativos no aplican a trabajadores privados."
+   ],
+   "fuentes": {
+    "edp": "https://mail.google.com/mail/u/0/#all/1a13bf9c3c672a53",
+    "sueldos": "https://mail.google.com/mail/u/0/#all/1a13c43cc48e7b29"
+   }
+  },
+  {
+   "clave": "imposiciones",
+   "f30": [
+    {
+     "fecha": "2026-02-17",
+     "doc": "F30-1 · certificado de cumplimiento laboral",
+     "enlace": "https://drive.google.com/file/d/1ruhCHJ-FbRLFvBLwofJk5FT_007TH3Rd/view"
+    },
+    {
+     "fecha": "2026-03-09",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/1q1zbq5fek52IHzrqs5G6kKjnBZBmYzJ7/view"
+    },
+    {
+     "fecha": "2026-05-25",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/13g8Jz0Zc8LvjhTpVPTazmb4q6eAphxbi/view"
+    },
+    {
+     "fecha": "2026-06-10",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/1UJe-ynMUcyPaxPwdLFLJohFIR3dMHl1K/view"
+    }
+   ]
+  },
+  {
+   "clave": "subdere",
+   "asignacion": 73986066,
+   "resolucion": "Resolución SUBDERE 22/2026 (09-03-2026), 66 beneficiarios",
+   "ingreso": "2026-04-24",
+   "rendidoAprobado": 60739606,
+   "memoControl": "Memo Control 1332/2026 (30-10-2026), aprobado con observaciones",
+   "saldoPorRendir": 13246460,
+   "pendientes": [
+    "Rendición oficial consolidada de Cosemar",
+    "Original del recibo de octubre",
+    "Respaldo de 4 finiquitados por $463.358",
+    "Conciliación de fondos y devolución del sobrante, si corresponde"
+   ],
+   "fuente": "https://drive.google.com/file/d/1__P0Qfz6DuyiTLO2SaaoTngifd2KxSyT/view"
+  },
+  {
+   "clave": "ciclo_fechas",
+   "reglas": {
+    "infoDesde": 1,
+    "infoHasta": 5,
+    "ocDias": 7,
+    "facturaDesde": 15,
+    "facturaHasta": 20,
+    "pagoDias": 30
+   },
+   "presupuesto": {
+    "cuenta": "215.22.08.001.001",
+    "basesRecMensualMin": 250000000,
+    "basesRecMensualMax": 260000000,
+    "basesRecMeses": 60,
+    "basesDf": 5200000000,
+    "basesDfMeses": 60,
+    "inicioRec": "2024-07",
+    "inicioDf": "2025-01"
+   }
+  }
+ ]
+}

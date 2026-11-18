@@ -73,6 +73,11 @@ w('correos.json', C.map((r, i) => ({ id: 'C' + String(i + 1).padStart(2, '0'), f
 
 // ---------- Flota (DETALLE DE MÓVILES 09-11-2026 + Control vencimientos COSEMAR 05-11-2026 + FLOTA ACTUAL 2026) ----------
 const FOTO = D + '10HobGdquVTe-47SqMluy_nO2MFBa4kRo/view';
+const FOTOS = { '921': '1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit', '922': '13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4', '938': '1vYTkANa-4V8Y4wHgmeCaLmZG2AYWsnEl', '939': '1uciHPystIjOzFxrIcn9v-pFtwjgsbLFD',
+  '940': '10jYcYIx-rLimK0_6wNwqJ0Ll1vNHIP0Y', '970': '1HURoAvNblbAuSl1zo9cuhwlOAkxiVKqC', '971': '1t3EOQgiuPTiUOTFyuleEGSqBf82WWKsl', '972': '1w0MzaJkGyi0ZpRD3Z-sqOyzYqQ1AriGR',
+  '973': '1NcVtn-puGWn6vA15-uS963v4O34wuuvt', '974': '1rXJofABOfqYe86bkHc8VBiMY1pwBGgJp', '975': '1elJ2fluBZc1ZvX-4boilzOqhM88NHjeZ', '976': '1xFGVxMU_Jgd15KQXZTI1FAGvncg-OgyX',
+  '977': '1-XcMS3ltnhYjaZyEtQSPDRMpQLgLKIqJ', '978': '1TElCNlVlvR3IGlCchNIcPk74dfhcDgSl', '979': '1qd9_zR10OqVzNS2rlghCCSFt6OGH_1fv', '980': '1IldVUd3n-F_t004yf8P91nNrIg4zNFi9',
+  '984': '11n5nepvOT-_dbqYt-K6F-06nduWw04QL', '985': '1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp' }; // carpeta Drive 10lZuRbhinsJcuIQVneD2kLnwh861lBwG
 const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (planilla), RT según «FLOTA ACTUAL» si difiere
   ['921', 'SZZJ80-4', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-11-16', null, 'Cosemar envió la revisión técnica renovada el 16-11; falta cargar la fecha nueva.'],
   ['922', 'SZZJ82-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-11-19', null, ''],
@@ -93,7 +98,7 @@ const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (plan
   ['984', 'TPRF92-3', 'Minicargador', 'Bobcat S510', 'Operativo en base', '2030-07-22', null, ''],
   ['985', 'PWWC14-3', 'Carro de arrastre', 'Invicta T6000', 'Operativo en base', '2027-01-14', null, '']
 ];
-w('flota.json', FL.map(r => ({ movil: r[0], patente: r[1], tipo: r[2], modelo: r[3], estado: r[4], estadoFecha: '2026-11-09', rt: r[5], rtOtraFuente: r[6], permiso: '2027-09-30', soap: '2027-09-30', aseguradora: 'Seguros Sura', nota: r[7], foto: FOTO })),
+w('flota.json', FL.map(r => ({ movil: r[0], patente: r[1], tipo: r[2], modelo: r[3], estado: r[4], estadoFecha: '2026-11-09', rt: r[5], rtOtraFuente: r[6], permiso: '2027-09-30', soap: '2027-09-30', aseguradora: 'Seguros Sura', nota: r[7], foto: FOTOS[r[0]] ? D + FOTOS[r[0]] + '/view' : FOTO, fotoId: FOTOS[r[0]] || null })),
   { contrato: [{ documento: 'Seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000)', vence: '2027-07-31' }, { documento: 'Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF; endoso por 419,57 UF el 29-10-2026)', vence: '2029-10-28' }],
     otros: 'El EDP también lista tres camionetas de apoyo (904, 986, 987) sin documentos en la planilla.', fuentes: { vencimientos: 'https://docs.google.com/spreadsheets/d/1tHM807N-TxxC-WTic12y5tgCJoNP0KEcBCvgX-dgE5w/edit', estado: G + '1a1c29df4f6d7d7c', ficha: D + '1hxwOOry6aPjS6QpeY4ETbQ43ThyvbVEw/view', fotos: FOTO } });
 
@@ -105,10 +110,23 @@ w('personal.json', [
   { cargo: 'Operario de mantención', dotacion: 2, oferta: null, sueldoMin: 554092, sueldoMax: 554092, nota: 'El informe de sueldos registra uno; el EDP lista dos.' },
   { cargo: 'Jefatura y administración', dotacion: 5, oferta: null, sueldoMin: 793381, sueldoMax: 1495829, nota: 'Jefatura de proyecto, encargado de base, administrativa, prevencionista y encargado ambiental.' }
 ], { total: 74, periodoEdp: 'Agosto de 2026 según la carta del EDP (el correo dice septiembre)', contratados: 4, desvinculados: 2, enFeriado: 46,
-  ultimoPagoSueldos: null, reajusteJul2026: 0.028, sueldoAl: 'julio de 2026', reajusteBases: 'BA 153: reajuste de sueldos base cada 6 meses (enero y julio) por IPC acumulado.',
-  pendientes: ['Liquidaciones o comprobante de pago de remuneraciones del último mes: no constan en el expediente.', 'Certificado de cumplimiento de obligaciones laborales (F30-1): no consta.',
+  ultimoPagoSueldos: '2026-08-11', ultimoPagoPeriodo: '2026-07', ultimoPagoTxt: 'Cotizaciones previsionales de julio de 2026 pagadas por PREVIRED el 11-08-2026, con libro de remuneraciones de julio.', reajusteJul2026: 0.028, sueldoAl: 'julio de 2026', reajusteBases: 'BA 153: reajuste de sueldos base cada 6 meses (enero y julio) por IPC acumulado.',
+  pendientes: ['Comprobantes de cotizaciones y libros de remuneraciones de agosto, septiembre y octubre de 2026: no están en Drive.', 'F30-1 actualizado: el último es del 17-02-2026 (F30 del 10-06-2026).',
     'Anexos de contrato del reajuste de julio de 2026: el informe comparativo muestra el alza, pero no se adjuntaron los anexos firmados.', 'Feriado legal: el EDP lista 46 personas sin aclarar si lo usaron en el mes. Días administrativos no aplican a trabajadores privados.'],
   fuentes: { edp: G + '1a13bf9c3c672a53', sueldos: G + '1a13c43cc48e7b29' } });
+
+
+// ---------- Imposiciones y remuneraciones (Drive · pagos mensuales del contrato) ----------
+const IM = [ // periodo, comprobante cotizaciones, libro remuneraciones, fecha de pago PREVIRED (si se leyó)
+  ['2026-01', '19BPilZ2TxxD80SrW14dI34ZXmvm0RR9V', '1LO00uW-EFyOYcRsUWmc8jMW79u1zD3vz', null], ['2026-02', '1B7haL3OpOSwS9JZF0EbbV8gBlu2EKX8i', '1_cC_5lgCBGYstXmias49-cWR_dAVdsNB', null],
+  ['2026-03', '1SUTWSISrZiF-XiyJQjs7U_EsM1IOjFoJ', '1HKD3HOvVeTgyB4bGkrjRZzPabOWO-_TP', null], ['2026-04', '1lNTA_NSpYclHIGY35AbdejhgJUFfIrhS', '1kVcrQS8M7Pg0Lyu6NStuvEjj6q5xgx8w', null],
+  ['2026-05', '1IW_WTj98LKLIfN5AmGX9Y_tEnLKZY-qj', null, null], ['2026-06', '1KmANzF4imJplOc9sprBtaI14beiHb3P0', '1JeoclRI1hJ03-A8LaqO6NP4CRWC1Nrd1', null],
+  ['2026-07', '12dxs3xMNmxjQ9ToE5RLXBWxqk43ZWmyH', '1sO9_Dg6icLSJ33vQlg-FDMshSa4pFKtU', '2026-08-11'], ['2026-08', null, null, null], ['2026-09', null, null, null], ['2026-10', null, null, null]
+];
+w('imposiciones.json', IM.map(r => ({ periodo: r[0], cotizaciones: r[1] ? D + r[1] + '/view' : null, libro: r[2] ? D + r[2] + '/view' : null, fechaPago: r[3],
+  estado: r[1] && r[2] ? 'Acreditado' : r[1] ? 'Falta libro de remuneraciones' : 'Sin respaldo en Drive' })),
+  { f30: [{ fecha: '2026-02-17', doc: 'F30-1 · certificado de cumplimiento laboral', enlace: D + '1ruhCHJ-FbRLFvBLwofJk5FT_007TH3Rd/view' }, { fecha: '2026-03-09', doc: 'F30', enlace: D + '1q1zbq5fek52IHzrqs5G6kKjnBZBmYzJ7/view' },
+    { fecha: '2026-05-25', doc: 'F30', enlace: D + '13g8Jz0Zc8LvjhTpVPTazmb4q6eAphxbi/view' }, { fecha: '2026-06-10', doc: 'F30', enlace: D + '1UJe-ynMUcyPaxPwdLFLJohFIR3dMHl1K/view' }] });
 
 // ---------- Bono SUBDERE 2026 (cotejo del 09-11-2026) ----------
 w('subdere.json', [

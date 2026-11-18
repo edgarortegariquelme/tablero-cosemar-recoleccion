@@ -1,0 +1,144 @@
+{
+ "rows": [
+  {
+   "id": "DF01",
+   "fecha": "2024-08-06",
+   "tipo": "Bases",
+   "acto": "D.A. 6.771/2024 · Bases P.P. 104/2024",
+   "efecto": "Precio por tonelada dispuesta. Reajuste en enero de cada año por la variación del IPC del año anterior informada por el INE, si es positiva (Título IX, art. 40 BT). Monto estimado del contrato: $5.200 millones en 5 años (art. 37).",
+   "tarifaNeta": null,
+   "rigeDesde": null,
+   "estado": "Vigente",
+   "capa": "Mecanismo",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/1IMVrrv23RZxJdSQjXOxB609VFaCcvl_n/view"
+  },
+  {
+   "id": "DF02",
+   "fecha": "2024-12-06",
+   "tipo": "Decreto",
+   "acto": "D.A. 9.883/2024 · adjudicación",
+   "efecto": "Adjudica a Cosemar S.A. por $14.836 neto por tonelada ($17.655 bruto unitario), del 01-01-2025 al 31-12-2029. Tomado de razón con alcances el 30-12-2024.",
+   "tarifaNeta": 14836,
+   "rigeDesde": "2025-01",
+   "estado": "Vigente en 2025",
+   "capa": "Contrato",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/1z1XOjQHk4U_FmlFfAbTq8HCnuctwzWkt/view"
+  },
+  {
+   "id": "DF03",
+   "fecha": "2025-03-13",
+   "tipo": "Contrato",
+   "acto": "Contrato 13-01-2025 · aprobado por D.A. 1.548/2025",
+   "efecto": "Precio de $14.836 neto por tonelada, no modificable salvo mutuo acuerdo (cláusula cuarta). Garantía de fiel cumplimiento por UF 6.850 (póliza 224109615).",
+   "tarifaNeta": 14836,
+   "rigeDesde": "2025-01",
+   "estado": "Vigente",
+   "capa": "Contrato",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/14BU2TzUFp9N6wbATNkKo3rK-mOvXQZWo/view"
+  },
+  {
+   "id": "DF04",
+   "fecha": "2025-05-06",
+   "tipo": "Oficio",
+   "acto": "Oficio del Alcalde a Cosemar (2025, sin número)",
+   "efecto": "Pide rebajar 35% la tarifa de 2025 ($9.642 neto por tonelada) mediante anexo, por falta de presupuesto. No se halló anexo ni decreto: todas las OC y facturas de 2025 están a $14.836, aunque los memos dicen «con un descuento del 30%».",
+   "tarifaNeta": 9642,
+   "rigeDesde": null,
+   "estado": "Sin anexo: no aplicado",
+   "capa": "Solicitud",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/1X-j3WnmgaYRaVGcL1Ww-5x49TLZIUfHF/view"
+  },
+  {
+   "id": "DF05",
+   "fecha": "2026-02-02",
+   "tipo": "Carta Cosemar",
+   "acto": "Carta Cosemar 02-02-2026",
+   "efecto": "Informa IPC 2025 de 3,5% y tarifa 2026 de $15.355 neto por tonelada.",
+   "tarifaNeta": 15355,
+   "rigeDesde": "2026-01",
+   "estado": "Acogida por D.A. 2.737",
+   "capa": "Solicitud",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
+  },
+  {
+   "id": "DF06",
+   "fecha": "2026-02-03",
+   "tipo": "Memo DMAO",
+   "acto": "Memo 673/2026 (rectificado por memo 941/2026)",
+   "efecto": "Pide decretar el reajuste IPC 2025. El memo 941 corrige el ID y la propuesta citados por error (3447-86-LR23 y P.P. 60/2023).",
+   "tarifaNeta": 15355,
+   "rigeDesde": null,
+   "estado": "Decretado",
+   "capa": "Trámite",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
+  },
+  {
+   "id": "DF07",
+   "fecha": "2026-05-07",
+   "tipo": "Decreto",
+   "acto": "D.A. 2.737/2026 · reajuste IPC 2025",
+   "efecto": "IPC 3,5%: tarifa de $14.836 a $15.355 neto por tonelada desde enero de 2026 (+$519). Estima $34.520.817 brutos de mayor gasto anual.",
+   "tarifaNeta": 15355,
+   "rigeDesde": "2026-01",
+   "estado": "Ejecutado",
+   "capa": "Decreto",
+   "tonProyeccion": 4657.85,
+   "anioBaseProyeccion": 2025,
+   "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
+  },
+  {
+   "id": "DF08",
+   "fecha": "2026-05-26",
+   "tipo": "Anexo",
+   "acto": "Anexo de contrato · cambio de razón social a Cosemar SpA (D.A. 3.097/2026)",
+   "efecto": "Cambia la razón social; no modifica la tarifa.",
+   "tarifaNeta": null,
+   "rigeDesde": null,
+   "estado": "Vigente",
+   "capa": "Trámite",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
+   "respaldo": "https://drive.google.com/file/d/1RbS7mXeTOdod-iH90IU38xVnkabQ_fEA/view"
+  },
+  {
+   "id": "DF09",
+   "fecha": "2026-11-13",
+   "tipo": "Memo DMAO",
+   "acto": "Borrador memo reajuste IPC 2027",
+   "efecto": "Prepara el reajuste de enero de 2027 por el IPC 2026; el porcentaje está en blanco hasta que el INE publique el IPC de diciembre de 2026. Cita una comunicación de Cosemar del 13-11-2026.",
+   "tarifaNeta": null,
+   "rigeDesde": "2027-01",
+   "estado": "Borrador",
+   "capa": "Trámite",
+   "tonProyeccion": 4643.69,
+   "anioBaseProyeccion": 2026,
+   "respaldo": "https://drive.google.com/file/d/1_Ny4V5VvD1lkfoLVkceGncV_VyCqMqJf4mrFdLRGSJo/view"
+  }
+ ],
+ "meta": [
+  {
+   "label": "Fuente",
+   "value": "Bases, D.A. 9.883/2024, contrato y D.A. 1.548/2025, D.A. 2.737/2026, oficio de rebaja 2025, carta Cosemar y memos DMAO"
+  },
+  {
+   "label": "Leído",
+   "value": "18-11-2026, desde Google Drive"
+  },
+  {
+   "label": "Generado por",
+   "value": "datos/disposicion_final.js (repositorio tablero-cosemar-recoleccion)"
+  }
+ ]
+}

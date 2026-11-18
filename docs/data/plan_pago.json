@@ -1,0 +1,546 @@
+{
+ "rows": [
+  {
+   "clave": "2026-12|2026-07|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-07",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2026-12|2026-08|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-08",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2026-12|2026-09|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-09",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2026-12|2026-10|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-10",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2026-12|2026-11|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-11",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2026-12|2026-12|pob",
+   "mesPago": "2026-12",
+   "servicio": "2026-12",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "Aumento poblacional julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-10|base",
+   "mesPago": "2027-02",
+   "servicio": "2026-10",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "Octubre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-07|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-07",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-08|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-08",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-09|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-09",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-10|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-10",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-11|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-11",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-02|2026-12|ipc",
+   "mesPago": "2027-02",
+   "servicio": "2026-12",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "IPC acumulado julio–diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-03|2026-11|base",
+   "mesPago": "2027-03",
+   "servicio": "2026-11",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "Noviembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-03|2026-12|base",
+   "mesPago": "2027-03",
+   "servicio": "2026-12",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "Diciembre 2026",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-01|base",
+   "mesPago": "2027-04",
+   "servicio": "2027-01",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "enero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-01|pob",
+   "mesPago": "2027-04",
+   "servicio": "2027-01",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "enero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-01|ipc",
+   "mesPago": "2027-04",
+   "servicio": "2027-01",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "enero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-02|base",
+   "mesPago": "2027-04",
+   "servicio": "2027-02",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "febrero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-02|pob",
+   "mesPago": "2027-04",
+   "servicio": "2027-02",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "febrero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-04|2027-02|ipc",
+   "mesPago": "2027-04",
+   "servicio": "2027-02",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "febrero 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-05|2027-03|base",
+   "mesPago": "2027-05",
+   "servicio": "2027-03",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "marzo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-05|2027-03|pob",
+   "mesPago": "2027-05",
+   "servicio": "2027-03",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "marzo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-05|2027-03|ipc",
+   "mesPago": "2027-05",
+   "servicio": "2027-03",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "marzo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-06|2027-04|base",
+   "mesPago": "2027-06",
+   "servicio": "2027-04",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "abril 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-06|2027-04|pob",
+   "mesPago": "2027-06",
+   "servicio": "2027-04",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "abril 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-06|2027-04|ipc",
+   "mesPago": "2027-06",
+   "servicio": "2027-04",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "abril 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-05|base",
+   "mesPago": "2027-07",
+   "servicio": "2027-05",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "mayo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-05|pob",
+   "mesPago": "2027-07",
+   "servicio": "2027-05",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "mayo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-05|ipc",
+   "mesPago": "2027-07",
+   "servicio": "2027-05",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "mayo 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-06|base",
+   "mesPago": "2027-07",
+   "servicio": "2027-06",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "junio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-06|pob",
+   "mesPago": "2027-07",
+   "servicio": "2027-06",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "junio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-07|2027-06|ipc",
+   "mesPago": "2027-07",
+   "servicio": "2027-06",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "junio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-08|2027-07|base",
+   "mesPago": "2027-08",
+   "servicio": "2027-07",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "julio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-08|2027-07|pob",
+   "mesPago": "2027-08",
+   "servicio": "2027-07",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "julio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-08|2027-07|ipc",
+   "mesPago": "2027-08",
+   "servicio": "2027-07",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "julio 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-09|2027-08|base",
+   "mesPago": "2027-09",
+   "servicio": "2027-08",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "agosto 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-09|2027-08|pob",
+   "mesPago": "2027-09",
+   "servicio": "2027-08",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "agosto 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-09|2027-08|ipc",
+   "mesPago": "2027-09",
+   "servicio": "2027-08",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "agosto 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-10|2027-09|base",
+   "mesPago": "2027-10",
+   "servicio": "2027-09",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "septiembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-10|2027-09|pob",
+   "mesPago": "2027-10",
+   "servicio": "2027-09",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "septiembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-10|2027-09|ipc",
+   "mesPago": "2027-10",
+   "servicio": "2027-09",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "septiembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-11|2027-10|base",
+   "mesPago": "2027-11",
+   "servicio": "2027-10",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "octubre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-11|2027-10|pob",
+   "mesPago": "2027-11",
+   "servicio": "2027-10",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "octubre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-11|2027-10|ipc",
+   "mesPago": "2027-11",
+   "servicio": "2027-10",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "octubre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-12|2027-11|base",
+   "mesPago": "2027-12",
+   "servicio": "2027-11",
+   "componente": "Mensualidad (D.A. 2.459)",
+   "tipo": "base",
+   "monto": 261767423,
+   "decretado": true,
+   "concepto": "noviembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-12|2027-11|pob",
+   "mesPago": "2027-12",
+   "servicio": "2027-11",
+   "componente": "Aumento poblacional (D.A. 3.957)",
+   "tipo": "pob",
+   "monto": 6172583,
+   "decretado": true,
+   "concepto": "noviembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  },
+  {
+   "clave": "2027-12|2027-11|ipc",
+   "mesPago": "2027-12",
+   "servicio": "2027-11",
+   "componente": "IPC 4,3% (sin decreto)",
+   "tipo": "ipc",
+   "monto": 11255999,
+   "decretado": false,
+   "concepto": "noviembre 2027 (mensualidad reajustada)",
+   "respaldo": "https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d"
+  }
+ ],
+ "meta": [
+  {
+   "label": "Fuente",
+   "value": "Notion · Plan de pago COSEMAR · diciembre 2026 a marzo 2027, sección «Actualización vigente del flujo de caja · 17-11-2026»"
+  },
+  {
+   "label": "Leído",
+   "value": "17-11-2026"
+  },
+  {
+   "label": "Generado por",
+   "value": "datos/plan_pago.js (repositorio tablero-cosemar-recoleccion)"
+  }
+ ]
+}

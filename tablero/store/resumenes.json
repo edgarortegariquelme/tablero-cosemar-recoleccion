@@ -40,13 +40,15 @@
    "contratados": 4,
    "desvinculados": 2,
    "enFeriado": 46,
-   "ultimoPagoSueldos": null,
+   "ultimoPagoSueldos": "2026-08-11",
+   "ultimoPagoPeriodo": "2026-07",
+   "ultimoPagoTxt": "Cotizaciones previsionales de julio de 2026 pagadas por PREVIRED el 11-08-2026, con libro de remuneraciones de julio.",
    "reajusteJul2026": 0.028,
    "sueldoAl": "julio de 2026",
    "reajusteBases": "BA 153: reajuste de sueldos base cada 6 meses (enero y julio) por IPC acumulado.",
    "pendientes": [
-    "Liquidaciones o comprobante de pago de remuneraciones del último mes: no constan en el expediente.",
-    "Certificado de cumplimiento de obligaciones laborales (F30-1): no consta.",
+    "Comprobantes de cotizaciones y libros de remuneraciones de agosto, septiembre y octubre de 2026: no están en Drive.",
+    "F30-1 actualizado: el último es del 17-02-2026 (F30 del 10-06-2026).",
     "Anexos de contrato del reajuste de julio de 2026: el informe comparativo muestra el alza, pero no se adjuntaron los anexos firmados.",
     "Feriado legal: el EDP lista 46 personas sin aclarar si lo usaron en el mes. Días administrativos no aplican a trabajadores privados."
    ],
@@ -54,6 +56,31 @@
     "edp": "https://mail.google.com/mail/u/0/#all/1a13bf9c3c672a53",
     "sueldos": "https://mail.google.com/mail/u/0/#all/1a13c43cc48e7b29"
    }
+  },
+  {
+   "clave": "imposiciones",
+   "f30": [
+    {
+     "fecha": "2026-02-17",
+     "doc": "F30-1 · certificado de cumplimiento laboral",
+     "enlace": "https://drive.google.com/file/d/1ruhCHJ-FbRLFvBLwofJk5FT_007TH3Rd/view"
+    },
+    {
+     "fecha": "2026-03-09",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/1q1zbq5fek52IHzrqs5G6kKjnBZBmYzJ7/view"
+    },
+    {
+     "fecha": "2026-05-25",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/13g8Jz0Zc8LvjhTpVPTazmb4q6eAphxbi/view"
+    },
+    {
+     "fecha": "2026-06-10",
+     "doc": "F30",
+     "enlace": "https://drive.google.com/file/d/1UJe-ynMUcyPaxPwdLFLJohFIR3dMHl1K/view"
+    }
+   ]
   },
   {
    "clave": "subdere",

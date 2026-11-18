@@ -1,0 +1,75 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "periodo": "2026-01",
+   "cotizaciones": "https://drive.google.com/file/d/19BPilZ2TxxD80SrW14dI34ZXmvm0RR9V/view",
+   "libro": "https://drive.google.com/file/d/1LO00uW-EFyOYcRsUWmc8jMW79u1zD3vz/view",
+   "fechaPago": null,
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-02",
+   "cotizaciones": "https://drive.google.com/file/d/1B7haL3OpOSwS9JZF0EbbV8gBlu2EKX8i/view",
+   "libro": "https://drive.google.com/file/d/1_cC_5lgCBGYstXmias49-cWR_dAVdsNB/view",
+   "fechaPago": null,
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-03",
+   "cotizaciones": "https://drive.google.com/file/d/1SUTWSISrZiF-XiyJQjs7U_EsM1IOjFoJ/view",
+   "libro": "https://drive.google.com/file/d/1HKD3HOvVeTgyB4bGkrjRZzPabOWO-_TP/view",
+   "fechaPago": null,
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-04",
+   "cotizaciones": "https://drive.google.com/file/d/1lNTA_NSpYclHIGY35AbdejhgJUFfIrhS/view",
+   "libro": "https://drive.google.com/file/d/1kVcrQS8M7Pg0Lyu6NStuvEjj6q5xgx8w/view",
+   "fechaPago": null,
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-05",
+   "cotizaciones": "https://drive.google.com/file/d/1IW_WTj98LKLIfN5AmGX9Y_tEnLKZY-qj/view",
+   "libro": null,
+   "fechaPago": null,
+   "estado": "Falta libro de remuneraciones"
+  },
+  {
+   "periodo": "2026-06",
+   "cotizaciones": "https://drive.google.com/file/d/1KmANzF4imJplOc9sprBtaI14beiHb3P0/view",
+   "libro": "https://drive.google.com/file/d/1JeoclRI1hJ03-A8LaqO6NP4CRWC1Nrd1/view",
+   "fechaPago": null,
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-07",
+   "cotizaciones": "https://drive.google.com/file/d/12dxs3xMNmxjQ9ToE5RLXBWxqk43ZWmyH/view",
+   "libro": "https://drive.google.com/file/d/1sO9_Dg6icLSJ33vQlg-FDMshSa4pFKtU/view",
+   "fechaPago": "2026-08-11",
+   "estado": "Acreditado"
+  },
+  {
+   "periodo": "2026-08",
+   "cotizaciones": null,
+   "libro": null,
+   "fechaPago": null,
+   "estado": "Sin respaldo en Drive"
+  },
+  {
+   "periodo": "2026-09",
+   "cotizaciones": null,
+   "libro": null,
+   "fechaPago": null,
+   "estado": "Sin respaldo en Drive"
+  },
+  {
+   "periodo": "2026-10",
+   "cotizaciones": null,
+   "libro": null,
+   "fechaPago": null,
+   "estado": "Sin respaldo en Drive"
+  }
+ ]
+}

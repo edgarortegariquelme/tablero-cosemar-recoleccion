@@ -1,0 +1,109 @@
+{
+ "corte": "2026-11-18",
+ "rows": [
+  {
+   "id": "AN01",
+   "contrato": "rec",
+   "fecha": "2026-11-18",
+   "tipo": "Hecho por subsanar",
+   "texto": "Los pagos de diciembre de 2025 a septiembre de 2026 constan solo por tu confirmación: pedir a DAF los comprobantes de egreso.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN02",
+   "contrato": "rec",
+   "fecha": "2026-11-13",
+   "tipo": "Antecedente",
+   "texto": "DAF no emite certificado presupuestario (saldo negativo): el anexo del reajuste IPC 4,3% queda suspendido.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN03",
+   "contrato": "rec",
+   "fecha": "2026-11-05",
+   "tipo": "Antecedente",
+   "texto": "Memo 2211/2026 pide la OC de octubre al valor del D.A. 2.459. Sin presupuesto para octubre a diciembre: se pagan en 2027 según el plan de pago.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN04",
+   "contrato": "rec",
+   "fecha": "2026-07-01",
+   "tipo": "Hecho por subsanar",
+   "texto": "Desde julio rige el D.A. 3.957 (aumento poblacional), pero las OC y facturas siguen al valor del D.A. 2.459.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN05",
+   "contrato": "rec",
+   "fecha": "2026-06-05",
+   "tipo": "Hecho por subsanar",
+   "texto": "Resolución sanitaria de las instalaciones (manifold 28): no consta respuesta de Cosemar.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN06",
+   "contrato": "rec",
+   "fecha": "2026-09-16",
+   "tipo": "Comentario",
+   "texto": "Cosemar espera respuesta al informe de variación de combustible desde el 16-09.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN07",
+   "contrato": "rec",
+   "fecha": "2026-01-01",
+   "tipo": "Hecho por subsanar",
+   "texto": "La revisión de sanciones antes del memo de pago no consta en ningún mes.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN08",
+   "contrato": "rec",
+   "fecha": "2026-10-29",
+   "tipo": "Antecedente",
+   "texto": "Endoso de la garantía por 419,57 UF entregado; la póliza vence el 28-10-2029.",
+   "estado": "Cerrado"
+  },
+  {
+   "id": "AN09",
+   "contrato": "df",
+   "fecha": "2026-11-13",
+   "tipo": "Antecedente",
+   "texto": "Cosemar pide la OC de octubre; el memo 2214/2026 la pidió el 05-11 y el plazo de 7 días ya venció.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN10",
+   "contrato": "df",
+   "fecha": "2026-11-13",
+   "tipo": "Antecedente",
+   "texto": "Borrador del memo de reajuste de enero de 2027 por el IPC 2026, con el porcentaje en blanco hasta que el INE lo publique.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN11",
+   "contrato": "df",
+   "fecha": "2026-10-21",
+   "tipo": "Comentario",
+   "texto": "El memo de pago llega entre uno y tres meses después del mes de servicio (septiembre: 21-10).",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN12",
+   "contrato": "df",
+   "fecha": "2026-09-02",
+   "tipo": "Hecho por subsanar",
+   "texto": "Falta el puesto de trabajo para el funcionario municipal en la garita de la báscula que exigen las bases.",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN13",
+   "contrato": "df",
+   "fecha": "2026-01-01",
+   "tipo": "Comentario",
+   "texto": "El D.A. 2.737 proyecta 4.657,85 t/mes y los documentos de 2025 promedian 4.574,38 t/mes: verificar la base usada.",
+   "estado": "Abierto"
+  }
+ ]
+}

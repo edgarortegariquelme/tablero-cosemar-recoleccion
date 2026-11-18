@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control Cosemar</title>
+<meta name="description" content="Control de los contratos Cosemar de recolección y disposición final: pagos, plazos, multas, manifolds, flota y personal.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f5d50'/%3E%3Cpath d='M8 21h16M10 21V12h12v9M13 12V9h6v3' stroke='%23fff' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root {
+  --font-anthropic-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --font-anthropic-serif: Georgia, "Times New Roman", serif;
+  --color-bg: #f6f5f1; --color-fg: #1d1d1b; --color-fg-muted: #5f5e5a; --color-panel: #ffffff; --color-border-line: #dcdad3;
+  --color-ok: #2e7d4f; --color-warn: #b07a00; --color-bad: #b83a2e;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 16px; --cds-gap-xl: 28px; --cds-pad-lg: 12px; --cds-radius: 8px;
+  --cds-font-size-title: 26px; --cds-font-size-heading: 18px; --cds-font-size-body: 15px; --cds-font-size-caption: 13px; --cds-font-weight-medium: 600;
+  --cds-chart-reference: #4c4b47; --cds-chart-grid: #ebe9e3; --cds-chart-axis: #9a988f; --cds-chart-muted: #a9a79f; --cds-chart-status-critical: #b83a2e;
+  --cds-text-secondary: #5f5e5a; --cds-surface-popover: #ffffff; --cds-border: #cfcdc5; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.12);
+  --c1: #2f6db3; --c2: #c9772b;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --color-bg: #191917; --color-fg: #ecebe6; --color-fg-muted: #a9a79f; --color-panel: #23231f; --color-border-line: #3a3934;
+  --color-ok: #5fb985; --color-warn: #e0a83a; --color-bad: #e2685b; --cds-chart-reference: #cfcdc5; --cds-chart-grid: #2e2d29; --cds-chart-axis: #7d7b74;
+  --cds-chart-muted: #6f6d66; --cds-chart-status-critical: #e2685b; --cds-text-secondary: #a9a79f; --cds-surface-popover: #2b2b27; --cds-border: #45443e;
+  --c1: #6ea4e0; --c2: #e39a55; } }
+:root[data-theme="dark"] {
+  --color-bg: #191917; --color-fg: #ecebe6; --color-fg-muted: #a9a79f; --color-panel: #23231f; --color-border-line: #3a3934;
+  --color-ok: #5fb985; --color-warn: #e0a83a; --color-bad: #e2685b; --cds-chart-reference: #cfcdc5; --cds-chart-grid: #2e2d29; --cds-chart-axis: #7d7b74;
+  --cds-chart-muted: #6f6d66; --cds-chart-status-critical: #e2685b; --cds-text-secondary: #a9a79f; --cds-surface-popover: #2b2b27; --cds-border: #45443e;
+  --c1: #6ea4e0; --c2: #e39a55; }
+html { background: var(--color-bg); }
+body { margin: 0; padding: 16px; background: var(--color-bg); color: var(--color-fg); }
+.va { margin: 0 auto; }
+.dash-skeleton { opacity: .5; }
+.app-estado { max-width: 920px; margin: 0 auto 8px; font: 13px var(--font-anthropic-sans); color: var(--color-fg-muted); }
+.app-estado.error { color: var(--color-bad); }
+</style>
+</head>
+<body>
+<div class="app-estado" id="app-estado" role="status">Cargando datos…</div>
+
+<style>
+.va { font-family: var(--font-anthropic-sans); color: var(--color-fg); max-width: 920px; }
+.va h2 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.2; margin: var(--cds-gap-xs) 0 var(--cds-gap-md); text-wrap: balance; }
+.va h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-xl) 0 var(--cds-gap-xs); text-wrap: balance; }
+.va p { max-width: 68ch; margin: var(--cds-gap-xs) 0; line-height: 1.55; }
+.va-eyebrow { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); letter-spacing: .04em; text-transform: uppercase; }
+.va-meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); }
+.va-num, .va b { font-variant-numeric: tabular-nums; }
+.va-muted { color: var(--color-fg-muted); }
+.va-box { position: relative; min-height: 120px; }
+.va-box svg { display: block; }
+.va-scroll { overflow-x: auto; }
+.va-axis text, .va-axlab, .va-grid text { fill: var(--cds-text-secondary); font-size: 11px; }
+.va-axis path, .va-axis line { stroke: var(--cds-chart-axis); }
+.va-grid line { stroke: var(--cds-chart-grid); }
+.va-grid path { display: none; }
+.va-strong { font-weight: 600; fill: var(--color-fg); }
+.va-lab { fill: var(--color-fg); font-size: 11px; font-variant-numeric: tabular-nums; }
+.va-bad { fill: var(--color-bad); }
+.va-tip { position: absolute; z-index: 3; max-width: 240px; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: 6px 8px; font-size: var(--cds-font-size-caption); pointer-events: none; }
+.va-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: var(--cds-gap-xs); }
+.va-key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.va-k-line { height: 3px; background: var(--cds-chart-reference); vertical-align: 2px; }
+.va-k-ok { background: var(--color-ok); opacity: .8; }
+.va-k-warn { background: var(--color-warn); opacity: .55; }
+.va-k-none { background: var(--color-panel); border: 1px solid var(--color-border-line); }
+.va-k-crit { background: var(--cds-chart-status-critical); border-radius: 50%; }
+.va-ul { margin: var(--cds-gap-sm) 0; padding-left: 18px; display: grid; gap: 6px; font-size: var(--cds-font-size-body); max-width: 72ch; }
+.va-wrap { overflow-x: auto; }
+.va-tbl { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+.va-tbl th { text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; white-space: nowrap; }
+.va-tbl td { border-bottom: 1px solid var(--color-border-line); padding: 6px 8px; vertical-align: top; }
+.va-tbl a { color: var(--color-fg); }
+.va h4 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-lg) 0 var(--cds-gap-xs); text-wrap: balance; }
+.va-sec { margin-top: var(--cds-gap-xl); }
+.va-deuda { color: var(--color-bad); }
+.va-ipc { color: var(--color-warn); }
+.va-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--cds-gap-md); margin: var(--cds-gap-md) 0; }
+.va-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); font-size: var(--cds-font-size-caption); }
+.va-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; margin: 4px 0; }
+.va-k-dash { height: 0; border-top: 2px dashed var(--color-warn); background: none; vertical-align: 3px; }
+.va-k-dot { border-radius: 50%; }
+.va-k-ring { border-radius: 50%; background: none; border: 2px solid var(--cds-chart-reference); width: 8px; height: 8px; }
+.va-k-deuda { background: var(--color-bad); opacity: .35; }
+.va-k-ipc { background: var(--color-warn); opacity: .35; }
+.va-chip { display: inline-block; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--color-border-line); white-space: nowrap; }
+.va-chip-ok { color: var(--color-ok); } .va-chip-bad { color: var(--color-bad); } .va-chip-warn { color: var(--color-warn); }
+.va-tbl td.va-r, .va-tbl th.va-r { text-align: right; }
+.va details summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); margin-top: var(--cds-gap-xl); }
+
+.vt-r, .ct-r { position: absolute; opacity: 0; pointer-events: none; }
+.vt-nav, .ct-nav { display: flex; flex-wrap: wrap; gap: 4px; margin: var(--cds-gap-md) 0; border-bottom: 1px solid var(--color-border-line); }
+.ct-nav { border-bottom: 0; margin: var(--cds-gap-sm) 0 var(--cds-gap-md); }
+.vt-nav label, .ct-nav label { cursor: pointer; padding: 6px 10px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-radius: var(--cds-radius) var(--cds-radius) 0 0; }
+.ct-nav label { border: 1px solid var(--color-border-line); border-radius: 999px; }
+.vt-nav label:hover, .ct-nav label:hover { color: var(--color-fg); }
+.va-tab, .op-c { display: none; }
+#vt-op:checked ~ #tab-op, #vt-mu:checked ~ #tab-mu, #vt-mf:checked ~ #tab-mf, #vt-co:checked ~ #tab-co, #vt-fl:checked ~ #tab-fl, #vt-pe:checked ~ #tab-pe, #vt-su:checked ~ #tab-su, #vt-an:checked ~ #tab-an { display: block; }
+#vt-op:checked ~ .vt-nav [for=vt-op], #vt-mu:checked ~ .vt-nav [for=vt-mu], #vt-mf:checked ~ .vt-nav [for=vt-mf], #vt-co:checked ~ .vt-nav [for=vt-co], #vt-fl:checked ~ .vt-nav [for=vt-fl], #vt-pe:checked ~ .vt-nav [for=vt-pe], #vt-su:checked ~ .vt-nav [for=vt-su], #vt-an:checked ~ .vt-nav [for=vt-an] { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); box-shadow: inset 0 -2px 0 var(--color-fg); }
+#ct-rec:checked ~ .op-rec, #ct-df:checked ~ .op-df { display: block; }
+#ct-rec:checked ~ .ct-nav [for=ct-rec], #ct-df:checked ~ .ct-nav [for=ct-df] { color: var(--color-fg); border-color: var(--color-fg); }
+.vt-r:focus-visible + *, .vt-nav label:focus-visible { outline: 2px solid var(--color-fg); }
+.op-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-lg); align-items: start; }
+.op-al { list-style: none; margin-left: -18px; }
+.op-sel { font: inherit; margin: 4px 0 8px; }
+.op-mon { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.op-pasos { list-style: none; padding: 0; margin: var(--cds-gap-sm) 0; display: grid; gap: 2px; font-size: var(--cds-font-size-caption); }
+.op-paso { display: grid; grid-template-columns: 16px 1fr; gap: 8px; padding: 4px 0; position: relative; }
+.op-pt { width: 10px; height: 10px; border-radius: 50%; margin-top: 3px; border: 2px solid var(--color-border-line); background: var(--color-panel); }
+.op-ok .op-pt { background: var(--color-ok); border-color: var(--color-ok); }
+.op-sig .op-pt { border-color: var(--color-warn); }
+.op-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.op-nav button { font: inherit; font-size: var(--cds-font-size-caption); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 2px 8px; cursor: pointer; color: var(--color-fg); }
+.op-vista { margin-left: auto; }
+.op-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; font-size: 11px; }
+.op-dow { color: var(--color-fg-muted); text-align: center; }
+.op-dia { min-height: 54px; border: 1px solid var(--color-border-line); border-radius: 4px; padding: 2px 3px; overflow: hidden; background: var(--color-panel); }
+.op-mini .op-dia { min-height: 0; height: 18px; padding: 0; text-align: center; border-radius: 2px; }
+.op-mini .op-dow { font-size: 9px; }
+.op-num { font-variant-numeric: tabular-nums; }
+.op-mk div { font-size: 10px; line-height: 1.2; color: var(--color-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.op-info, .op-k-info { background: color-mix(in srgb, var(--color-ok) 16%, var(--color-panel)); }
+.op-fac, .op-k-fac { background: color-mix(in srgb, var(--color-warn) 18%, var(--color-panel)); }
+.op-oc, .op-pago, .op-k-oc { box-shadow: inset 0 0 0 2px var(--cds-chart-reference); }
+.op-doc, .op-k-doc { box-shadow: inset 0 -3px 0 var(--color-fg); }
+.op-alerta, .op-k-alerta { box-shadow: inset 0 0 0 2px var(--color-bad); }
+.op-hoy { outline: 2px solid var(--color-fg); outline-offset: -1px; font-weight: 600; }
+.op-anio { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cds-gap-md); }
+.op-mes-t { font-size: var(--cds-font-size-caption); text-transform: capitalize; margin-bottom: 2px; }
+.op-tema { font-weight: var(--cds-font-weight-medium); margin: 4px 0; }
+.tl, .tl-list { list-style: none; padding: 0; margin: var(--cds-gap-sm) 0; border-left: 2px solid var(--color-border-line); }
+.tl li, .tl-li { display: grid; grid-template-columns: 82px 1fr; gap: 8px; padding: 6px 0 6px 10px; position: relative; font-size: var(--cds-font-size-caption); }
+.tl li::before, .tl-li::before { content: ''; position: absolute; left: -6px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-panel); border: 2px solid var(--color-border-line); }
+.tl-open::before { border-color: var(--color-warn) !important; }
+.tl-warn { opacity: .75; }
+.tl-f { color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.tl-item { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); margin: var(--cds-gap-sm) 0; background: var(--color-panel); }
+.tl-item summary { margin: 0 !important; }
+.tl-item summary .va-muted { font-weight: 400; }
+.fl-sin { display: inline-block; margin-bottom: 4px; font-size: var(--cds-font-size-caption); }
+.fl-foto { display: block; width: 96px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
+@media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
+</style>
+
+<article class="va" id="analisis">
+  <div class="va-eyebrow">DMAO · Contratos Cosemar · recolección 3447-86-LR23 y disposición final 3447-187-LR24</div>
+  <h2 id="titulo-op">Control de los contratos Cosemar: pagos, plazos, flota y personal</h2>
+  <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
+
+  <input type="radio" name="vt" id="vt-op" class="vt-r" checked>
+  <input type="radio" name="vt" id="vt-mu" class="vt-r">
+  <input type="radio" name="vt" id="vt-mf" class="vt-r">
+  <input type="radio" name="vt" id="vt-co" class="vt-r">
+  <input type="radio" name="vt" id="vt-fl" class="vt-r">
+  <input type="radio" name="vt" id="vt-pe" class="vt-r">
+  <input type="radio" name="vt" id="vt-su" class="vt-r">
+  <input type="radio" name="vt" id="vt-an" class="vt-r">
+  <div class="vt-nav" role="tablist"><label for="vt-op">Operación</label><label for="vt-mu">Multas</label><label for="vt-mf">Manifolds</label><label for="vt-co">Correos</label><label for="vt-fl">Flota</label><label for="vt-pe">Personal</label><label for="vt-su">Bono SUBDERE</label><label for="vt-an">Análisis y deuda</label></div>
+
+  <section class="va-tab" id="tab-op">
+  <input type="radio" name="ct" id="ct-rec" class="ct-r" checked><input type="radio" name="ct" id="ct-df" class="ct-r">
+  <div class="ct-nav"><label for="ct-rec">Recolección · 3447-86-LR23</label><label for="ct-df">Disposición final · 3447-187-LR24</label></div>
+  <div class="op-c op-rec">
+    <p class="va-muted">P.P. 060/2023 · recolección y transporte · mensualidad fija. Cosemar informa del 1 al 5, la OC se genera en máximo 7 días, la factura llega del 15 al 20 y se paga a 30 días.</p>
+    <h3 id="h-alertas-rec">Alertas de hoy</h3>
+    <ul class="va-ul" id="alertas-rec" data-draw="op_alertas_rec" data-source="c_alertas"></ul>
+    <div class="op-row">
+      <div>
+        <h3 id="h-ultimo-rec">Último pago y en qué paso va cada mes</h3>
+        <div id="ultimo-rec" data-draw="op_ultimo_rec" data-source="c_ciclo">—</div>
+      </div>
+      <div>
+        <h3 id="h-cal-rec">Calendario del ciclo: informe, OC, factura y pago</h3>
+        <p class="va-muted">Pasa el cursor por un día para ver qué vence. «Ver año» muestra los doce meses en miniatura.</p>
+        <div id="cal-rec" data-draw="op_cal_rec" data-source="c_ciclo">—</div>
+      </div>
+    </div>
+    <h3 id="h-cifras-rec">Gasto del contrato, lo pagado en 2026 y lo que queda para 2027</h3>
+    <div id="cifras-rec" data-draw="op_cifras_rec" data-source="c_presupuesto">—</div>
+    <h3 id="h-ant-rec">Antecedentes, comentarios y hechos por subsanar</h3>
+    <ul class="va-ul" id="ant-rec" data-draw="op_ant_rec" data-source="antecedentes"></ul>
+    <h3 id="h-dec-rec">Decretos y actos vigentes, y lo que respaldan</h3>
+    <div class="va-wrap"><table class="va-tbl" id="tbl-dec-rec" data-source="c_decretos"><thead><tr><th>Fecha</th><th>Acto</th><th>Qué respalda</th><th>Estado</th></tr></thead><tbody data-draw="op_dec_rec"></tbody></table></div>
+  </div>
+  <div class="op-c op-df">
+    <p class="va-muted">P.P. 104/2024 · relleno sanitario Santa Inés · se paga por tonelada. Mismo ciclo y misma cuenta presupuestaria 215.22.08.001.001.</p>
+    <h3 id="h-alertas-df">Alertas de hoy</h3>
+    <ul class="va-ul" id="alertas-df" data-draw="op_alertas_df" data-source="c_alertas"></ul>
+    <div class="op-row">
+      <div>
+        <h3 id="h-ultimo-df">Último pago y en qué paso va cada mes</h3>
+        <div id="ultimo-df" data-draw="op_ultimo_df" data-source="c_ciclo">—</div>
+      </div>
+      <div>
+        <h3 id="h-cal-df">Calendario del ciclo: informe, OC, factura y pago</h3>
+        <p class="va-muted">Pasa el cursor por un día para ver qué vence. «Ver año» muestra los doce meses en miniatura.</p>
+        <div id="cal-df" data-draw="op_cal_df" data-source="c_ciclo">—</div>
+      </div>
+    </div>
+    <h3 id="h-cifras-df">Gasto del contrato, lo pagado en 2026 y lo que queda para 2027</h3>
+    <div id="cifras-df" data-draw="op_cifras_df" data-source="c_presupuesto">—</div>
+    <h3 id="h-ant-df">Antecedentes, comentarios y hechos por subsanar</h3>
+    <ul class="va-ul" id="ant-df" data-draw="op_ant_df" data-source="antecedentes"></ul>
+    <h3 id="h-dec-df">Decretos y actos vigentes, y lo que respaldan</h3>
+    <div class="va-wrap"><table class="va-tbl" id="tbl-dec-df" data-source="c_decretos"><thead><tr><th>Fecha</th><th>Acto</th><th>Qué respalda</th><th>Estado</th></tr></thead><tbody data-draw="op_dec_df"></tbody></table></div>
+  </div>
+  </section>
+
+  <section class="va-tab" id="tab-mu">
+  <h3 id="h-multas">Procesos sancionatorios y multas, del más nuevo al más antiguo</h3>
+  <p class="va-muted">Cada proceso muestra sus pasos ejecutados en orden, los documentos, los decretos de multa y el que la reafirma, el monto y el pago donde se cobra. Abiertos primero desplegados.</p>
+  <div id="multas" data-draw="vm_multas" data-source="c_sanciones c_eventos">—</div>
+  <h3 id="h-sanciones">Hasta qué etapa llega cada proceso sancionatorio con respaldo</h3>
+  <p class="va-muted">El punto marca la etapa acreditada más avanzada. Ámbar: plazo por verificar; rojo: plazo vencido; verde: en plazo; gris: proceso cerrado.</p>
+  <div id="graf-sanciones" data-draw="va_sanciones" data-source="c_sanciones c_eventos">—</div>
+  <ul class="va-ul" id="faltas" data-draw="va_faltas" data-source="c_sanciones"></ul>
+
+  </section>
+
+  <section class="va-tab" id="tab-mf">
+  <h3 id="h-mf">Manifolds, del más reciente al más antiguo</h3>
+  <p id="mf-resumen" data-draw="vm_mf_resumen" data-source="manifolds">—</p>
+  <p class="va-muted">Plazos en días hábiles desde la anotación, salvo que el manifold fije otra fecha. Solo libro del contrato Cosemar (desde julio de 2024).</p>
+  <ul class="tl-list" id="mf-lista" data-draw="vm_mf" data-source="manifolds"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-co">
+  <h3 id="h-co">Correos con el personal del contrato</h3>
+  <p class="va-muted">Hernán Gómez, Jesús Chinchayán, Edgar Ortega, Teresa Donoso, René Gutiérrez, Alejandra Marzán y Rodrigo Barril, desde agosto de 2026. Un registro por hilo, con su último mensaje.</p>
+  <div id="co-ultimo" data-draw="vc_ultimo" data-source="correos">—</div>
+  <ul class="tl-list" id="co-lista" data-draw="vc_lista" data-source="correos"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-fl">
+  <h3 id="h-fl">Flota del contrato: estado y documentos al día</h3>
+  <div id="fl-resumen" data-draw="vf_resumen" data-source="flota">—</div>
+  <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. La foto de cada móvil se abre al tocarla.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso de circulación</th><th>SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
+  <p class="va-muted">Contrato: seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000), vence el 31-07-2027. Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF, con endoso de 419,57 UF del 29-10-2026), vence el 28-10-2029.</p>
+  <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
+  <p class="va-muted">Hoy: <b data-draw="va_vence" data-source="c_portada" data-field="vencen30" data-row="0">—</b> vencen en 30 días y <b data-draw="va_atraso" data-source="c_portada" data-field="atrasados" data-row="0">—</b> están atrasados, contando los plazos sancionatorios vencidos. Las fechas de flota vienen de la planilla de vencimientos y se confirman contra el certificado de cada patente.</p>
+  <div id="graf-venc" data-draw="va_venc" data-source="c_vencimientos">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-crit"></span>Vencido</span><span><span class="va-key va-k-warn"></span>Vence en 30 días</span></div>
+
+  </section>
+
+  <section class="va-tab" id="tab-pe">
+  <h3 id="h-pe">Personal del contrato</h3>
+  <div id="pe-resumen" data-draw="vp2_resumen" data-source="personal resumenes">—</div>
+  <p class="va-muted">Cifras agregadas del estado de pago (EDP) de Cosemar del 14-10-2026 y del informe comparativo de sueldos base. El tablero no publica nombres ni RUT.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-personal" data-source="personal" data-row-key="cargo"><thead><tr><th>Cargo</th><th class="va-r">Dotación</th><th class="va-r">Oferta</th><th class="va-r">Sueldo base julio 2026</th><th>Nota</th></tr></thead><tbody data-draw="vp2_tabla"></tbody></table></div>
+  <h4 id="h-pe-impo">Imposiciones y libro de remuneraciones por mes</h4>
+  <p class="va-muted">Comprobantes de pago de cotizaciones (PREVIRED) y libros de remuneraciones que Cosemar entrega con cada estado de pago.</p>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-impo" data-source="imposiciones" data-row-key="periodo"><thead><tr><th>Mes</th><th>Estado</th><th>Cotizaciones</th><th>Remuneraciones</th></tr></thead><tbody data-draw="vp2_impo"></tbody></table></div>
+  <h4 id="h-pe-f30">Certificados de cumplimiento laboral</h4>
+  <ul class="va-ul" id="pe-f30" data-draw="vp2_f30" data-source="resumenes"></ul>
+  <h4 id="h-pe-pend">Lo que falta acreditar</h4>
+  <ul class="va-ul" id="pe-pend" data-draw="vp2_pend" data-source="resumenes"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-su">
+  <h3 id="h-su">Bono SUBDERE 2026: cuánto se pagó y cuánto está rendido</h3>
+  <div id="su-resumen" data-draw="vs_resumen" data-source="subdere resumenes">—</div>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-subdere" data-source="subdere" data-row-key="concepto"><thead><tr><th>Concepto</th><th class="va-r">Trabajadores</th><th class="va-r">Nominal</th><th class="va-r">Con firma o recibo</th><th>Fecha</th><th>Estado</th></tr></thead><tbody data-draw="vs_tabla"></tbody></table></div>
+  <p class="va-muted">Los trabajadores se repiten entre planillas: no se suman. Cotejo documental municipal del 09-11-2026; no reemplaza la conciliación bancaria.</p>
+  <h4 id="h-su-pend">Para cerrar el bono</h4>
+  <ul class="va-ul" id="su-pend" data-draw="vs_pend" data-source="resumenes"></ul>
+  </section>
+
+  <section class="va-tab" id="tab-an">
+  <h2 id="titular" data-draw="va_titular" data-source="c_portada c_pagos">—</h2>
+  <p>En el libro de control quedan <b data-draw="va_rem" data-source="c_portada" data-field="remitidoSinPago" data-row="0">—</b> remitidos a pago sin pago registrado, en <b data-draw="va_meses" data-source="c_portada" data-field="mesesRemitidos" data-row="0">—</b> meses de servicio (<b data-draw="va_sinmonto" data-source="c_portada" data-field="mesesSinMonto" data-row="0">—</b> sin monto cargado). La diferencia frente al decreto vigente suma <b data-draw="va_dif" data-source="c_portada" data-field="diferenciaDecreto" data-row="0">—</b>.<span data-draw="va_causa" data-source="c_pagos"></span> En paralelo hay <b data-draw="va_abiertas" data-source="c_portada" data-field="decision" data-row="0">—</b> procesos sancionatorios abiertos, <b data-draw="va_porver" data-source="c_portada" data-field="plazoPorVerificar" data-row="0">—</b> de ellos sin un plazo computable porque falta la notificación con fecha cierta.</p>
+  <section id="alzas" class="va-sec">
+  <h3 id="h-alzas">Lo que se debió pagar a Cosemar cada mes y lo que se tramitó, desde el inicio del contrato</h3>
+  <p>Entre julio de 2024 y <b data-draw="vd_ultimo" data-source="c_deuda_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vd_tram" data-source="c_deuda_resumen" data-field="tramitadoTotal" data-row="0">—</b>, retroactivo incluido. Por decretos dictados y no aplicados el municipio adeuda <b class="va-deuda" data-draw="vd_dec" data-source="c_deuda_resumen" data-field="deudaDecreto" data-row="0">—</b>, y las bases (art. 9) suman <b class="va-ipc" data-draw="vd_bases" data-source="c_deuda_resumen" data-field="deudaBases" data-row="0">—</b> más por el IPC que Cosemar pidió y que no tiene decreto. Cada mes sin regularizar agrega <b data-draw="vd_mesdec" data-source="c_deuda_resumen" data-field="mensualDecreto" data-row="0">—</b> y <b data-draw="vd_mesbases" data-source="c_deuda_resumen" data-field="mensualBases" data-row="0">—</b>, respectivamente.</p>
+  <div class="va-cards">
+    <div class="va-card" id="card-dec"><div class="va-eyebrow">Adeudado por decretos</div><div class="va-big va-deuda" data-draw="vd_dec2" data-source="c_deuda_resumen" data-field="deudaDecreto" data-row="0">—</div><div class="va-muted">D.A. 3.957/2026 rige desde julio de 2026; las OC siguen al valor del D.A. 2.459. Incluye $7 de redondeo entre el retroactivo decretado y la suma de las diferencias mensuales.</div></div>
+    <div class="va-card" id="card-bases"><div class="va-eyebrow">Adicional según bases, sin decreto</div><div class="va-big va-ipc" data-draw="vd_bases2" data-source="c_deuda_resumen" data-field="deudaBases" data-row="0">—</div><div class="va-muted">IPC 4,3% del segundo año, pedido por carta de Cosemar del 10-07-2026 y concordado; el anexo está suspendido por falta de certificado presupuestario.</div></div>
+    <div class="va-card" id="card-total"><div class="va-eyebrow">Total que Cosemar puede exigir</div><div class="va-big" data-draw="vd_total" data-source="c_deuda_resumen" data-field="deudaTotal" data-row="0">—</div><div class="va-muted">Retroactivo del D.A. 2.459 ya remitido a pago: <span data-draw="vd_retro" data-source="c_deuda_resumen" data-field="retroTramitado" data-row="0">—</span> (factura 50.836).</div></div>
+  </div>
+
+  <h4 id="h-escalera">Valor mensual bruto: decretado, según bases y tramitado</h4>
+  <p class="va-muted">Cada escalón es un alza. Línea continua: valor que fijan el contrato y los decretos vigentes en ese mes. Línea punteada: valor que corresponde según las bases si se decreta el IPC pedido por Cosemar. Puntos: monto del memo de pago (o de la OC pedida); el anillo sobre el punto es la diferencia pagada después como retroactivo. Rojo: adeudado por decreto. Ámbar: adicional según bases. Gris: diferencia ya saldada con el retroactivo del D.A. 2.459.</p>
+  <div id="graf-escalera" data-draw="vd_escalera" data-source="c_deuda_mes alzas">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-line"></span>Debido según decretos</span><span><span class="va-key va-k-dash"></span>Debido según bases</span><span><span class="va-key va-k-dot" data-draw="vd_k1"></span>Tramitado</span><span><span class="va-key va-k-ring"></span>Retroactivo pagado después</span><span><span class="va-key va-k-deuda"></span>Adeudado por decreto</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
+
+  <h4 id="h-acumulado">Deuda acumulada con Cosemar a cada fecha, y hasta junio de 2027 si no se regulariza</h4>
+  <p class="va-muted">Suma de lo que faltó pagar mes a mes. La deuda del primer reajuste creció de julio de 2025 a marzo de 2026 y se saldó con el retroactivo remitido en junio de 2026; desde julio de 2026 vuelve a crecer. Las barras claras proyectan la diferencia mensual de hoy hasta el cierre del segundo año del contrato.</p>
+  <p>Si nada cambia, a <b data-draw="vd_proyhasta" data-source="c_deuda_resumen" data-field="proyHasta" data-row="0">—</b> (<span data-draw="vd_proymeses" data-source="c_deuda_resumen" data-field="proyMeses" data-row="0">—</span> meses más) la deuda llegaría a <b class="va-deuda" data-draw="vd_proydec" data-source="c_deuda_resumen" data-field="proyDecreto" data-row="0">—</b> por decretos y <b class="va-ipc" data-draw="vd_proybases" data-source="c_deuda_resumen" data-field="proyBases" data-row="0">—</b> según bases: <b data-draw="vd_proytotal" data-source="c_deuda_resumen" data-field="proyTotal" data-row="0">—</b> en total, sin contar el reajuste del tercer año que rige desde julio de 2027.</p>
+  <div id="graf-acumulado" data-draw="vd_acum" data-source="c_deuda_mes">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-deuda"></span>Por decretos</span><span><span class="va-key va-k-ipc"></span>Adicional según bases</span></div>
+
+  <h4 id="h-anual">Resumen de deuda por año</h4>
+  <p class="va-muted">Montos brutos con IVA por mes de servicio. El retroactivo se cuenta en el año del servicio al que corresponde. La multa descontada no es deuda: se muestra aparte.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-anual" data-source="c_deuda_anual" data-row-key="clave">
+      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="debidoDecreto">Debido según decretos</th><th data-field="tramitado">Tramitado (mensual + retroactivo)</th><th data-field="multa">Multas descontadas</th><th data-field="deudaDecreto">Adeudado por decretos</th><th data-field="deudaBases">Adicional según bases</th><th data-field="deudaTotal">Total adeudado</th></tr></thead>
+      <tbody data-draw="vd_anual"></tbody>
+    </table>
+  </div>
+
+  <h4 id="h-cronologia">Alzas, decretos, anexos y cartas de Cosemar</h4>
+  <p class="va-muted">Cada acto con su efecto en el valor mensual. Solo los marcados «Contrato» y «Decreto» son exigibles hoy; «Bases sin decreto» es el derecho del art. 9 que falta formalizar.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-alzas" data-source="alzas" data-row-key="id">
+      <thead><tr><th data-field="fecha">Fecha</th><th data-field="tipo">Tipo</th><th data-field="acto">Acto</th><th data-field="efecto">Efecto</th><th data-field="bruto">Valor bruto</th><th data-field="rigeDesde">Rige desde</th><th data-field="estado">Estado</th><th data-field="respaldo">Respaldo</th></tr></thead>
+      <tbody data-draw="vd_alzas"></tbody>
+    </table>
+  </div>
+  </section>
+
+  <section id="plan" class="va-sec">
+  <h3 id="h-plan">Plan de pago vigente: qué se paga cada mes y con cuánto atraso</h3>
+  <p>El plan registrado en Notion el 17-11-2026 programa <b data-draw="vp_total" data-source="c_plan_resumen" data-field="total" data-row="0">—</b> entre <b data-draw="vp_desde" data-source="c_plan_resumen" data-field="primerMes" data-row="0">—</b> y <b data-draw="vp_hasta" data-source="c_plan_resumen" data-field="ultimoMes" data-row="0">—</b>. De ese monto, <b class="va-ipc" data-draw="vp_ipc" data-source="c_plan_resumen" data-field="sinDecreto" data-row="0">—</b> corresponden al IPC 4,3%, que no tiene decreto: sin él, lo exigible baja a <b data-draw="vp_dec" data-source="c_plan_resumen" data-field="decretado" data-row="0">—</b>. <b class="va-deuda" data-draw="vp_atrasados" data-source="c_plan_resumen" data-field="mesesAtrasados" data-row="0">—</b> meses de servicio se pagan después del plazo estimado, hasta <b data-draw="vp_maxatraso" data-source="c_plan_resumen" data-field="maxAtraso" data-row="0">—</b> meses tarde, y lo adeudado a Cosemar llega a <b class="va-deuda" data-draw="vp_saldomax" data-source="c_plan_resumen" data-field="saldoMax" data-row="0">—</b> al cierre de <b data-draw="vp_saldomes" data-source="c_plan_resumen" data-field="saldoMaxMes" data-row="0">—</b>.</p>
+
+  <h4 id="h-plan-caja">Desembolso por mes de pago y saldo adeudado al cierre de cada mes</h4>
+  <p class="va-muted">Barras: lo que el plan paga cada mes, separado en mensualidad del D.A. 2.459, diferencia del D.A. 3.957 por viviendas e IPC 4,3% sin decreto. Línea: lo que se adeuda al cierre del mes, es decir, servicios ya prestados que el plan paga después.</p>
+  <div id="graf-plan" data-draw="vp_caja" data-source="c_plan_mes">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vp_k0"></span>Mensualidad (D.A. 2.459)</span><span><span class="va-key" data-draw="vp_k1"></span>Aumento poblacional (D.A. 3.957)</span><span><span class="va-key va-k-ipc" style="opacity:.8"></span>IPC 4,3% sin decreto</span><span><span class="va-key va-k-line"></span>Saldo adeudado al cierre</span></div>
+
+  <h4 id="h-plan-servicio">Cada mes de servicio: monto programado, mes de pago y atraso</h4>
+  <p class="va-muted">Plazo estimado de pago: <span data-draw="vp_plazo">—</span> meses después del mes de servicio (la factura llega a mediados del mes siguiente y las OC fijan 30 días contra recepción conforme). Julio a septiembre de 2026 ya se tramitaron al valor del D.A. 2.459; el plan solo les paga las diferencias por viviendas e IPC.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-plan" data-source="c_plan_servicio" data-row-key="servicio">
+      <thead><tr><th data-field="servicio">Mes de servicio</th><th data-field="programado">Programado en el plan</th><th data-field="debidoBases">Debido según bases</th><th data-field="mesPago">Mes de pago de la mensualidad</th><th data-field="atraso">Atraso</th><th data-field="detalle">Qué incluye</th></tr></thead>
+      <tbody data-draw="vp_servicios"></tbody>
+    </table>
+  </div>
+  <p class="va-muted">Fuera del plan: la mensualidad de diciembre de 2027 y el reajuste IPC del tercer año, que rige desde julio de 2027. <a id="lnk-plan" href="https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d" target="_blank" rel="noopener">Abrir el plan en Notion</a>.</p>
+  </section>
+
+  <section id="disposicion" class="va-sec">
+  <div class="va-eyebrow">Contrato de disposición final · P.P. 104/2024 · ID 3447-187-LR24 · contrato distinto del de recolección</div>
+  <h3 id="h-df">Disposición final: lo tramitado calza con las toneladas, pero el pago llega tarde</h3>
+  <p>Entre enero de 2025 y <b data-draw="vf_ultimo" data-source="c_df_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vf_tram" data-source="c_df_resumen" data-field="tramitado" data-row="0">—</b> por <b data-draw="vf_ton" data-source="c_df_resumen" data-field="toneladas" data-row="0">—</b> toneladas, y cada mes coincide con toneladas × tarifa vigente × 1,19 (diferencia total <b data-draw="vf_dif" data-source="c_df_resumen" data-field="diferencia" data-row="0">—</b>). <b class="va-deuda" data-draw="vf_sinmemo" data-source="c_df_resumen" data-field="mesesSinMemo" data-row="0">—</b> mes(es) siguen pendientes de pago (<b class="va-deuda" data-draw="vf_sinmemomonto" data-source="c_df_resumen" data-field="sinMemo" data-row="0">—</b>); el resto está pagado según el encargado del contrato (18-11-2026). En 2025 el memo de pago llegó hasta <b data-draw="vf_maxlag" data-source="c_df_resumen" data-field="maxAtraso" data-row="0">—</b> meses después del servicio. La tarifa vigente es <b data-draw="vf_tarifa" data-source="c_df_resumen" data-field="tarifaVigente" data-row="0">—</b> neto por tonelada.</p>
+
+  <h4 id="h-df-pagos">Monto de cada mes de servicio y meses hasta el memo de pago</h4>
+  <p class="va-muted">Barras: monto bruto tramitado. Rojo: mes pendiente de pago. El número sobre cada barra son los meses entre el servicio y el memo de pago; las facturas vencen a 30 días.</p>
+  <div id="graf-df-pagos" data-draw="vf_pagos" data-source="c_df_mes">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vf_k0"></span>Pagado</span><span><span class="va-key va-k-deuda" style="opacity:.8"></span>Pendiente de pago</span></div>
+
+  <h4 id="h-df-ton">Toneladas por mes frente al promedio que proyectan los decretos</h4>
+  <p class="va-muted">Línea continua: promedio real del año según los documentos de cada mes. Línea punteada: promedio que el acto usa para proyectar el gasto (D.A. 2.737/2026 para 2025 y borrador del reajuste 2027 para 2026).</p>
+  <div id="graf-df-ton" data-draw="vf_ton_graf" data-source="c_df_mes c_df_anual">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vf_k1"></span>Toneladas del mes</span><span><span class="va-key va-k-line"></span>Promedio real del año</span><span><span class="va-key va-k-dash"></span>Promedio usado en el acto</span></div>
+
+  <h4 id="h-df-anual">Resumen por año</h4>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-df-anual" data-source="c_df_anual" data-row-key="clave">
+      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="toneladas">Toneladas</th><th data-field="promedio">Promedio t/mes</th><th data-field="proyeccion">Promedio en el acto</th><th data-field="tramitado">Tramitado</th><th data-field="diferencia">Diferencia con toneladas × tarifa</th><th data-field="sinMemo">Pendiente de pago</th><th data-field="atrasoMedio">Meses hasta memo de pago (promedio)</th></tr></thead>
+      <tbody data-draw="vf_anual"></tbody>
+    </table>
+  </div>
+
+  <h4 id="h-df-actos">Tarifas, decretos y solicitudes</h4>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-df-actos" data-source="df_alzas" data-row-key="id">
+      <thead><tr><th data-field="fecha">Fecha</th><th data-field="tipo">Tipo</th><th data-field="acto">Acto</th><th data-field="efecto">Efecto</th><th data-field="tarifaNeta">Tarifa neta $/t</th><th data-field="rigeDesde">Rige desde</th><th data-field="estado">Estado</th><th data-field="respaldo">Respaldo</th></tr></thead>
+      <tbody data-draw="vf_actos"></tbody>
+    </table>
+  </div>
+  </section>
+
+  <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
+  <p class="va-muted">Los pagos de diciembre de 2025 a septiembre de 2026 constan por confirmación del encargado del contrato (18-11-2026), sin comprobante de egreso de DAF. La revisión de sanciones antes del pago no consta en ningún mes.</p>
+  <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
+  <div class="va-legend"><span><span class="va-key va-k-ok"></span>Acreditado</span><span><span class="va-key va-k-warn"></span>Por verificar</span><span><span class="va-key va-k-none"></span>Sin antecedentes</span></div>
+
+  <h3 id="h-pend">Pendientes y diferencias, con su respaldo</h3>
+  <p class="va-muted">Para descargar esta lista, abra Fuentes y baje «Pendientes y diferencias» como CSV.</p>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-pend" data-source="c_pendientes" data-row-key="clave">
+      <thead><tr><th data-field="tipo">Tipo</th><th data-field="entidad">Entidad</th><th data-field="descripcion">Qué falta</th><th data-field="plazo">Fecha o plazo</th><th data-field="unidad">A cargo</th><th data-field="enlace">Respaldo</th></tr></thead>
+      <tbody data-draw="va_pend"></tbody>
+    </table>
+  </div>
+
+  <details>
+    <summary>Cómo se leen estas cifras</summary>
+    <p class="va-muted">Todo sale del libro de control en Notion, que n8n actualiza cada hora. «Sin antecedentes» significa que el libro no tiene el documento, no que el hito no ocurrió. Un hito solo cuenta como acreditado si trae respaldo y no está «por verificar». Los plazos se calculan en días hábiles desde 24 horas después de una notificación con fecha cierta (bases, art. 7, 177 a 186). Las fechas del inventario del 22-09-2026 son fechas de archivo, no del acto.</p>
+  </details>
+  </section>
+</article>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="js/runtime.js"></script>
+<script src="js/motor.js"></script>
+<script src="js/app.js"></script>
+<script src="js/operacion.js"></script>
+<script>Tablero.iniciar();</script>
+</body>
+</html>
