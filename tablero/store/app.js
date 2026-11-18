@@ -419,6 +419,119 @@
     }));
   });
 
+  // ---------- contrato de disposición final (df_pagos, df_alzas) ----------
+  dash.calc('c_df_mes', {
+    inputs: ['df_pagos'], title: 'Disposición final por mes de servicio',
+    description: 'Toneladas, tarifa, debido (toneladas × tarifa × 1,19), tramitado, diferencia y meses entre el servicio y el memo de pago de cada mes.',
+    fn: function (pagos) {
+      return pagos.slice().sort(function (a, b) { return a.periodo < b.periodo ? -1 : 1; }).map(function (p) {
+        var lag = p.fechaMemoPago ? (+p.fechaMemoPago.slice(0, 4) - +p.periodo.slice(0, 4)) * 12 + (+p.fechaMemoPago.slice(5, 7) - +p.periodo.slice(5, 7)) : null;
+        return { periodo: p.periodo, anio: p.anio, toneladas: Number(p.toneladas), tarifaNeta: p.tarifaNeta, debido: p.debido, tramitado: p.tramitado, diferencia: p.tramitado - p.debido,
+          estado: p.estado, memoPago: p.memoPago, factura: p.factura, oc: p.oc, atraso: lag, sinMemo: !p.memoPago, respaldo: p.respaldo, nota: p.nota };
+      });
+    }
+  });
+  dash.calc('c_df_anual', {
+    inputs: ['c_df_mes', 'df_alzas'], title: 'Disposición final por año',
+    description: 'Suma por año toneladas, tramitado, diferencia y montos sin memo de pago; promedio de toneladas por mes, promedio usado para proyectar en el acto de ese año y atraso medio del memo de pago. Agrega una fila Total.',
+    fn: function (meses, actos) {
+      var by = {}, orden = [], f = function (k) { return { clave: k, meses: 0, toneladas: 0, tramitado: 0, diferencia: 0, sinMemo: 0, _lag: 0, _nlag: 0 }; }, tot = f('Total');
+      meses.forEach(function (m) { var k = String(m.anio); if (!by[k]) { by[k] = f(k); orden.push(k); }
+        [by[k], tot].forEach(function (r) { r.meses++; r.toneladas += m.toneladas; r.tramitado += m.tramitado; r.diferencia += m.diferencia; if (m.sinMemo) r.sinMemo += m.tramitado; if (m.atraso != null) { r._lag += m.atraso; r._nlag++; } }); });
+      return orden.map(function (k) { return by[k]; }).concat([tot]).map(function (r) {
+        var pr = actos.filter(function (a) { return a.tonProyeccion && String(a.anioBaseProyeccion) === r.clave; })[0];
+        return { clave: r.clave, meses: r.meses, toneladas: Math.round(r.toneladas * 100) / 100, promedio: Math.round(r.toneladas / r.meses * 100) / 100, proyeccion: pr ? pr.tonProyeccion : null, actoProyeccion: pr ? pr.acto : null,
+          tramitado: r.tramitado, diferencia: r.diferencia, sinMemo: r.sinMemo, atrasoMedio: r._nlag ? Math.round(r._lag / r._nlag * 10) / 10 : null };
+      });
+    }
+  });
+  dash.calc('c_df_resumen', {
+    inputs: ['c_df_mes', 'df_alzas'], title: 'Disposición final: resumen',
+    description: 'Último mes registrado, total tramitado y toneladas, diferencia con toneladas × tarifa, meses y monto sin memo de pago, atraso máximo del memo de pago y tarifa vigente del último decreto.',
+    fn: function (meses, actos) {
+      if (!meses.length) return [];
+      var s = function (f) { return meses.reduce(function (t, m) { return t + (m[f] || 0); }, 0); }, sm = meses.filter(function (m) { return m.sinMemo; });
+      var t = actos.filter(function (a) { return (a.capa === 'Decreto' || a.capa === 'Contrato') && a.tarifaNeta && a.rigeDesde; }).sort(function (a, b) { return a.rigeDesde < b.rigeDesde ? -1 : 1; }).pop();
+      return [{ ultimoMes: meses[meses.length - 1].periodo, tramitado: s('tramitado'), toneladas: Math.round(s('toneladas') * 100) / 100, diferencia: s('diferencia'), mesesSinMemo: sm.length,
+        sinMemo: sm.reduce(function (a, m) { return a + m.tramitado; }, 0), maxAtraso: meses.reduce(function (a, m) { return Math.max(a, m.atraso || 0); }, 0), tarifaVigente: t ? t.tarifaNeta : null }];
+    }
+  });
+  function RF(id, f, fmt) { dash.draw(id, function (el) { if (!listo(el, ['c_df_resumen'])) return; var r = filas('c_df_resumen')[0]; el.textContent = r ? fmt(r[f]) : '—'; }); }
+  RF('vf_ultimo', 'ultimoMes', mesLargo); RF('vf_tram', 'tramitado', clp); RF('vf_ton', 'toneladas', function (v) { return v.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); });
+  RF('vf_dif', 'diferencia', clp); RF('vf_sinmemo', 'mesesSinMemo', String); RF('vf_sinmemomonto', 'sinMemo', clp); RF('vf_maxlag', 'maxAtraso', String); RF('vf_tarifa', 'tarifaVigente', clp);
+  dash.draw('vf_k0', function (el) { el.style.background = dash.colors[0]; });
+  dash.draw('vf_k1', function (el) { el.style.background = dash.colors[1] || dash.colors[0]; });
+
+  dash.draw('vf_pagos', function (el) {
+    if (!listo(el, ['c_df_mes'])) return;
+    var ms = filas('c_df_mes'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = 240, m = { l: 58, r: 10, t: 20, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.2);
+    var y = d3.scaleLinear().domain([0, d3.max(ms, function (p) { return p.tramitado; }) * 1.12]).nice().range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Monto bruto tramitado por mes de servicio de disposición final y meses hasta el memo de pago');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return '$' + (v / 1e6).toFixed(0) + ' M'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.bandwidth()).attr('y', function (p) { return y(p.tramitado); }).attr('height', function (p) { return H - m.b - y(p.tramitado); })
+      .style('fill', function (p) { return p.sinMemo ? 'var(--color-bad)' : dash.colors[0]; }).style('opacity', function (p) { return p.sinMemo ? 0.75 : 0.85; });
+    if (x.bandwidth() > 12) svg.append('g').selectAll('text').data(ms).join('text').attr('class', function (p) { return 'va-lab' + (p.atraso > 2 ? ' va-bad' : ''); }).attr('text-anchor', 'middle')
+      .attr('x', function (p) { return x(p.periodo) + x.bandwidth() / 2; }).attr('y', function (p) { return y(p.tramitado) - 4; }).text(function (p) { return p.sinMemo ? 'sin memo' : p.atraso + ' m'; })
+      .style('font-size', x.bandwidth() < 26 ? '9px' : null);
+    var t = tip(box);
+    svg.append('g').selectAll('rect.h').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · ' + p.toneladas.toLocaleString('es-CL') + ' t × $' + M.fmt(p.tarifaNeta) + ' · tramitado ' + clp(p.tramitado) + (p.diferencia ? ' (dif. ' + clp(p.diferencia) + ')' : '') + ' · ' + (p.memoPago ? p.memoPago + ', ' + p.atraso + ' meses después' : 'sin memo de pago') + (p.nota ? ' · ' + p.nota : '')); })
+      .on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  dash.draw('vf_ton_graf', function (el) {
+    if (!listo(el, ['c_df_mes', 'c_df_anual'])) return;
+    var ms = filas('c_df_mes'), an = filas('c_df_anual'); el.replaceChildren(); if (!ms.length) { el.textContent = 'Sin meses'; return; }
+    var w = Math.max(320, el.clientWidth || 720), H = 220, m = { l: 58, r: 10, t: 14, b: 30 };
+    var x = d3.scaleBand().domain(ms.map(function (p) { return p.periodo; })).range([m.l, w - m.r]).padding(0.2);
+    var vals = ms.map(function (p) { return p.toneladas; }).concat(an.map(function (a) { return a.proyeccion || 0; }));
+    var y = d3.scaleLinear().domain([Math.min.apply(null, vals.filter(Boolean)) * 0.9, d3.max(vals) * 1.04]).nice().range([H - m.b, m.t]);
+    var box = d3.select(el).append('div').attr('class', 'va-box');
+    var svg = box.append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + w + ' ' + H).attr('role', 'img').attr('aria-label', 'Toneladas mensuales dispuestas frente al promedio real y al promedio usado en los actos para proyectar');
+    svg.append('g').attr('class', 'va-grid').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(w - m.l - m.r)).tickFormat(function (v) { return M.fmt(v) + ' t'; }));
+    var step = Math.max(1, Math.ceil(ms.length / Math.floor((w - m.l) / 46)));
+    svg.append('g').attr('class', 'va-axis').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(ms.map(function (p) { return p.periodo; }).filter(function (p, i) { return i % step === 0; })).tickFormat(mesTxt));
+    svg.append('g').selectAll('circle').data(ms).join('circle').attr('cx', function (p) { return x(p.periodo) + x.bandwidth() / 2; }).attr('cy', function (p) { return y(p.toneladas); }).attr('r', 4).style('fill', dash.colors[1] || dash.colors[0]);
+    svg.append('path').attr('d', d3.line().x(function (p) { return x(p.periodo) + x.bandwidth() / 2; }).y(function (p) { return y(p.toneladas); })(ms)).style('fill', 'none').style('stroke', dash.colors[1] || dash.colors[0]).style('stroke-width', 1.2).style('opacity', 0.6);
+    an.filter(function (a) { return a.clave !== 'Total'; }).forEach(function (a) {
+      var mm = ms.filter(function (p) { return String(p.anio) === a.clave; }); if (!mm.length) return;
+      var x0 = x(mm[0].periodo), x1 = x(mm[mm.length - 1].periodo) + x.bandwidth();
+      svg.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(a.promedio)).attr('y2', y(a.promedio)).style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 2);
+      svg.append('text').attr('class', 'va-lab').attr('x', x0 + 2).attr('y', y(a.promedio) + 13).text('real ' + M.fmt(Math.round(a.promedio)) + ' t');
+      if (a.proyeccion) { svg.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(a.proyeccion)).attr('y2', y(a.proyeccion)).style('stroke', 'var(--color-warn)').style('stroke-width', 2).style('stroke-dasharray', '5 4');
+        svg.append('text').attr('class', 'va-lab').style('fill', 'var(--color-warn)').attr('x', x1 - 2).attr('y', y(a.proyeccion) - 4).attr('text-anchor', 'end').text('acto ' + M.fmt(Math.round(a.proyeccion)) + ' t'); }
+    });
+    var t = tip(box);
+    svg.append('g').selectAll('rect').data(ms).join('rect').attr('x', function (p) { return x(p.periodo); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, p) { showTip(t, el, ev, mesLargo(p.periodo) + ' · ' + p.toneladas.toLocaleString('es-CL') + ' t'); }).on('pointerleave', function () { t.attr('hidden', ''); });
+  });
+
+  dash.draw('vf_anual', function (el) {
+    if (!listo(el, ['c_df_anual'])) return;
+    var ton = function (v) { return v == null ? '—' : v.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+    el.replaceChildren.apply(el, filas('c_df_anual').map(function (r) {
+      var c = function (txt, cls) { return h('td', { cls: 'va-num va-r' + (cls ? ' ' + cls : ''), text: txt }); };
+      return h('tr', { 'data-key': encodeURIComponent(r.clave), style: r.clave === 'Total' ? 'font-weight:600' : null }, [h('td', { text: r.clave === 'Total' ? 'Total a la fecha' : r.clave }), c(String(r.meses)), c(ton(r.toneladas)), c(ton(r.promedio)),
+        c(r.proyeccion ? ton(r.proyeccion) : '—', r.proyeccion && Math.abs(r.proyeccion - r.promedio) > 10 ? 'va-ipc' : ''), c(clp(r.tramitado)), c(clp(r.diferencia)), c(clp(r.sinMemo), r.sinMemo > 0 ? 'va-deuda' : ''), c(r.atrasoMedio == null ? '—' : String(r.atrasoMedio).replace('.', ','))]);
+    }));
+  });
+
+  dash.draw('vf_actos', function (el) {
+    if (!listo(el, ['df_alzas'])) return;
+    var tono = function (e) { return /Ejecutado|Vigente/.test(e) ? 'ok' : /no aplicado|Borrador/i.test(e) ? 'warn' : ''; };
+    el.replaceChildren.apply(el, filas('df_alzas').map(function (a) {
+      return h('tr', { 'data-key': encodeURIComponent(a.id) }, [h('td', { cls: 'va-num', text: fechaCL(a.fecha) }), h('td', { text: a.tipo }), h('td', null, [h('b', { text: a.acto })]), h('td', { text: a.efecto }),
+        h('td', { cls: 'va-num va-r', text: a.tarifaNeta == null ? '—' : clp(a.tarifaNeta) }), h('td', { cls: 'va-num', text: a.rigeDesde ? mesTxt(a.rigeDesde) : '—' }),
+        h('td', null, [h('span', { cls: 'va-chip' + (tono(a.estado) ? ' va-chip-' + tono(a.estado) : ''), text: a.estado })]),
+        h('td', null, [a.respaldo ? h('a', { href: a.respaldo, target: '_blank', rel: 'noopener', text: 'Abrir' }) : h('span', { cls: 'va-muted', text: 'Sin respaldo' })])]);
+    }));
+  });
+
   dash.draw('vd_alzas', function (el) {
     if (!listo(el, ['alzas'])) return;
     var tono = function (e) { return /Ejecutado|Vigente/.test(e) ? 'ok' : /no aplicado|sin decreto|Sin decreto|suspendido|Sin firmas|Sin respuesta/i.test(e) ? 'bad' : /Concordada|Devengado|Remitido/.test(e) ? 'warn' : ''; };

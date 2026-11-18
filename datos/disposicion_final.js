@@ -17,7 +17,9 @@ const A = [
   ['DF08', '2026-05-26', 'Anexo', 'Anexo de contrato · cambio de razón social a Cosemar SpA (D.A. 3.097/2026)', 'Cambia la razón social; no modifica la tarifa.', null, null, 'Vigente', 'Trámite', '1RbS7mXeTOdod-iH90IU38xVnkabQ_fEA'],
   ['DF09', '2026-11-13', 'Memo DMAO', 'Borrador memo reajuste IPC 2027', 'Prepara el reajuste de enero de 2027 por el IPC 2026; el porcentaje está en blanco hasta que el INE publique el IPC de diciembre de 2026. Cita una comunicación de Cosemar del 13-11-2026.', null, '2027-01', 'Borrador', 'Trámite', '1_Ny4V5VvD1lkfoLVkceGncV_VyCqMqJf4mrFdLRGSJo']
 ];
-const alzas = A.map(([id, fecha, tipo, acto, efecto, tarifa, rigeDesde, estado, capa, did]) => ({ id, fecha, tipo, acto, efecto, tarifaNeta: tarifa, rigeDesde, estado, capa, respaldo: u(did) }));
+// Promedio mensual de toneladas que cada acto usa para proyectar el gasto (texto del acto).
+const PROY = { DF07: { ton: 4657.85, base: 2025 }, DF09: { ton: 4643.69, base: 2026 } };
+const alzas = A.map(([id, fecha, tipo, acto, efecto, tarifa, rigeDesde, estado, capa, did]) => ({ id, fecha, tipo, acto, efecto, tarifaNeta: tarifa, rigeDesde, estado, capa, tonProyeccion: PROY[id] ? PROY[id].ton : null, anioBaseProyeccion: PROY[id] ? PROY[id].base : null, respaldo: u(did) }));
 const tarifa = p => alzas.filter(a => ['Contrato', 'Decreto'].includes(a.capa) && a.rigeDesde && a.rigeDesde <= p && a.tarifaNeta).sort((a, b) => a.rigeDesde < b.rigeDesde ? -1 : 1).pop();
 
 // periodo, toneladas, bruto tramitado, estado, OC, factura, memo OC, memo pago, fecha memo pago, id respaldo, nota

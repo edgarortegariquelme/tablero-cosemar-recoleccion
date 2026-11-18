@@ -10,6 +10,8 @@
    "rigeDesde": null,
    "estado": "Vigente",
    "capa": "Mecanismo",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/1IMVrrv23RZxJdSQjXOxB609VFaCcvl_n/view"
   },
   {
@@ -22,6 +24,8 @@
    "rigeDesde": "2025-01",
    "estado": "Vigente en 2025",
    "capa": "Contrato",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/1z1XOjQHk4U_FmlFfAbTq8HCnuctwzWkt/view"
   },
   {
@@ -34,6 +38,8 @@
    "rigeDesde": "2025-01",
    "estado": "Vigente",
    "capa": "Contrato",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/14BU2TzUFp9N6wbATNkKo3rK-mOvXQZWo/view"
   },
   {
@@ -46,6 +52,8 @@
    "rigeDesde": null,
    "estado": "Sin anexo: no aplicado",
    "capa": "Solicitud",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/1X-j3WnmgaYRaVGcL1Ww-5x49TLZIUfHF/view"
   },
   {
@@ -58,6 +66,8 @@
    "rigeDesde": "2026-01",
    "estado": "Acogida por D.A. 2.737",
    "capa": "Solicitud",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
   },
   {
@@ -70,6 +80,8 @@
    "rigeDesde": null,
    "estado": "Decretado",
    "capa": "Trámite",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
   },
   {
@@ -82,6 +94,8 @@
    "rigeDesde": "2026-01",
    "estado": "Ejecutado",
    "capa": "Decreto",
+   "tonProyeccion": 4657.85,
+   "anioBaseProyeccion": 2025,
    "respaldo": "https://drive.google.com/file/d/13fn_QFVrVeO2XHE5ZRxmhE07OCg2KNrT/view"
   },
   {
@@ -94,6 +108,8 @@
    "rigeDesde": null,
    "estado": "Vigente",
    "capa": "Trámite",
+   "tonProyeccion": null,
+   "anioBaseProyeccion": null,
    "respaldo": "https://drive.google.com/file/d/1RbS7mXeTOdod-iH90IU38xVnkabQ_fEA/view"
   },
   {
@@ -106,6 +122,8 @@
    "rigeDesde": "2027-01",
    "estado": "Borrador",
    "capa": "Trámite",
+   "tonProyeccion": 4643.69,
+   "anioBaseProyeccion": 2026,
    "respaldo": "https://drive.google.com/file/d/1_Ny4V5VvD1lkfoLVkceGncV_VyCqMqJf4mrFdLRGSJo/view"
   }
  ],

@@ -115,6 +115,38 @@
   <p class="va-muted">Fuera del plan: la mensualidad de diciembre de 2027 y el reajuste IPC del tercer año, que rige desde julio de 2027. <a id="lnk-plan" href="https://app.notion.com/p/41b9e3e655c081e6a717e4034132988d" target="_blank" rel="noopener">Abrir el plan en Notion</a>.</p>
   </section>
 
+  <section id="disposicion" class="va-sec">
+  <div class="va-eyebrow">Contrato de disposición final · P.P. 104/2024 · ID 3447-187-LR24 · contrato distinto del de recolección</div>
+  <h3 id="h-df">Disposición final: lo tramitado calza con las toneladas, pero el pago llega tarde</h3>
+  <p>Entre enero de 2025 y <b data-draw="vf_ultimo" data-source="c_df_resumen" data-field="ultimoMes" data-row="0">—</b> se tramitaron <b data-draw="vf_tram" data-source="c_df_resumen" data-field="tramitado" data-row="0">—</b> por <b data-draw="vf_ton" data-source="c_df_resumen" data-field="toneladas" data-row="0">—</b> toneladas, y cada mes coincide con toneladas × tarifa vigente × 1,19 (diferencia total <b data-draw="vf_dif" data-source="c_df_resumen" data-field="diferencia" data-row="0">—</b>). <b class="va-deuda" data-draw="vf_sinmemo" data-source="c_df_resumen" data-field="mesesSinMemo" data-row="0">—</b> meses no tienen memo de pago (<b class="va-deuda" data-draw="vf_sinmemomonto" data-source="c_df_resumen" data-field="sinMemo" data-row="0">—</b>), y el memo de pago llegó hasta <b data-draw="vf_maxlag" data-source="c_df_resumen" data-field="maxAtraso" data-row="0">—</b> meses después del servicio. La tarifa vigente es <b data-draw="vf_tarifa" data-source="c_df_resumen" data-field="tarifaVigente" data-row="0">—</b> neto por tonelada.</p>
+
+  <h4 id="h-df-pagos">Monto de cada mes de servicio y meses hasta el memo de pago</h4>
+  <p class="va-muted">Barras: monto bruto tramitado. Rojo: mes sin memo de pago. El número sobre cada barra son los meses entre el servicio y el memo de pago; las facturas vencen a 30 días.</p>
+  <div id="graf-df-pagos" data-draw="vf_pagos" data-source="c_df_mes">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vf_k0"></span>Con memo de pago</span><span><span class="va-key va-k-deuda" style="opacity:.8"></span>Sin memo de pago</span></div>
+
+  <h4 id="h-df-ton">Toneladas por mes frente al promedio que proyectan los decretos</h4>
+  <p class="va-muted">Línea continua: promedio real del año según los documentos de cada mes. Línea punteada: promedio que el acto usa para proyectar el gasto (D.A. 2.737/2026 para 2025 y borrador del reajuste 2027 para 2026).</p>
+  <div id="graf-df-ton" data-draw="vf_ton_graf" data-source="c_df_mes c_df_anual">—</div>
+  <div class="va-legend"><span><span class="va-key" data-draw="vf_k1"></span>Toneladas del mes</span><span><span class="va-key va-k-line"></span>Promedio real del año</span><span><span class="va-key va-k-dash"></span>Promedio usado en el acto</span></div>
+
+  <h4 id="h-df-anual">Resumen por año</h4>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-df-anual" data-source="c_df_anual" data-row-key="clave">
+      <thead><tr><th data-field="clave">Año</th><th data-field="meses">Meses</th><th data-field="toneladas">Toneladas</th><th data-field="promedio">Promedio t/mes</th><th data-field="proyeccion">Promedio en el acto</th><th data-field="tramitado">Tramitado</th><th data-field="diferencia">Diferencia con toneladas × tarifa</th><th data-field="sinMemo">Sin memo de pago</th><th data-field="atrasoMedio">Meses hasta memo de pago (promedio)</th></tr></thead>
+      <tbody data-draw="vf_anual"></tbody>
+    </table>
+  </div>
+
+  <h4 id="h-df-actos">Tarifas, decretos y solicitudes</h4>
+  <div class="va-wrap">
+    <table class="va-tbl" id="tbl-df-actos" data-source="df_alzas" data-row-key="id">
+      <thead><tr><th data-field="fecha">Fecha</th><th data-field="tipo">Tipo</th><th data-field="acto">Acto</th><th data-field="efecto">Efecto</th><th data-field="tarifaNeta">Tarifa neta $/t</th><th data-field="rigeDesde">Rige desde</th><th data-field="estado">Estado</th><th data-field="respaldo">Respaldo</th></tr></thead>
+      <tbody data-draw="vf_actos"></tbody>
+    </table>
+  </div>
+  </section>
+
   <h3 id="h-cadena">Dónde se detiene cada pago, de la solicitud de OC al pago efectivo</h3>
   <p class="va-muted">Ningún mes llega a «Pago efectivo» con comprobante, y la revisión de sanciones antes del pago no consta en ningún mes.</p>
   <div id="graf-cadena" data-draw="va_cadena" data-source="c_pagos c_eventos">—</div>
