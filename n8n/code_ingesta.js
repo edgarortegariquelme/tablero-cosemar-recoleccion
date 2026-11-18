@@ -13,9 +13,17 @@ if (cuerpo && Array.isArray(cuerpo.eventos)) cuerpo.eventos.forEach(e => { fuent
 if (cuerpo && Array.isArray(cuerpo.documentos)) cuerpo.documentos.forEach(d => { fuentes.webhook++; candidatos.push(M.clasificar(Object.assign({ origen: 'n8n · webhook' }, d))); });
 // 2) Archivos nuevos o modificados en las carpetas del expediente (Drive)
 intentar('Drive', () => {
-  $('Drive: archivos nuevos').all().forEach(i => {
-    if (i.json.error) throw new Error((i.json.error.message || JSON.stringify(i.json.error)).slice(0, 200));
-    (i.json.files || []).forEach(f => {
+  const paginasDrive = $('Drive: archivos nuevos').all();
+  const cursores = new Set();
+  if (!paginasDrive.length) throw new Error('Sin respuesta');
+  paginasDrive.forEach(({ json: p }, indice) => {
+    if (!Array.isArray(p.files) || p.incompleteSearch || p.error ||
+        Boolean(p.nextPageToken) !== (indice < paginasDrive.length - 1) ||
+        (p.nextPageToken && cursores.has(p.nextPageToken))) throw new Error('Listado incompleto');
+    cursores.add(p.nextPageToken);
+  });
+  paginasDrive.forEach(i => {
+    i.json.files.forEach(f => {
       if (f.mimeType === 'application/vnd.google-apps.folder') return;
       if (porFuente['drive:' + f.id] === f.modifiedTime) { omitidos++; return; }
       fuentes.drive++;
@@ -27,9 +35,17 @@ intentar('Drive', () => {
 });
 // 3) Comunicaciones ya registradas en Notion (base existente «Comunicaciones» de Trazabilidad DMAO)
 intentar('Notion Comunicaciones', () => {
-  $('Notion: comunicaciones').all().forEach(i => {
-    if (i.json.error) throw new Error((i.json.error.message || JSON.stringify(i.json.error)).slice(0, 200));
-    (i.json.results || []).forEach(pg => {
+  const paginasCom = $('Notion: comunicaciones').all();
+  const cursores = new Set();
+  if (!paginasCom.length) throw new Error('Sin respuesta');
+  paginasCom.forEach(({ json: p }, indice) => {
+    const intermedia = indice < paginasCom.length - 1;
+    if (!Array.isArray(p.results) || p.error || p.has_more !== intermedia ||
+        (intermedia && (!p.next_cursor || cursores.has(p.next_cursor)))) throw new Error('Listado incompleto');
+    cursores.add(p.next_cursor);
+  });
+  paginasCom.forEach(i => {
+    i.json.results.forEach(pg => {
       const p = pg.properties || {}, titulo = txt(p['Documento']) || '', resumen = txt(p['Resumen']) || '';
       if (!/cosemar/i.test(titulo + ' ' + resumen)) return;
       if (porFuente['notion-com:' + pg.id] === pg.last_edited_time) { omitidos++; return; }
@@ -56,7 +72,6 @@ candidatos.forEach(c => {
   ops.push(Object.assign(crear(r.registro), { accion: r.accion, clave: r.registro.clave, carga: c }));
   if (r.accion === 'rectificar') {
     trabajo.forEach(x => { if (x === r.reemplaza) x.vigente = false; });
-    ops.push({ method: 'PATCH', url: base + '/pages/' + r.reemplaza.id, body: { properties: { 'Vigente': { checkbox: false } } }, accion: 'cerrar_version', clave: r.reemplaza.clave, carga: null });
   }
 });
 const meta = { hoy, leidos: libro.length, candidatos: candidatos.length, omitidos, fuentes, fallasFuente, resumen, sis: (libro.filter(e => e.modulo === 'Sistema' && e.vigente !== false)[0] || {}).id || null };
