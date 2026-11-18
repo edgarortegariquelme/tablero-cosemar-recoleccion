@@ -1,0 +1,21 @@
+[
+ {
+  "verificacion": "Acreditado",
+  "fechaTipo": "Acto acreditado",
+  "clave": "VEN|M-921|revision_tecnica|2026-11-16",
+  "modulo": "Vencimiento",
+  "entidad": "M-921",
+  "hito": "revision_tecnica",
+  "fecha": "2027-05-14",
+  "documento": "Revisión técnica · certificado A0110000000079161 (renovada el 14-11-2026)",
+  "respaldo": "https://drive.google.com/file/d/1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit/view",
+  "origen": "Correo de Cosemar 16-11-2026 · certificado de revisión técnica",
+  "detalle": "Renovación de la revisión técnica que vencía el 16-11-2026; vigente hasta el 14-05-2027.",
+  "patente": "SZZJ80-4",
+  "obligacion": "OB-20",
+  "huella": "3bad19e6",
+  "vigente": true,
+  "version": 2,
+  "rectificaA": "VEN|M-921|revision_tecnica|2026-11-16 v1"
+ }
+]

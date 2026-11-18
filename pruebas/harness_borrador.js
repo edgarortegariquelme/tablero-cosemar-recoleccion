@@ -1,7 +1,7 @@
 /* Ejecuta el borrador de análisis visual en jsdom + d3 con el libro de la semilla. */
 const S = process.env.HARNESS_MODULES ? process.env.HARNESS_MODULES.replace(/\/?$/, '/') : '';
 const { JSDOM } = require(S + 'jsdom'), fs = require('fs'), path = require('path'), T = path.join(__dirname, '../tablero/draft/');
-const libro = require('../datos/semilla.js').concat(require('./pagos_confirmados.json'));
+const libro = require('../datos/semilla.js').concat(require('./pagos_confirmados.json'), require('../datos/libro_novedades.json'));
 const esc = s => typeof s === 'string' ? s.replace(/([_|$.\\])/g, '\\$1') : s;
 function fila(e) { const r = { 'Clave': esc(e.clave), 'Módulo': e.modulo, 'Entidad': e.entidad || '', 'Hito': esc(e.hito || ''), 'Tipo de fecha': e.fechaTipo, 'Verificación': e.verificacion, 'Documento': esc(e.documento || ''), 'Respaldo': e.respaldo || '', 'Obligación': e.obligacion || '', 'Detalle': esc(e.detalle || ''), 'Origen': '', 'N°': e.numero || '', 'Patente': e.patente || '', 'Sector': e.sector || '', 'Vigente': '__YES__', 'Versión': 1, url: 'x' }; if (e.fecha) r['date:Fecha:start'] = e.fecha; if (e.monto != null) { r['Monto'] = e.monto; r['Unidad'] = e.unidadMonto; } return r; }
 const G = { libro_san: ['Sanción', 'Hallazgo'], libro_pag: ['Pago', 'Reajuste'], libro_ven: ['Vencimiento'], libro_sis: ['Sistema', 'Control', 'Revisión', 'Error', 'Aviso'] };

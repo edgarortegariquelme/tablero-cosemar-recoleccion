@@ -47,3 +47,11 @@ Computador M370-00507, carpeta `PASE_CLAUDE_CODE_PP73_2026_v2`: figura como no u
 - `datos/exportar_notion.js` baja el libro de control con la API de Notion (variable `NOTION_TOKEN`) a `docs/data/notion/`; si no hay token se usa la semilla.
 - `.github/workflows/actualizar-app.yml`: cada hora exporta Notion, regenera y hace commit si cambió algo. Falta el secreto `NOTION_TOKEN` y activar GitHub Pages (carpeta /docs).
 - Fotos por móvil: carpeta Drive 10lZuRbhinsJcuIQVneD2kLnwh861lBwG. Imposiciones ene–jul 2026 en Drive (pagos mensuales); faltan ago–oct.
+
+## 18-11-2026 (noche) · n8n por importación manual y corrección M-921
+- API de n8n: la clave nueva («n8n API Cosemar (nueva)», única en el entorno) también recibe 401 «Unauthorized» de n8n (ya no del proxy): clave mal copiada, de otra instancia o plan sin API pública. Se optó por importar a mano.
+- `entregables/cosemar_*.json` estaban atrasados respecto de `n8n/produccion/` (faltaba la copia CC en «Enviar aviso» y el enlace nuevo): sincronizados. `avisosPara` sigue como `CORREO_AVISOS` en el repo; al importar hay que poner el correo en el nodo «Config» de los 3 flujos (o usar los archivos ya completados que se entregaron por chat, fuera del repo).
+- Verificación sin ejecutar flujos: `GET https://edgar-ortega.app.n8n.cloud/webhook/cosemar/evento` responde «not registered» mientras el flujo esté inactivo; activo, responde que el webhook no acepta GET.
+- Libro de control: la RT del M-921 figuraba vencida (16-11) aunque se renovó el 14-11 (certificado A0110000000079161, vigente al 14-05-2027). Rectificada en Notion (v2 https://app.notion.com/p/41c9e3e655c081118bd9c5f8a2797004; v1 con Vigente desmarcado) y en `datos/libro_novedades.json` (filas agregadas a Notion después de la carga; las leen `construir_app.js` y el arnés).
+- Avisos que enviaría el flujo 2 hoy (libro real): RT M-922 vence el 19-11, M-940 el 05-12, M-938 el 18-12; rectificación M-921; y los 7 hallazgos antiguos (PS01–PS06, REQ07) saldrán como «Hallazgo nuevo» en el primer correo porque aún no hay filas «Aviso».
+- `npm run test:tablero` ahora corre `pruebas/harness_borrador.js` (el arnés antiguo buscaba la tabla `tbl_san_plazo`, eliminada con las pestañas; `tablero/store` = `tablero/draft`).

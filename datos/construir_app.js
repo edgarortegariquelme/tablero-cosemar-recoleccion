@@ -1,6 +1,6 @@
 /* Construye la app independiente en docs/ (GitHub Pages): copia el código del tablero y los datos JSON.
  * El libro de control sale de docs/data/notion/*.json si existe (lo escribe datos/exportar_notion.js con la API de Notion);
- * si no, de la semilla del repositorio más los pagos confirmados (mismo contenido que Notion al 18-11-2026).
+ * si no, de la semilla del repositorio más los pagos confirmados y datos/libro_novedades.json (filas agregadas a Notion después de la carga; mismo contenido que Notion).
  * Uso: node datos/construir_app.js */
 const fs = require('fs'), path = require('path');
 const R = path.join(__dirname, '..'), T = path.join(R, 'tablero/draft'), S = path.join(R, 'tablero/store'), D = path.join(R, 'docs'), DATA = path.join(D, 'data');
@@ -19,14 +19,14 @@ const NOT = path.join(DATA, 'notion'); let origen;
 if (Object.keys(G).every(k => fs.existsSync(path.join(NOT, k + '.json')))) {
   Object.keys(G).forEach(k => { mapa[k] = 'data/notion/' + k + '.json'; }); origen = 'Notion (datos/exportar_notion.js)';
 } else {
-  const libro = require('./semilla.js').concat(require('../pruebas/pagos_confirmados.json'));
+  const libro = require('./semilla.js').concat(require('../pruebas/pagos_confirmados.json'), require('./libro_novedades.json'));
   const esc = s => typeof s === 'string' ? s.replace(/([_|$.\\])/g, '\\$1') : s;
   const fila = e => { const r = { 'Clave': esc(e.clave), 'Módulo': e.modulo, 'Entidad': e.entidad || '', 'Hito': esc(e.hito || ''), 'Tipo de fecha': e.fechaTipo, 'Verificación': e.verificacion,
     'Documento': esc(e.documento || ''), 'Respaldo': e.respaldo || '', 'Obligación': e.obligacion || '', 'Detalle': esc(e.detalle || ''), 'Origen': e.origen || '', 'N°': e.numero || '',
     'Patente': e.patente || '', 'Sector': e.sector || '', 'Vigente': '__YES__', 'Versión': e.version || 1 };
     if (e.fecha) r['date:Fecha:start'] = e.fecha; if (e.monto != null) { r['Monto'] = e.monto; r['Unidad'] = e.unidadMonto; } return r; };
   Object.keys(G).forEach(k => { fs.writeFileSync(path.join(DATA, k + '.json'), JSON.stringify({ results: libro.filter(e => G[k].includes(e.modulo)).map(fila) })); mapa[k] = 'data/' + k + '.json'; });
-  origen = 'Semilla del repositorio + pagos confirmados';
+  origen = 'Semilla del repositorio + pagos confirmados + novedades del libro';
 }
 // La fecha de construcción solo cambia si cambian los datos (evita commits vacíos cada hora)
 const crypto = require('crypto'), huella = crypto.createHash('sha1');
