@@ -83,7 +83,9 @@ const C = [
   ['2026-08-13', 'Jesús Chinchayán', 'Cosemar', 'Resolución del proceso de multa por papeles vencidos del móvil 980', 'Recolección', 'Baja', 'Cerrado', 'Recibido por Cosemar.', '19ffba3362b4a3ed']
 ];
 // Correos desde Gmail: hilo nuevo → fila nueva; hilo ya curado con un mensaje más reciente → se actualiza fecha y nota y se marca para revisar.
-Object.values(AUTO.correos || {}).forEach(c => { const i = C.findIndex(r => r[8] === c.hilo);
+// Hilos de Gmail que son el mismo tema que otro ya curado (Gmail los separa, p. ej. cuando una respuesta llega marcada como SPAM).
+const MISMO_TEMA = { '19ed5e2ffad0d00e': '1a1f08efadff48ad' };
+Object.values(AUTO.correos || {}).forEach(c => { if (MISMO_TEMA[c.hilo]) c = Object.assign({}, c, { hilo: MISMO_TEMA[c.hilo] }); const i = C.findIndex(r => r[8] === c.hilo);
   if (i < 0) C.push([c.fecha, c.contacto, c.empresa, c.tema, c.contrato, c.urgencia, c.estado, c.nota, c.hilo]);
   else if (c.fecha > C[i][0]) C[i] = [c.fecha, c.contacto, c.empresa, C[i][3], C[i][4], c.urgencia === 'Baja' ? C[i][5] : c.urgencia, c.estado === 'Informativo' ? C[i][6] : c.estado, 'Nuevo mensaje: ' + c.nota, c.hilo]; });
 C.sort((x, y) => (y[0] > x[0] ? 1 : y[0] < x[0] ? -1 : 0));
