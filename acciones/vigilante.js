@@ -22,6 +22,11 @@ function correoHTML(novedades, nuevas, abiertas) {
 async function enviar(asunto, html) {
   const E = process.env;
   if (E.VIGILANTE_CORREO_PRUEBA) { fs.writeFileSync(E.VIGILANTE_CORREO_PRUEBA, JSON.stringify({ para: E.AVISOS_PARA, cc: E.AVISOS_CC, asunto, html }, null, 1)); return 'prueba'; }
+  if (E.GMAIL_PUENTE_URL) {   // el puente de Apps Script envía desde tu Gmail a ti mismo, con copia @maho.cl
+    const r = await fetch(E.GMAIL_PUENTE_URL, { method: 'POST', redirect: 'follow', headers: { 'content-type': 'text/plain' }, body: JSON.stringify({ asunto, html, cc: E.AVISOS_CC || '' }) });
+    const j = await r.json().catch(() => ({})); if (!j.enviado) throw new Error('El puente no envió el correo: ' + (j.error || r.status));
+    return 'puente';
+  }
   if (!E.GMAIL_USUARIO || !E.GMAIL_CLAVE_APP || !E.AVISOS_PARA) return null;
   const t = require('nodemailer').createTransport({ host: 'smtp.gmail.com', port: 465, secure: true, auth: { user: E.GMAIL_USUARIO, pass: E.GMAIL_CLAVE_APP } });
   const r = await t.sendMail({ from: '"Control Cosemar" <' + E.GMAIL_USUARIO + '>', to: E.AVISOS_PARA, cc: E.AVISOS_CC || undefined, subject: asunto, html });
@@ -40,7 +45,7 @@ async function enviar(asunto, html) {
   if (nuevas.length || novedades.length) {
     const asunto = 'Cosemar · ' + [novedades.length && novedades.length + (novedades.length === 1 ? ' novedad' : ' novedades'), nuevas.length && nuevas.length + (nuevas.length === 1 ? ' alerta nueva' : ' alertas nuevas')].filter(Boolean).join(' y ');
     const id = await enviar(asunto, correoHTML(novedades, nuevas, todas.length));
-    informe.correo = id ? 'enviado: ' + asunto : 'no enviado: faltan secretos GMAIL_USUARIO, GMAIL_CLAVE_APP o AVISOS_PARA';
+    informe.correo = id ? 'enviado: ' + asunto : 'no enviado: falta el secreto GMAIL_PUENTE_URL';
     if (id) { const hoy = new Date().toISOString().slice(0, 10); nuevas.forEach(a => { av[clave(a)] = hoy; }); }
   } else informe.correo = 'sin novedades: no se envía nada';
   // Se olvidan las alertas que ya no están, para avisar de nuevo si reaparecen.

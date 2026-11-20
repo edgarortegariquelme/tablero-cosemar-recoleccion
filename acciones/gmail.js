@@ -113,12 +113,21 @@ async function mensajesIMAP(desde) {
   return out;
 }
 
+// Lectura por el puente de Apps Script (acciones/puente_gmail.gs): sin contraseñas, corre en la cuenta de Google del dueño.
+async function mensajesPuente(desde) {
+  const u = new URL(process.env.GMAIL_PUENTE_URL); u.searchParams.set('desde', desde);
+  const r = await fetch(u, { redirect: 'follow' }); if (!r.ok) throw new Error('Puente Gmail respondió ' + r.status);
+  const j = await r.json(); if (j.error) throw new Error('Puente Gmail: ' + j.error);
+  return (j.mensajes || []).map(m => Object.assign(m, { adjuntos: (m.adjuntos || []).map(a => ({ nombre: a.nombre, tipo: a.tipo, contenido: Buffer.from(a.b64 || '', 'base64') })) }));
+}
+
 async function ingestar() {
   const st = leerEstado(), novedades = [];
   let msgs;
   if (process.env.GMAIL_PRUEBA) msgs = JSON.parse(fs.readFileSync(process.env.GMAIL_PRUEBA, 'utf8')).map(m => Object.assign(m, { adjuntos: (m.adjuntos || []).map(a => Object.assign(a, { contenido: a.ruta ? fs.readFileSync(a.ruta) : Buffer.from(a.texto || '') })) }));
+  else if (process.env.GMAIL_PUENTE_URL) msgs = await mensajesPuente(st.desde);
   else if (process.env.GMAIL_USUARIO && process.env.GMAIL_CLAVE_APP) msgs = await mensajesIMAP(st.desde);
-  else return { omitido: 'faltan los secretos GMAIL_USUARIO y GMAIL_CLAVE_APP', novedades };
+  else return { omitido: 'falta el secreto GMAIL_PUENTE_URL (o GMAIL_USUARIO y GMAIL_CLAVE_APP)', novedades };
   const vistos = new Set(st.vistos);
   msgs.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).forEach(m => { if (vistos.has(m.id)) return; vistos.add(m.id); clasificar(m, st, novedades); });
   // La próxima lectura parte dos días antes de hoy (Gmail busca por día); los ya vistos se descartan por id.

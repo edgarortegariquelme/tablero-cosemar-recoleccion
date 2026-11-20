@@ -1,6 +1,6 @@
 # Cada hora: lee Gmail (correos, manifolds y revisiones técnicas de Cosemar/ITS), regenera la app y avisa por correo SOLO si hay algo nuevo.
-# Secretos (Settings → Secrets and variables → Actions): GMAIL_USUARIO, GMAIL_CLAVE_APP (contraseña de aplicación de Google),
-# AVISOS_PARA, AVISOS_CC (opcional), NOTION_TOKEN (opcional: si está, el libro de control se toma de Notion).
+# Secretos (Settings → Secrets and variables → Actions): GMAIL_PUENTE_URL (enlace del puente de Apps Script, acciones/puente_gmail.gs),
+# AVISOS_CC (opcional, @maho.cl). Alternativa con contraseña de aplicación: GMAIL_USUARIO, GMAIL_CLAVE_APP, AVISOS_PARA, NOTION_TOKEN (opcional: si está, el libro de control se toma de Notion).
 # Sin secretos la app igual se reconstruye; solo se omiten la lectura de Gmail y el correo.
 name: Actualizar app Cosemar
 on:
@@ -32,6 +32,7 @@ jobs:
         run: node datos/exportar_notion.js
       - name: Gmail → datos → app → avisos
         env:
+          GMAIL_PUENTE_URL: ${{ secrets.GMAIL_PUENTE_URL }}
           GMAIL_USUARIO: ${{ secrets.GMAIL_USUARIO }}
           GMAIL_CLAVE_APP: ${{ secrets.GMAIL_CLAVE_APP }}
           AVISOS_PARA: ${{ secrets.AVISOS_PARA }}
