@@ -5,10 +5,9 @@
 name: Flujos Cosemar
 on:
   schedule:
-    - cron: '7 * * * *'        # ingesta, antes de la exportación de la app (:17)
+    # Archivado: la ingesta de Gmail y Drive y los avisos los hace acciones/vigilante.js (actualizar-app.yml), sin n8n ni Notion.
     # Los avisos por correo los envía ahora acciones/vigilante.js (actualizar-app.yml) solo cuando hay algo nuevo;
     # aquí quedan disponibles solo a mano (workflow_dispatch → avisos) para no duplicar correos.
-    - cron: '37 */6 * * *'     # reproceso de errores
   workflow_dispatch:
     inputs:
       proceso:

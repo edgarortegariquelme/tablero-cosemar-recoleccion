@@ -25,7 +25,7 @@ function alertas(fechaHoy) {
 }
 
 // Clave estable de una alerta: sin la cuenta regresiva de días, para no repetir el aviso cada día.
-const clave = a => (a.nivel + '|' + a.contrato + '|' + a.texto).replace(/\s*\((en \d+ días|hoy|mañana)\)/g, '').replace(/\s+/g, ' ').trim();
+const clave = a => a.clave || (a.nivel + '|' + a.contrato + '|' + a.texto).replace(/\s*\((en \d+ días|hoy|mañana)\)/g, '').replace(/\s+/g, ' ').trim();
 
 module.exports = { alertas, clave };
 if (require.main === module) console.log(JSON.stringify(alertas(process.argv[2]), null, 1));

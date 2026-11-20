@@ -13,7 +13,7 @@ function construir() { for (const f of ['datos/operacion.js', 'datos/construir_a
 function correoHTML(novedades, nuevas, abiertas) {
   const nom = { rec: 'Recolección', df: 'Disposición final' }, col = { alta: '#b3261e', media: '#9a6700', info: '#2f6db3' };
   let h = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#1f2328;max-width:680px">';
-  if (novedades.length) h += '<h3 style="margin:0 0 8px">Novedades en Gmail</h3><ul>' + novedades.map(n => '<li><b>' + esc(n.tipo) + ':</b> ' + esc(n.texto) + (n.enlace ? ' · <a href="' + esc(n.enlace) + '">abrir</a>' : '') + '</li>').join('') + '</ul>';
+  if (novedades.length) h += '<h3 style="margin:0 0 8px">Novedades en Gmail y Drive</h3><ul>' + novedades.map(n => '<li><b>' + esc(n.tipo) + ':</b> ' + esc(n.texto) + (n.enlace ? ' · <a href="' + esc(n.enlace) + '">abrir</a>' : '') + '</li>').join('') + '</ul>';
   if (nuevas.length) h += '<h3 style="margin:16px 0 8px">Alertas nuevas</h3><ul>' + nuevas.map(a => '<li><span style="color:' + col[a.nivel] + ';font-weight:bold">' + (a.nivel === 'alta' ? 'Urgente' : a.nivel === 'media' ? 'Atento' : 'Próximo') + '</span> · ' + nom[a.contrato] + ': ' + esc(a.texto) + '</li>').join('') + '</ul>';
   h += '<p style="color:#59636e">Alertas abiertas en total: ' + abiertas + '. Detalle, pagos, multas, flota y personal en la app: <a href="' + APP + '">' + APP + '</a></p>';
   return h + '<p style="color:#59636e;font-size:12px">Aviso automático del control contractual Cosemar (DMAO). Solo llega cuando hay algo nuevo.</p></div>';
@@ -37,10 +37,13 @@ async function enviar(asunto, html) {
   const informe = {};
   try { informe.gmail = await require('./gmail').ingestar(); }
   catch (e) { informe.gmail = { error: e.message, novedades: [] }; console.error('Gmail:', e.message); }   // si Gmail falla, la app igual se reconstruye
+  try { informe.drive = await require('./drive').ingestarDrive(); }
+  catch (e) { informe.drive = { error: e.message, novedades: [] }; console.error('Drive:', e.message); }
   construir();
-  const { alertas, clave } = require('./alertas'), todas = alertas();
+  const { alertas, clave } = require('./alertas'), hoyCL = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date());
+  const todas = alertas().concat(require('./drive').avisosPlazos(hoyCL));
   let av = {}; try { av = JSON.parse(fs.readFileSync(AVISADOS, 'utf8')); } catch (e) {}
-  const nuevas = todas.filter(a => !av[clave(a)]), novedades = informe.gmail.novedades || [];
+  const nuevas = todas.filter(a => !av[clave(a)]), novedades = (informe.gmail.novedades || []).concat(informe.drive.novedades || []);
   informe.alertas = { total: todas.length, nuevas: nuevas.length }; informe.novedades = novedades.length;
   if (nuevas.length || novedades.length) {
     const asunto = 'Cosemar · ' + [novedades.length && novedades.length + (novedades.length === 1 ? ' novedad' : ' novedades'), nuevas.length && nuevas.length + (nuevas.length === 1 ? ' alerta nueva' : ' alertas nuevas')].filter(Boolean).join(' y ');
@@ -53,6 +56,7 @@ async function enviar(asunto, html) {
   fs.mkdirSync(path.dirname(AVISADOS), { recursive: true }); fs.writeFileSync(AVISADOS, JSON.stringify(av, null, 1) + '\n');
   // Registro de la corrida (sin contenido de correos) para revisar desde el repositorio que todo anduvo.
   const reg = { corrida: new Date().toISOString(), gmail: informe.gmail.error ? 'error: ' + informe.gmail.error : informe.gmail.omitido ? 'omitido: ' + informe.gmail.omitido : 'ok: ' + informe.gmail.mensajes + ' mensajes leídos',
+    drive: informe.drive.error ? 'error: ' + informe.drive.error : informe.drive.omitido ? 'omitido: ' + informe.drive.omitido : 'ok: ' + JSON.stringify(informe.drive.resumen),
     novedades: informe.novedades, alertas: informe.alertas, correo: informe.correo };
   fs.writeFileSync(path.join(RAIZ, 'datos/auto/ultima_corrida.json'), JSON.stringify(reg, null, 1) + '\n');
   console.log(JSON.stringify(informe, null, 1));

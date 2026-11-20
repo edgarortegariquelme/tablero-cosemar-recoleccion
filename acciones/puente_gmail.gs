@@ -31,6 +31,7 @@ function nuevaClave() {
 
 function doGet(e) {
   if (!autorizado_(e)) return salida_({ error: 'no autorizado' });
+  if (e.parameter.accion === 'drive') return salida_(drive_(e.parameter.desde, e.parameter.carpetas || ''));
   var desde = String(e.parameter.desde || '').match(/^\d{4}-\d{2}-\d{2}$/) ? e.parameter.desde : Utilities.formatDate(new Date(Date.now() - 2 * 864e5), 'America/Santiago', 'yyyy-MM-dd');
   var limite = new Date(desde + 'T00:00:00-04:00'), out = [];
   GmailApp.search('after:' + desde.replace(/-/g, '/') + ' ' + BUSQUEDA, 0, 100).forEach(function (t) {
@@ -48,6 +49,29 @@ function doGet(e) {
     });
   });
   return salida_({ desde: desde, mensajes: out });
+}
+
+/** Archivos modificados desde una fecha dentro de las carpetas del expediente (incluidas subcarpetas), con su ruta. */
+function drive_(desde, carpetas) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(desde || ''))) desde = Utilities.formatDate(new Date(Date.now() - 2 * 864e5), 'America/Santiago', 'yyyy-MM-dd');
+  var raices = {}; String(carpetas).split(',').forEach(function (id) { if (id) raices[id] = true; });
+  var it = DriveApp.searchFiles("modifiedDate > '" + desde + "T00:00:00' and trashed = false and mimeType != 'application/vnd.google-apps.folder'");
+  var out = [], cache = {}, n = 0;
+  while (it.hasNext() && n < 400) {
+    var f = it.next(); n++;
+    var padres = f.getParents(); if (!padres.hasNext()) continue;
+    var r = ruta_(padres.next(), raices, cache, 0);
+    if (r) out.push({ id: f.getId(), nombre: f.getName(), modificado: f.getLastUpdated().toISOString(), enlace: f.getUrl(), raiz: r.raiz, ruta: r.ruta });
+  }
+  return { desde: desde, revisados: n, archivos: out };
+}
+function ruta_(carpeta, raices, cache, prof) {
+  var id = carpeta.getId();
+  if (cache.hasOwnProperty(id)) return cache[id];
+  var res = null;
+  if (raices[id]) res = { raiz: id, ruta: carpeta.getName() };
+  else if (prof < 8) { var ps = carpeta.getParents(); if (ps.hasNext()) { var arriba = ruta_(ps.next(), raices, cache, prof + 1); if (arriba) res = { raiz: arriba.raiz, ruta: arriba.ruta + '/' + carpeta.getName() }; } }
+  cache[id] = res; return res;
 }
 
 function doPost(e) {
