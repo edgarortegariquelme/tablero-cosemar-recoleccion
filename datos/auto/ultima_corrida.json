@@ -1,10 +1,10 @@
 {
- "corrida": "2026-11-20T14:08:54.380Z",
- "gmail": "error: GMAIL_PUENTE_URL mal formado (largo 479, no parece una URL de aplicación web de Apps Script, sin ?k=)",
+ "corrida": "2026-11-20T14:27:54.376Z",
+ "gmail": "ok: 2 mensajes leídos",
  "novedades": 0,
  "alertas": {
   "total": 9,
-  "nuevas": 9
+  "nuevas": 0
  },
- "correo": "error: GMAIL_PUENTE_URL mal formado (largo 479, no parece una URL de aplicación web de Apps Script, sin ?k=)"
+ "correo": "sin novedades: no se envía nada"
 }

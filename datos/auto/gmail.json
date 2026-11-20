@@ -1,1 +1,23 @@
-{"desde":"2026-11-20","correos":{},"manifolds":{},"rt":{},"vistos":[]}
+{
+ "desde": "2026-11-18",
+ "correos": {
+  "1a1f959870d7f2a9": {
+   "fecha": "2026-11-20",
+   "contacto": "Control Cosemar",
+   "empresa": "DMAO",
+   "tema": "Cosemar · 1 novedad y 9 alertas nuevas",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Abre este correo en formato HTML.",
+   "hilo": "1a1f959870d7f2a9"
+  }
+ },
+ "manifolds": {},
+ "rt": {},
+ "vistos": [
+  "1a1f9490f5a1b1bc",
+  "1a1f959870d7f2a9"
+ ],
+ "leido": "2026-11-20T14:27:54.215Z"
+}
