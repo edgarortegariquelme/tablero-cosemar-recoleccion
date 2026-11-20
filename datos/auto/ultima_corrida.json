@@ -1,10 +1,10 @@
 {
- "corrida": "2026-11-20T13:59:26.889Z",
- "gmail": "omitido: falta el secreto GMAIL_PUENTE_URL (o GMAIL_USUARIO y GMAIL_CLAVE_APP)",
+ "corrida": "2026-11-20T14:08:54.380Z",
+ "gmail": "error: GMAIL_PUENTE_URL mal formado (largo 479, no parece una URL de aplicación web de Apps Script, sin ?k=)",
  "novedades": 0,
  "alertas": {
   "total": 9,
   "nuevas": 9
  },
- "correo": "no enviado: falta el secreto GMAIL_PUENTE_URL"
+ "correo": "error: GMAIL_PUENTE_URL mal formado (largo 479, no parece una URL de aplicación web de Apps Script, sin ?k=)"
 }
