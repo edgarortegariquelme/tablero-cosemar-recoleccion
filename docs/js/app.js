@@ -151,7 +151,16 @@
   dash.draw('va_porver', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].plazoPorVerificar); });
   dash.draw('va_vence', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].vencen30); });
   dash.draw('va_atraso', function (el) { if (!listo(el, ['c_portada'])) return; el.textContent = String(filas('c_portada')[0].atrasados); });
-  dash.draw('va_sync', function (el) { if (!listo(el, ['c_portada'])) return; var v = filas('c_portada')[0].ultimaSync; el.textContent = v ? fechaCL(v) : 'sin registro'; });
+  // Última corrida del vigilante (datos/auto/ultima_corrida.json); si no está, la última sincronización del libro.
+  dash.draw('va_sync', function (el) {
+    var c = dash.data('corrida');
+    if (c && c.status === 'ok' && c.data && c.data.corrida) {
+      var f = new Date(c.data.corrida), ok = /^ok/.test(c.data.gmail || '');
+      el.textContent = f.toLocaleDateString('es-CL', { timeZone: 'America/Santiago' }) + ' ' + f.toLocaleTimeString('es-CL', { timeZone: 'America/Santiago', hour: '2-digit', minute: '2-digit' }) + (ok ? ' · Gmail leído' : ' · Gmail sin leer');
+      el.title = c.data.gmail + ' · ' + c.data.correo; el.classList.remove('dash-skeleton'); return;
+    }
+    if (!listo(el, ['c_portada'])) return; var v = filas('c_portada')[0].ultimaSync; el.textContent = v ? fechaCL(v) : 'sin registro';
+  });
   dash.draw('va_hoy', function (el) { el.textContent = fechaCL(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date())); });
 
   // ---------- alzas y deuda con Cosemar (pagos_contrato + alzas) ----------

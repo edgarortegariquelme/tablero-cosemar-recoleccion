@@ -1,8 +1,9 @@
 {
- "construido": "2026-11-20T14:27:54.300Z",
- "huella": "deaacedd5ed7a523edc10510d2471564db82330b",
+ "construido": "2026-11-20T14:31:48.880Z",
+ "huella": "b779760d07ab6b08effb8610a5cb2a03fd758d9d",
  "libro": "Semilla del repositorio + pagos confirmados + novedades del libro",
  "archivos": {
+  "corrida": "data/corrida.json",
   "pagos_contrato": "data/pagos_contrato.json",
   "alzas": "data/alzas_contrato.json",
   "plan_pago": "data/plan_pago.json",

@@ -99,6 +99,7 @@
 .tl-item summary { margin: 0 !important; }
 .tl-item summary .va-muted { font-weight: 400; }
 .fl-sin { display: inline-block; margin-bottom: 4px; font-size: var(--cds-font-size-caption); }
+#tbl-flota td:last-child { min-width: 220px; }
 .fl-foto { display: block; width: 96px; height: 72px; object-fit: cover; object-position: top; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
 @media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
 </style>
@@ -106,7 +107,7 @@
 <article class="va" id="analisis">
   <div class="va-eyebrow">DMAO · Contratos Cosemar · recolección 3447-86-LR23 y disposición final 3447-187-LR24</div>
   <h2 id="titulo-op">Control de los contratos Cosemar: pagos, plazos, flota y personal</h2>
-  <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última actualización de n8n: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
+  <div class="va-meta"><span>Corte: <b data-draw="va_hoy">—</b></span><span>Última revisión automática: <b data-draw="va_sync" data-source="c_portada" data-field="ultimaSync" data-row="0">—</b></span></div>
 
   <input type="radio" name="vt" id="vt-op" class="vt-r" checked>
   <input type="radio" name="vt" id="vt-mu" class="vt-r">
@@ -196,7 +197,7 @@
   <h3 id="h-fl">Flota del contrato: estado y documentos al día</h3>
   <div id="fl-resumen" data-draw="vf_resumen" data-source="flota">—</div>
   <p class="va-muted">Estado según el detalle de móviles de Cosemar del 09-11-2026. Revisión técnica, permiso de circulación y SOAP según la planilla «Control vencimientos COSEMAR» del 05-11-2026. La imagen de cada móvil es su certificado de revisión técnica con la patente; se abre en grande al tocarla.</p>
-  <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso de circulación</th><th>SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-flota" data-source="flota" data-row-key="movil"><thead><tr><th>Móvil</th><th>Tipo</th><th>Estado</th><th>Revisión técnica</th><th>Permiso y SOAP</th><th>Nota</th></tr></thead><tbody data-draw="vf_tabla"></tbody></table></div>
   <p class="va-muted">Contrato: seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000), vence el 31-07-2027. Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF, con endoso de 419,57 UF del 29-10-2026), vence el 28-10-2029.</p>
   <h3 id="h-venc">Documentos de garantía, seguros y flota que vencen en los próximos 120 días</h3>
   <p class="va-muted">Hoy: <b data-draw="va_vence" data-source="c_portada" data-field="vencen30" data-row="0">—</b> vencen en 30 días y <b data-draw="va_atraso" data-source="c_portada" data-field="atrasados" data-row="0">—</b> están atrasados, contando los plazos sancionatorios vencidos. Las fechas de flota vienen de la planilla de vencimientos y se confirman contra el certificado de cada patente.</p>
@@ -338,7 +339,7 @@
 
   <details>
     <summary>Cómo se leen estas cifras</summary>
-    <p class="va-muted">Todo sale del libro de control en Notion, que n8n actualiza cada hora. «Sin antecedentes» significa que el libro no tiene el documento, no que el hito no ocurrió. Un hito solo cuenta como acreditado si trae respaldo y no está «por verificar». Los plazos se calculan en días hábiles desde 24 horas después de una notificación con fecha cierta (bases, art. 7, 177 a 186). Las fechas del inventario del 22-09-2026 son fechas de archivo, no del acto.</p>
+    <p class="va-muted">Todo sale del libro de control, que se actualiza solo cada hora con lo que llega a Gmail (correos, manifolds y certificados). «Sin antecedentes» significa que el libro no tiene el documento, no que el hito no ocurrió. Un hito solo cuenta como acreditado si trae respaldo y no está «por verificar». Los plazos se calculan en días hábiles desde 24 horas después de una notificación con fecha cierta (bases, art. 7, 177 a 186). Las fechas del inventario del 22-09-2026 son fechas de archivo, no del acto.</p>
   </details>
   </section>
 </article>

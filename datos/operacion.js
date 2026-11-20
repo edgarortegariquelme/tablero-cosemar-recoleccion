@@ -170,7 +170,7 @@ const A = [
   ['rec', '2026-11-13', 'Antecedente', 'DAF no emite certificado presupuestario (saldo negativo): el anexo del reajuste IPC 4,3% queda suspendido.', 'Abierto'],
   ['rec', '2026-11-05', 'Antecedente', 'Memo 2211/2026 pide la OC de octubre al valor del D.A. 2.459. Sin presupuesto para octubre a diciembre: se pagan en 2027 según el plan de pago.', 'Abierto'],
   ['rec', '2026-07-01', 'Hecho por subsanar', 'Desde julio rige el D.A. 3.957 (aumento poblacional), pero las OC y facturas siguen al valor del D.A. 2.459.', 'Abierto'],
-  ['rec', '2026-06-05', 'Hecho por subsanar', 'Resolución sanitaria de las instalaciones (manifold 28): no consta respuesta de Cosemar.', 'Abierto'],
+  ['rec', '2026-06-05', 'Hecho por subsanar', 'Resolución sanitaria de las instalaciones (manifold 28): la ITS reiteró el 18-11; Cosemar respondió que el trámite está iniciado (patente comercial en revisión) y aún no presenta la resolución.', 'Abierto'],
   ['rec', '2026-09-16', 'Comentario', 'Cosemar espera respuesta al informe de variación de combustible desde el 16-09.', 'Abierto'],
   ['rec', '2026-01-01', 'Hecho por subsanar', 'La revisión de sanciones antes del memo de pago no consta en ningún mes.', 'Abierto'],
   ['rec', '2026-10-29', 'Antecedente', 'Endoso de la garantía por 419,57 UF entregado; la póliza vence el 28-10-2029.', 'Cerrado'],

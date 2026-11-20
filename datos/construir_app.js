@@ -13,6 +13,8 @@ const ARCH = { pagos_contrato: 'pagos_contrato', alzas: 'alzas_contrato', plan_p
 const mapa = {};
 // El catálogo del tablero se regenera desde datos/catalogo.js (evita copias desfasadas).
 fs.writeFileSync(path.join(__dirname, '../tablero/store/catalogo.json'), JSON.stringify(JSON.parse(JSON.stringify(require('./catalogo.js'))), null, 1));
+// Última corrida del vigilante (sin contenido de correos), para el encabezado de la app.
+try { fs.copyFileSync(path.join(__dirname, 'auto/ultima_corrida.json'), path.join(DATA, 'corrida.json')); mapa.corrida = 'data/corrida.json'; } catch (e) {}
 Object.keys(ARCH).forEach(id => { fs.copyFileSync(path.join(S, ARCH[id] + '.json'), path.join(DATA, ARCH[id] + '.json')); mapa[id] = 'data/' + ARCH[id] + '.json'; });
 
 // Libro de control: Notion exportado o semilla
