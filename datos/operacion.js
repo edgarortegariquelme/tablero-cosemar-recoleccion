@@ -7,7 +7,7 @@ const fs = require('fs'), path = require('path'), M = require('../motor/motor.js
 const OUT = path.join(__dirname, '../tablero/store'), D = 'https://drive.google.com/file/d/', G = 'https://mail.google.com/mail/u/0/#all/';
 const hab = (f, n) => M.sumarHabiles(f, n), cor = (f, n) => M.sumarDias(f, n);
 const RES = []; // resúmenes de una fila por tema (tablero/store/resumenes.json)
-function w(nombre, rows, extra) { fs.writeFileSync(path.join(OUT, nombre), JSON.stringify({ corte: '2026-11-18', rows }, null, 1)); console.log(nombre, rows.length);
+function w(nombre, rows, extra) { fs.writeFileSync(path.join(OUT, nombre), JSON.stringify({ corte: '2026-11-20', rows }, null, 1)); console.log(nombre, rows.length);
   if (extra) RES.push(Object.assign({ clave: nombre.replace('.json', '') }, extra)); }
 
 // ---------- Manifolds (recolección; los anteriores a jul-2024 son del contratista anterior y se excluyen) ----------
@@ -18,7 +18,9 @@ const MF = [
   ['MF-2026-04', '2026-04-06', '4', 'Inicia el proceso sancionatorio 5 por modificar el plan de trabajo (inicio del domingo 5 de abril)', 'Inicio de proceso', 5, 'hábiles', 'Cerrado', '2026-06-17', 'Terminó en multa de 60 UTM (D.A. 2.463, firme por D.A. 3.649).', 'PS05', D + '1AzUzxyT5R9U35Ff7znuoqBwhiZfrhu5Y/view'],
   ['MF-2026-01', '2026-02-26', '1', 'Fija el plazo de descargos del proceso 1 (plan de escombros y voluminosos): vence el jueves 5 de marzo', 'Plazo de descargos', null, null, 'Cerrado', '2026-06-02', 'Proceso dejado sin efecto (correo de cierre del 02-06-2026).', 'PS01', D + '1j6ppQLUdp4dK8WkhawnWR0Zvp6U2pZDo/view', '2026-03-05'],
   ['MF-2026-47', '2026-02-25', '47', 'Notifica el inicio del proceso 1 por puntos con escombros de más de 3 días', 'Inicio de proceso', 5, 'hábiles', 'Cerrado', '2026-06-02', 'Sin efecto el 02-06-2026.', 'PS01', D + '1O9q0sQ3YTdEQ0kqRHVcb5GIW9RkHJKN7/view'],
-  ['MF-2026-46', '2026-02-25', '46', 'Pide propuestas de gráfica de camiones (logo municipal, Cosemar, servicio, numeración)', 'Requerimiento', null, null, 'Abierto', null, 'Plazo tope 06-02-2026 según el manifold. Proceso 2 en evaluación; el 22-09 se dio visto bueno a la identidad corporativa.', 'PS02', D + '1vaE67C_kc_MEHaW714smqZvLJbW2_6mq/view', '2026-02-06'],
+  ['MF-2026-22', '2026-11-18', '22', 'Cierra el proceso sancionatorio 2: gráfica de camiones al 100%', 'Cierre de proceso', null, null, 'Cerrado', '2026-11-18', 'Proceso 2 cerrado sin multa por cumplimiento total de la gráfica.', 'PS02', null, null],
+  ['MF-2026-20', '2026-11-17', '20', 'Remite informe de incumplimiento por observaciones de la visita técnica a instalaciones (30-09)', 'Inicio de proceso', 1, 'hábiles', 'Cerrado', '2026-11-19', 'Cosemar presentó descargos el 18-11; la ITS los acogió el 19-11 «en esta oportunidad».', 'PS07', null, null],
+  ['MF-2026-46', '2026-02-25', '46', 'Pide propuestas de gráfica de camiones (logo municipal, Cosemar, servicio, numeración)', 'Requerimiento', null, null, 'Cerrado', '2026-11-18', 'Plazo tope 06-02-2026 según el manifold. Gráfica al 100%: proceso 2 cerrado el 18-11-2026 (manifold 22).', 'PS02', D + '1vaE67C_kc_MEHaW714smqZvLJbW2_6mq/view', '2026-02-06'],
   ['MF-2026-45', '2026-02-25', '45', 'Pide un plan para retirar escombros y voluminosos día y noche (puntos con más de 3 días)', 'Requerimiento', 5, 'hábiles', 'Cerrado', '2026-06-02', 'Derivó en el proceso 1, dejado sin efecto.', 'PS01', D + '1AafkQ0SS9km6Wqw0kNhbiDZOWisbDdFr/view'],
   ['MF-2026-43', '2026-02-17', '43', 'Inicia el proceso por lavado deficiente de los camiones', 'Inicio de proceso', 5, 'hábiles', 'Cerrado', '2026-06-03', 'Informe de cierre del 03-06-2026: sin efecto.', 'PS04', D + '1hDvGTXWBo0m-SolxoHbjcV5otqpRz8jt/view'],
   ['MF-2026-41', '2026-02-16', '41', 'Inicia el proceso por circular con revisión técnica rechazada (móvil 980)', 'Inicio de proceso', 5, 'hábiles', 'Cerrado', '2026-08-13', 'Multa de 5 UTM (D.A. 3.307), notificada el 13-08-2026.', 'PS03', D + '1hDvGTXWBo0m-SolxoHbjcV5otqpRz8jt/view'],
@@ -41,8 +43,11 @@ w('manifolds.json', MF.map(r => {
 
 // ---------- Correos con el personal del contrato (último mensaje de cada hilo; desde ago-2026) ----------
 const C = [
-  ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Informe de sobreproductores (comercio, instituciones, condominios)', 'Recolección', 'Media', 'Revisar', 'Llegó el informe pedido por Hernán el 09-11.', '19fa9a13f0792f57'],
-  ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Siniestro del móvil 980 (colisión del 10-11)', 'Recolección', 'Media', 'Revisar', 'La ITS cerró el informe el 17-11; Cosemar agregó registro de charlas y denuncio.', '1a1d01a0ff40f93c'],
+  ['2026-11-19', 'Hernán Gómez (ITS)', 'DMAO', 'Descargos acogidos: informe de incumplimiento por instalaciones (visita 30-09)', 'Recolección', 'Media', 'Cerrado', 'Informe 17-11, descargos 18-11, acogidos 19-11 «en esta oportunidad»: vigilar que se corrijan las observaciones.', '1a1e9e4c9e56016c'],
+  ['2026-11-19', 'Teresa Donoso', 'Cosemar', 'Revisión técnica del M-922 actualizada', 'Recolección', 'Baja', 'Cerrado', 'Vigente hasta el 19-05-2027; cargada en Flota.', '1a1f3dfaa55b7bdd'],
+  ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Proceso sancionatorio 2 (gráfica de camiones): cierre', 'Recolección', 'Baja', 'Cerrado', 'La ITS informó gráfica al 100% y cierre sin multa (manifold 22).', '19e8e06e3b03ec21'],
+  ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Informe de sobreproductores (comercio, instituciones, condominios)', 'Recolección', 'Baja', 'Cerrado', 'Hernán acusó recibo el 18-11; insumo para el trabajo con otras direcciones.', '19fa9a13f0792f57'],
+  ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Siniestro del móvil 980 (colisión del 10-11)', 'Recolección', 'Baja', 'Cerrado', 'Hernán recibió el 18-11 el registro de charlas y la denuncia; caso cerrado.', '1a1d01a0ff40f93c'],
   ['2026-11-16', 'Teresa Donoso', 'Cosemar', 'Revisión técnica del M-921 actualizada', 'Recolección', 'Media', 'Actualizar', 'La revisión vencía el 16-11: cargar la nueva fecha en la planilla de vencimientos.', '1a1e44a6ba4759da'],
   ['2026-11-16', 'Grupo EBI (A. Concha)', 'Cosemar', 'Reunión por la API del GPS de la flota', 'Recolección', 'Baja', 'En curso', 'Coordinación técnica de la integración GPS.', '1a1e489965953f02'],
   ['2026-11-13', 'Rodrigo Barril', 'Cosemar', 'Pide la OC de octubre de disposición final', 'Disposición final', 'Alta', 'Responder', 'Memo de OC del 05-11: los 7 días para generar la OC vencieron el 12-11. Preguntar a DAF.', '1a1d56b3b111e8f6'],
@@ -80,7 +85,7 @@ const FOTOS = { '921': '1Nlfu30Xk1wJUjboPCpXizF8cJFvJCLit', '922': '13Ndz0O0tNlz
   '984': '11n5nepvOT-_dbqYt-K6F-06nduWw04QL', '985': '1UmCCUHMyG_0es6Ze1B-HjGLavpnIlJyp' }; // carpeta Drive 10lZuRbhinsJcuIQVneD2kLnwh861lBwG
 const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (planilla), RT según «FLOTA ACTUAL» si difiere
   ['921', 'SZZJ80-4', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-05-14', null, 'Revisión técnica renovada el 14-11-2026 (certificado A0110000000079161, enviado por Teresa Donoso el 16-11).'],
-  ['922', 'SZZJ82-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-11-19', null, ''],
+  ['922', 'SZZJ82-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2027-05-19', null, 'Renovada el 19-11-2026 (certificado A0110000000079335).'],
   ['938', 'TCXV47-0', 'Recolector', 'VW Constellation 17.280', 'Operativo en ruta', '2026-12-18', null, 'Siniestro informado en noviembre (cerrado por la ITS).'],
   ['939', 'TCXV48-9', 'Recolector', 'VW Constellation 17.280', 'En taller', '2026-12-24', null, 'Taller en Iquique: fuga hidráulica del cilindro expulsor.'],
   ['940', 'TCRY91-K', 'Ampliroll', 'VW Constellation 17.280', 'Operativo en base', '2026-12-05', null, ''],
@@ -168,4 +173,4 @@ w('ciclo_fechas.json', [
   { contrato: 'rec', periodo: '2026-10', hito: 'informe_trabajos', fecha: '2026-11-05', documento: 'Informe por los servicios de octubre 2026' }
 ], { reglas: { infoDesde: 1, infoHasta: 5, ocDias: 7, facturaDesde: 15, facturaHasta: 20, pagoDias: 30 },
   presupuesto: { cuenta: '215.22.08.001.001', basesRecMensualMin: 250000000, basesRecMensualMax: 260000000, basesRecMeses: 60, basesDf: 5200000000, basesDfMeses: 60, inicioRec: '2024-07', inicioDf: '2025-01' } });
-fs.writeFileSync(path.join(OUT, 'resumenes.json'), JSON.stringify({ corte: '2026-11-18', rows: RES }, null, 1)); console.log('resumenes.json', RES.length);
+fs.writeFileSync(path.join(OUT, 'resumenes.json'), JSON.stringify({ corte: '2026-11-20', rows: RES }, null, 1)); console.log('resumenes.json', RES.length);

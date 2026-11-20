@@ -104,7 +104,8 @@
       PS04: { titulo: 'Lavado deficiente de equipos', obligacion: 'OB-30', sector: 'Instalaciones', carpeta: '4. FEB LAVADO DEFICIENTE EQUIPOS (sin efecto)' },
       PS05: { titulo: 'Modificación unilateral del plan de trabajo (inicio domingo 5 de abril)', obligacion: 'OB-28', sector: 'Rutas de recolección', carpeta: '5. MODIFICACION UNILATERAL DE PLAN DE TRABAJO (decretando)' },
       PS06: { titulo: 'Camión no informado en el plan de trabajo (móvil 1473)', obligacion: 'OB-25', sector: 'Flota', carpeta: '6. CAMION NO INFORMADO EN PLAN TRABAJO' },
-      REQ07: { titulo: 'Requerimiento de resolución sanitaria de instalaciones', obligacion: 'OB-32', sector: 'Instalaciones', carpeta: '7. RESOLUCION SANITARIA INSTALACIONES' }
+      REQ07: { titulo: 'Requerimiento de resolución sanitaria de instalaciones', obligacion: 'OB-32', sector: 'Instalaciones', carpeta: '7. RESOLUCION SANITARIA INSTALACIONES' },
+      PS07: { titulo: 'Observaciones de la visita técnica a instalaciones (30-09-2026)', obligacion: 'OB-30', sector: 'Instalaciones', carpeta: '8. NOVIEMBRE INSTALACIONES COSEMAR' }
     },
     flujos: [
       { id: 'monitoreo', titulo: 'Monitoreo y fiscalización', ramas: [

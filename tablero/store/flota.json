@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-18",
+ "corte": "2026-11-20",
  "rows": [
   {
    "movil": "921",
@@ -25,12 +25,12 @@
    "modelo": "VW Constellation 17.280",
    "estado": "Operativo en ruta",
    "estadoFecha": "2026-11-09",
-   "rt": "2026-11-19",
+   "rt": "2027-05-19",
    "rtOtraFuente": null,
    "permiso": "2027-09-30",
    "soap": "2027-09-30",
    "aseguradora": "Seguros Sura",
-   "nota": "",
+   "nota": "Renovada el 19-11-2026 (certificado A0110000000079335).",
    "foto": "https://drive.google.com/file/d/13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4/view",
    "fotoId": "13Ndz0O0tNlzJZe_HOo3-EIXHaDZBhjX4",
    "imagen": "fotos/rt-922.jpg"

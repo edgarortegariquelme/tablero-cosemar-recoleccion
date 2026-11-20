@@ -1044,6 +1044,12 @@
    "obligacion": "OB-32",
    "sector": "Instalaciones",
    "carpeta": "7. RESOLUCION SANITARIA INSTALACIONES"
+  },
+  "PS07": {
+   "titulo": "Observaciones de la visita técnica a instalaciones (30-09-2026)",
+   "obligacion": "OB-30",
+   "sector": "Instalaciones",
+   "carpeta": "8. NOVIEMBRE INSTALACIONES COSEMAR"
   }
  },
  "flujos": [

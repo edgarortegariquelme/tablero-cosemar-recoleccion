@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-18",
+ "corte": "2026-11-20",
  "rows": [
   {
    "id": "MF-2026-28",
@@ -92,6 +92,36 @@
    "respaldo": "https://drive.google.com/file/d/1O9q0sQ3YTdEQ0kqRHVcb5GIW9RkHJKN7/view"
   },
   {
+   "id": "MF-2026-22",
+   "fecha": "2026-11-18",
+   "pagina": "22",
+   "motivo": "Cierra el proceso sancionatorio 2: gráfica de camiones al 100%",
+   "tipo": "Cierre de proceso",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Proceso 2 cerrado sin multa por cumplimiento total de la gráfica.",
+   "caso": "PS02",
+   "respaldo": null
+  },
+  {
+   "id": "MF-2026-20",
+   "fecha": "2026-11-17",
+   "pagina": "20",
+   "motivo": "Remite informe de incumplimiento por observaciones de la visita técnica a instalaciones (30-09)",
+   "tipo": "Inicio de proceso",
+   "plazoDias": 1,
+   "plazoUnidad": "hábiles",
+   "vence": "2026-11-18",
+   "estado": "Cerrado",
+   "cierre": "2026-11-19",
+   "nota": "Cosemar presentó descargos el 18-11; la ITS los acogió el 19-11 «en esta oportunidad».",
+   "caso": "PS07",
+   "respaldo": null
+  },
+  {
    "id": "MF-2026-46",
    "fecha": "2026-02-25",
    "pagina": "46",
@@ -100,9 +130,9 @@
    "plazoDias": null,
    "plazoUnidad": null,
    "vence": "2026-02-06",
-   "estado": "Abierto",
-   "cierre": null,
-   "nota": "Plazo tope 06-02-2026 según el manifold. Proceso 2 en evaluación; el 22-09 se dio visto bueno a la identidad corporativa.",
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Plazo tope 06-02-2026 según el manifold. Gráfica al 100%: proceso 2 cerrado el 18-11-2026 (manifold 22).",
    "caso": "PS02",
    "respaldo": "https://drive.google.com/file/d/1vaE67C_kc_MEHaW714smqZvLJbW2_6mq/view"
   },

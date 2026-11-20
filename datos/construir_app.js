@@ -11,6 +11,8 @@ fs.mkdirSync(path.join(D, 'js'), { recursive: true }); fs.mkdirSync(DATA, { recu
 const ARCH = { pagos_contrato: 'pagos_contrato', alzas: 'alzas_contrato', plan_pago: 'plan_pago', df_pagos: 'disposicion_final_pagos', df_alzas: 'disposicion_final_alzas', catalogo: 'catalogo',
   manifolds: 'manifolds', correos: 'correos', flota: 'flota', personal: 'personal', subdere: 'subdere', antecedentes: 'antecedentes', ciclo_fechas: 'ciclo_fechas', resumenes: 'resumenes', imposiciones: 'imposiciones' };
 const mapa = {};
+// El catálogo del tablero se regenera desde datos/catalogo.js (evita copias desfasadas).
+fs.writeFileSync(path.join(__dirname, '../tablero/store/catalogo.json'), JSON.stringify(JSON.parse(JSON.stringify(require('./catalogo.js'))), null, 1));
 Object.keys(ARCH).forEach(id => { fs.copyFileSync(path.join(S, ARCH[id] + '.json'), path.join(DATA, ARCH[id] + '.json')); mapa[id] = 'data/' + ARCH[id] + '.json'; });
 
 // Libro de control: Notion exportado o semilla
