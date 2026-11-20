@@ -18,7 +18,7 @@ La conexión con Gmail se hace con un **puente de Google Apps Script** (`accione
 |---|---|---|
 | 1 | https://script.google.com → **Nuevo proyecto** | Borrar lo que trae, pegar todo `acciones/puente_gmail.gs` y guardar con el nombre «Puente Cosemar» |
 | 2 | **Implementar → Nueva implementación** → engranaje → **Aplicación web** | Ejecutar como: **Yo** · Quién tiene acceso: **Cualquier usuario** → Implementar → **Autorizar acceso**. Si Google advierte «app no verificada», ir a *Configuración avanzada → Ir a Puente Cosemar* (es tu propio script) |
-| 3 | Arriba, elegir la función **enlace** → **Ejecutar** | En el registro aparece un enlace largo que termina en `?k=...`; copiarlo |
+| 3 | Arriba, elegir la función **enlace** → **Ejecutar** | En el registro aparece `?k=...`: el enlace es la URL de la aplicación web (termina en **/exec**) seguida de ese `?k=...`. Si el enlace se compartió, ejecutar **nuevaClave** |
 | 4 | GitHub → repo → Settings → Secrets and variables → Actions → **New repository secret** | `GMAIL_PUENTE_URL` = ese enlace · `AVISOS_CC` = el correo institucional @maho.cl |
 | 5 | GitHub → Settings → General → Change visibility | **Public**, para que el enlace de la app abra sin cuenta |
 | 6 | GitHub → Settings → Pages | Branch `main`, carpeta `/docs` → Save |

@@ -3,8 +3,8 @@
  * - GET  ?k=CLAVE&desde=AAAA-MM-DD  → devuelve en JSON los correos del contrato desde esa fecha (con los adjuntos de RT y manifolds).
  * - POST ?k=CLAVE  {asunto, html, cc} → envía el aviso desde tu Gmail A TI MISMO (cc solo a direcciones @maho.cl).
  * Instalación (una vez): pegar este código en script.google.com → Implementar → Nueva implementación → Aplicación web
- * (Ejecutar como: Yo · Quién tiene acceso: Cualquier usuario) → autorizar → ejecutar la función «enlace» y copiar el enlace
- * que aparece en el registro al secreto GMAIL_PUENTE_URL de GitHub. Quien no tenga la clave del enlace no obtiene nada.
+ * (Ejecutar como: Yo · Quién tiene acceso: Cualquier usuario) → autorizar → ejecutar «enlace» y guardar en el secreto
+ * GMAIL_PUENTE_URL de GitHub la URL de la aplicación web (termina en /exec) seguida de ?k=CLAVE. Quien no tenga la clave del enlace no obtiene nada.
  */
 var BUSQUEDA = '(from:grupoebi.cl OR to:grupoebi.cl OR cc:grupoebi.cl OR from:hgomez@maho.cl OR subject:cosemar OR "3447-86-LR23" OR "3447-187-LR24" OR subject:manifold)';
 var CON_ADJUNTOS = /revisi[oó]n\s+t[eé]cnica|manifold/i;
@@ -17,11 +17,16 @@ function clave_() {
 function salida_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function autorizado_(e) { return e && e.parameter && e.parameter.k === clave_(); }
 
-/** Ejecuta esta función después de implementar: deja en el registro el enlace secreto para GitHub. */
+/** Ejecuta esta función después de implementar: deja en el registro la clave que va al final del enlace para GitHub.
+ *  El enlace completo es la «URL de la aplicación web» (Implementar → Gestionar implementaciones; termina en /exec) + ?k=CLAVE. */
 function enlace() {
-  var url = ScriptApp.getService().getUrl();
-  if (!url) throw new Error('Primero implementa el script como aplicación web (Implementar → Nueva implementación).');
-  Logger.log('Copia este enlace en el secreto GMAIL_PUENTE_URL de GitHub:\n' + url + '?k=' + clave_());
+  Logger.log('Agrega esto al final de la URL de la aplicación web (la que termina en /exec):\n?k=' + clave_());
+}
+
+/** Cambia la clave (por ejemplo, si se compartió el enlace). El enlace anterior deja de funcionar al instante. */
+function nuevaClave() {
+  PropertiesService.getScriptProperties().deleteProperty('CLAVE');
+  enlace();
 }
 
 function doGet(e) {

@@ -116,6 +116,8 @@ async function mensajesIMAP(desde) {
 // Lectura por el puente de Apps Script (acciones/puente_gmail.gs): sin contraseñas, corre en la cuenta de Google del dueño.
 async function mensajesPuente(desde) {
   const u = new URL(process.env.GMAIL_PUENTE_URL); u.searchParams.set('desde', desde);
+  if (/\/dev$/.test(u.pathname)) throw new Error('GMAIL_PUENTE_URL termina en /dev (versión de prueba del editor): usa la URL de la aplicación web que termina en /exec');
+  if (!u.searchParams.get('k')) throw new Error('GMAIL_PUENTE_URL no trae la clave ?k=');
   const r = await fetch(u, { redirect: 'follow' }); if (!r.ok) throw new Error('Puente Gmail respondió ' + r.status);
   const j = await r.json(); if (j.error) throw new Error('Puente Gmail: ' + j.error);
   return (j.mensajes || []).map(m => Object.assign(m, { adjuntos: (m.adjuntos || []).map(a => ({ nombre: a.nombre, tipo: a.tipo, contenido: Buffer.from(a.b64 || '', 'base64') })) }));

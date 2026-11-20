@@ -51,5 +51,9 @@ async function enviar(asunto, html) {
   // Se olvidan las alertas que ya no están, para avisar de nuevo si reaparecen.
   const vivas = new Set(todas.map(clave)); Object.keys(av).forEach(k => { if (!vivas.has(k)) delete av[k]; });
   fs.mkdirSync(path.dirname(AVISADOS), { recursive: true }); fs.writeFileSync(AVISADOS, JSON.stringify(av, null, 1) + '\n');
+  // Registro de la corrida (sin contenido de correos) para revisar desde el repositorio que todo anduvo.
+  const reg = { corrida: new Date().toISOString(), gmail: informe.gmail.error ? 'error: ' + informe.gmail.error : informe.gmail.omitido ? 'omitido: ' + informe.gmail.omitido : 'ok: ' + informe.gmail.mensajes + ' mensajes leídos',
+    novedades: informe.novedades, alertas: informe.alertas, correo: informe.correo };
+  fs.writeFileSync(path.join(RAIZ, 'datos/auto/ultima_corrida.json'), JSON.stringify(reg, null, 1) + '\n');
   console.log(JSON.stringify(informe, null, 1));
 })().catch(e => { console.error(e); process.exit(1); });
