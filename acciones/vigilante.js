@@ -23,7 +23,7 @@ async function enviar(asunto, html) {
   const E = process.env;
   if (E.VIGILANTE_CORREO_PRUEBA) { fs.writeFileSync(E.VIGILANTE_CORREO_PRUEBA, JSON.stringify({ para: E.AVISOS_PARA, cc: E.AVISOS_CC, asunto, html }, null, 1)); return 'prueba'; }
   if (E.GMAIL_PUENTE_URL) {   // el puente de Apps Script envía desde tu Gmail a ti mismo, con copia @maho.cl
-    const r = await fetch(E.GMAIL_PUENTE_URL, { method: 'POST', redirect: 'follow', headers: { 'content-type': 'text/plain' }, body: JSON.stringify({ asunto, html, cc: E.AVISOS_CC || '' }) });
+    const r = await fetch(require('./gmail').puenteURL(), { method: 'POST', redirect: 'follow', headers: { 'content-type': 'text/plain' }, body: JSON.stringify({ asunto, html, cc: E.AVISOS_CC || '' }) });
     const j = await r.json().catch(() => ({})); if (!j.enviado) throw new Error('El puente no envió el correo: ' + (j.error || r.status));
     return 'puente';
   }
@@ -44,8 +44,8 @@ async function enviar(asunto, html) {
   informe.alertas = { total: todas.length, nuevas: nuevas.length }; informe.novedades = novedades.length;
   if (nuevas.length || novedades.length) {
     const asunto = 'Cosemar · ' + [novedades.length && novedades.length + (novedades.length === 1 ? ' novedad' : ' novedades'), nuevas.length && nuevas.length + (nuevas.length === 1 ? ' alerta nueva' : ' alertas nuevas')].filter(Boolean).join(' y ');
-    const id = await enviar(asunto, correoHTML(novedades, nuevas, todas.length));
-    informe.correo = id ? 'enviado: ' + asunto : 'no enviado: falta el secreto GMAIL_PUENTE_URL';
+    let id = null; try { id = await enviar(asunto, correoHTML(novedades, nuevas, todas.length)); } catch (e) { informe.errorCorreo = e.message; console.error('Correo:', e.message); }
+    informe.correo = id ? 'enviado: ' + asunto : informe.errorCorreo ? 'error: ' + informe.errorCorreo : 'no enviado: falta el secreto GMAIL_PUENTE_URL';
     if (id) { const hoy = new Date().toISOString().slice(0, 10); nuevas.forEach(a => { av[clave(a)] = hoy; }); }
   } else informe.correo = 'sin novedades: no se envía nada';
   // Se olvidan las alertas que ya no están, para avisar de nuevo si reaparecen.

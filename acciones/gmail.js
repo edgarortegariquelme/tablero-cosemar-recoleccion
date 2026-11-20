@@ -130,10 +130,19 @@ async function mensajesIMAP(desde) {
 }
 
 // Lectura por el puente de Apps Script (acciones/puente_gmail.gs): sin contraseñas, corre en la cuenta de Google del dueño.
+// Enlace del puente normalizado (sin espacios ni saltos de línea pegados por error) y validado sin revelar la clave.
+function puenteURL() {
+  const crudo = String(process.env.GMAIL_PUENTE_URL || ''), limpio = crudo.replace(/\s+/g, '');
+  const diag = 'largo ' + limpio.length + ', ' + (/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec/.test(limpio) ? 'URL /exec correcta' : /\/dev(\?|$)/.test(limpio) ? 'termina en /dev (debe ser /exec)' : 'no parece una URL de aplicación web de Apps Script')
+    + ', ' + (/[?&]k=[0-9a-f]{32,}/i.test(limpio) ? 'con clave' : /k=/.test(limpio) ? 'clave incompleta' : 'sin ?k=') + (crudo !== limpio ? ', tenía espacios o saltos de línea (corregido)' : '');
+  let u; try { u = new URL(limpio); } catch (e) { throw new Error('GMAIL_PUENTE_URL no es una URL válida (' + diag + ')'); }
+  if (/\/dev$/.test(u.pathname) || !/\/exec$/.test(u.pathname) || !/^[0-9a-f]{32,}$/i.test(u.searchParams.get('k') || '')) throw new Error('GMAIL_PUENTE_URL mal formado (' + diag + ')');
+  return u;
+}
+
+// Lectura por el puente de Apps Script (acciones/puente_gmail.gs): sin contraseñas, corre en la cuenta de Google del dueño.
 async function mensajesPuente(desde) {
-  const u = new URL(process.env.GMAIL_PUENTE_URL); u.searchParams.set('desde', desde);
-  if (/\/dev$/.test(u.pathname)) throw new Error('GMAIL_PUENTE_URL termina en /dev (versión de prueba del editor): usa la URL de la aplicación web que termina en /exec');
-  if (!u.searchParams.get('k')) throw new Error('GMAIL_PUENTE_URL no trae la clave ?k=');
+  const u = puenteURL(); u.searchParams.set('desde', desde);
   const r = await fetch(u, { redirect: 'follow' }); if (!r.ok) throw new Error('Puente Gmail respondió ' + r.status);
   const j = await r.json(); if (j.error) throw new Error('Puente Gmail: ' + j.error);
   return (j.mensajes || []).map(m => Object.assign(m, { adjuntos: (m.adjuntos || []).map(a => ({ nombre: a.nombre, tipo: a.tipo, contenido: Buffer.from(a.b64 || '', 'base64') })) }));
@@ -155,5 +164,5 @@ async function ingestar() {
   return { mensajes: msgs.length, novedades };
 }
 
-module.exports = { ingestar, clasificar, vigenciaRT, limpiarAsunto };
+module.exports = { puenteURL, ingestar, clasificar, vigenciaRT, limpiarAsunto };
 if (require.main === module) ingestar().then(r => console.log(JSON.stringify(r, null, 1)), e => { console.error(e); process.exit(1); });
