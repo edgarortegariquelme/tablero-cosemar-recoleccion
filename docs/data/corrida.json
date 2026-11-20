@@ -1,6 +1,7 @@
 {
- "corrida": "2026-11-20T15:08:10.373Z",
- "gmail": "ok: 19 mensajes leídos",
+ "corrida": "2026-11-20T15:10:51.134Z",
+ "gmail": "omitido: falta el secreto GMAIL_PUENTE_URL (o GMAIL_USUARIO y GMAIL_CLAVE_APP)",
+ "drive": "omitido: falta el secreto GMAIL_PUENTE_URL",
  "novedades": 0,
  "alertas": {
   "total": 16,
