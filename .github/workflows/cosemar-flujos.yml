@@ -2,12 +2,10 @@
 # Ejecutan el mismo código de los nodos de n8n/produccion/*.json con acciones/ejecutor.js.
 # Secretos (Settings → Secrets and variables → Actions): NOTION_TOKEN (obligatorio), AVISOS_PARA, AVISOS_CC (opcional),
 # GMAIL_USUARIO, GMAIL_CLAVE_APP (avisos), GOOGLE_SA_JSON (opcional, Drive). Sin NOTION_TOKEN no se ejecuta nada.
-name: Flujos Cosemar
+name: Flujos Cosemar (archivado, n8n)
 on:
-  schedule:
-    # Archivado: la ingesta de Gmail y Drive y los avisos los hace acciones/vigilante.js (actualizar-app.yml), sin n8n ni Notion.
-    # Los avisos por correo los envía ahora acciones/vigilante.js (actualizar-app.yml) solo cuando hay algo nuevo;
-    # aquí quedan disponibles solo a mano (workflow_dispatch → avisos) para no duplicar correos.
+  # Archivado (sin horarios): la ingesta de Gmail y Drive y los avisos los hace acciones/vigilante.js
+  # (actualizar-app.yml), sin n8n ni Notion. Este flujo queda solo para ejecución manual.
   workflow_dispatch:
     inputs:
       proceso:
