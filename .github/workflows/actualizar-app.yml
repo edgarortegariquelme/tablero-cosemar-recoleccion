@@ -1,3 +1,7 @@
+# Cada hora: lee Gmail (correos, manifolds y revisiones técnicas de Cosemar/ITS), regenera la app y avisa por correo SOLO si hay algo nuevo.
+# Secretos (Settings → Secrets and variables → Actions): GMAIL_USUARIO, GMAIL_CLAVE_APP (contraseña de aplicación de Google),
+# AVISOS_PARA, AVISOS_CC (opcional), NOTION_TOKEN (opcional: si está, el libro de control se toma de Notion).
+# Sin secretos la app igual se reconstruye; solo se omiten la lectura de Gmail y el correo.
 name: Actualizar app Cosemar
 on:
   schedule:
@@ -5,26 +9,39 @@ on:
   workflow_dispatch: {}
   push:
     branches: [main]
-    paths: ['datos/**', 'tablero/draft/**', 'tablero/store/*.json']
+    paths: ['datos/**', 'tablero/draft/**', 'tablero/store/*.json', 'acciones/**']
 permissions:
   contents: write
+concurrency:
+  group: app-cosemar
+  cancel-in-progress: false
 jobs:
   construir:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - name: Exportar libro de control desde Notion
+        with: { node-version: '22', cache: 'npm' }
+      - name: Herramientas para leer certificados (PDF y OCR)
+        run: sudo apt-get install -y -q poppler-utils tesseract-ocr tesseract-ocr-spa >/dev/null
+      - name: Dependencias
+        run: npm ci --no-audit --no-fund
+      - name: Exportar libro de control desde Notion (si hay token)
         env: { NOTION_TOKEN: '${{ secrets.NOTION_TOKEN }}' }
         run: node datos/exportar_notion.js
-      - name: Regenerar datos y construir la app
-        run: |
-          node datos/operacion.js
-          node datos/construir_app.js
+      - name: Gmail → datos → app → avisos
+        env:
+          GMAIL_USUARIO: ${{ secrets.GMAIL_USUARIO }}
+          GMAIL_CLAVE_APP: ${{ secrets.GMAIL_CLAVE_APP }}
+          AVISOS_PARA: ${{ secrets.AVISOS_PARA }}
+          AVISOS_CC: ${{ secrets.AVISOS_CC }}
+        run: node acciones/vigilante.js
       - name: Guardar cambios
         run: |
           git config user.name "app-cosemar"
           git config user.email "actions@users.noreply.github.com"
-          git add docs
-          git diff --cached --quiet || (git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)" && git push)
+          git add docs datos/auto tablero/store
+          git diff --cached --quiet && exit 0
+          git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done

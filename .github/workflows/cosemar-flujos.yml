@@ -6,7 +6,8 @@ name: Flujos Cosemar
 on:
   schedule:
     - cron: '7 * * * *'        # ingesta, antes de la exportación de la app (:17)
-    - cron: '10 11 * * 1-6'    # avisos: 08:10 Chile (UTC-3); en invierno (UTC-4) corre a las 07:10
+    # Los avisos por correo los envía ahora acciones/vigilante.js (actualizar-app.yml) solo cuando hay algo nuevo;
+    # aquí quedan disponibles solo a mano (workflow_dispatch → avisos) para no duplicar correos.
     - cron: '37 */6 * * *'     # reproceso de errores
   workflow_dispatch:
     inputs:

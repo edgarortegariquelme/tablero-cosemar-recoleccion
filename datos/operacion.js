@@ -4,6 +4,8 @@
  * Gmail (hilos con Cosemar / Grupo EBI e ITS) y EDP de Cosemar del 14-10-2026. Uso: node datos/operacion.js
  * Personal: solo cifras agregadas por cargo; el tablero no publica nombres ni RUT. */
 const fs = require('fs'), path = require('path'), M = require('../motor/motor.js');
+// Lo que llega solo desde Gmail (acciones/gmail.js); lo curado a mano en este archivo siempre manda.
+let AUTO = { correos: {}, manifolds: {}, rt: {} }; try { AUTO = JSON.parse(fs.readFileSync(path.join(__dirname, 'auto/gmail.json'), 'utf8')); } catch (e) {}
 const OUT = path.join(__dirname, '../tablero/store'), D = 'https://drive.google.com/file/d/', G = 'https://mail.google.com/mail/u/0/#all/';
 const hab = (f, n) => M.sumarHabiles(f, n), cor = (f, n) => M.sumarDias(f, n);
 const RES = []; // resúmenes de una fila por tema (tablero/store/resumenes.json)
@@ -35,6 +37,9 @@ const MF = [
   ['MF-2024-06', '2024-07-18', '6', 'Adjunta el oficio 10 del primer proceso sancionatorio', 'Notificación', null, null, 'Cerrado', '2024-07-25', 'Cosemar respondió el 25-07-2024.', null, D + '15Wk2Lmfbr7mljv6iQFn6oP45P5iz1Yj4/view'],
   ['MF-2024-05', '2024-07-17', '5', 'Pide a Cosemar los planes de trabajo', 'Requerimiento', null, null, 'Cerrado', '2024-10-02', 'Cosemar adjuntó los planes el 02-10-2024.', null, D + '1t3T4Tu8G4EPk1B1Hl2N-QaIvkQKtlO5h/view']
 ];
+// Manifolds nuevos desde Gmail: se agregan si la página del año no está ya en la lista curada.
+Object.values(AUTO.manifolds || {}).forEach(m => { if (!MF.some(r => r[2] === m.pagina && r[1].slice(0, 4) === m.fecha.slice(0, 4))) MF.unshift([m.id, m.fecha, m.pagina, m.motivo, m.tipo, null, null, m.estado, null, m.nota, null, m.respaldo, null]); });
+MF.sort((x, y) => (y[1] > x[1] ? 1 : y[1] < x[1] ? -1 : 0));
 w('manifolds.json', MF.map(r => {
   const [id, fecha, pagina, motivo, tipo, dias, unidad, estado, cierre, nota, caso, respaldo, venceFijo] = r;
   const vence = venceFijo || (dias ? (unidad === 'hábiles' ? hab(fecha, dias) : cor(fecha, dias)) : null);
@@ -73,6 +78,11 @@ const C = [
   ['2026-08-21', 'Jesús Chinchayán', 'Cosemar', 'Solicitud de suspensión del servicio', 'Recolección', 'Baja', 'Cerrado', '', '1a017222df8ab0c7'],
   ['2026-08-13', 'Jesús Chinchayán', 'Cosemar', 'Resolución del proceso de multa por papeles vencidos del móvil 980', 'Recolección', 'Baja', 'Cerrado', 'Recibido por Cosemar.', '19ffba3362b4a3ed']
 ];
+// Correos desde Gmail: hilo nuevo → fila nueva; hilo ya curado con un mensaje más reciente → se actualiza fecha y nota y se marca para revisar.
+Object.values(AUTO.correos || {}).forEach(c => { const i = C.findIndex(r => r[8] === c.hilo);
+  if (i < 0) C.push([c.fecha, c.contacto, c.empresa, c.tema, c.contrato, c.urgencia, c.estado, c.nota, c.hilo]);
+  else if (c.fecha > C[i][0]) C[i] = [c.fecha, c.contacto, c.empresa, C[i][3], C[i][4], c.urgencia === 'Baja' ? C[i][5] : c.urgencia, c.estado === 'Informativo' ? C[i][6] : c.estado, 'Nuevo mensaje: ' + c.nota, c.hilo]; });
+C.sort((x, y) => (y[0] > x[0] ? 1 : y[0] < x[0] ? -1 : 0));
 w('correos.json', C.map((r, i) => ({ id: 'C' + String(i + 1).padStart(2, '0'), fecha: r[0], contacto: r[1], empresa: r[2], tema: r[3], contrato: r[4], urgencia: r[5], estado: r[6], nota: r[7], enlace: G + r[8] })),
   { contactos: ['Hernán Gómez (ITS)', 'Jesús Chinchayán (jefatura de proyecto Cosemar)', 'Edgar Ortega (encargado del contrato)', 'Teresa Donoso (administrativa Cosemar)', 'René Gutiérrez (Cosemar)', 'Alejandra Marzán (Cosemar)', 'Rodrigo Barril (relleno sanitario)'] });
 
@@ -103,6 +113,8 @@ const FL = [ // movil, patente, tipo, marca/modelo, estado 09-11, RT vence (plan
   ['984', 'TPRF92-3', 'Minicargador', 'Bobcat S510', 'Operativo en base', '2030-07-22', null, ''],
   ['985', 'PWWC14-3', 'Carro de arrastre', 'Invicta T6000', 'Operativo en base', '2027-01-14', null, '']
 ];
+// Revisiones técnicas que llegaron por Gmail con fecha legible: reemplazan la de la planilla si son posteriores.
+FL.forEach(r => { const a = (AUTO.rt || {})[r[0]]; if (a && a.vence && a.vence > (r[5] || '')) { r[5] = a.vence; r[7] = 'Renovada el ' + a.recibido.split('-').reverse().join('-') + ' (certificado recibido por correo).'; } });
 w('flota.json', FL.map(r => ({ movil: r[0], patente: r[1], tipo: r[2], modelo: r[3], estado: r[4], estadoFecha: '2026-11-09', rt: r[5], rtOtraFuente: r[6], permiso: '2027-09-30', soap: '2027-09-30', aseguradora: 'Seguros Sura', nota: r[7], foto: FOTOS[r[0]] ? D + FOTOS[r[0]] + '/view' : FOTO, fotoId: FOTOS[r[0]] || null, imagen: FOTOS[r[0]] ? 'fotos/rt-' + r[0] + '.jpg' : null })),
   { contrato: [{ documento: 'Seguro de responsabilidad civil, póliza 226102080 (Continental, UF 2.000)', vence: '2027-07-31' }, { documento: 'Garantía de fiel cumplimiento, póliza 224103598 (20.379,57 UF; endoso por 419,57 UF el 29-10-2026)', vence: '2029-10-28' }],
     otros: 'El EDP también lista tres camionetas de apoyo (904, 986, 987) sin documentos en la planilla.', fuentes: { vencimientos: 'https://docs.google.com/spreadsheets/d/1tHM807N-TxxC-WTic12y5tgCJoNP0KEcBCvgX-dgE5w/edit', estado: G + '1a1c29df4f6d7d7c', ficha: D + '1hxwOOry6aPjS6QpeY4ETbQ43ThyvbVEw/view', fotos: FOTO } });

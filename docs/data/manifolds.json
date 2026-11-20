@@ -2,6 +2,36 @@
  "corte": "2026-11-20",
  "rows": [
   {
+   "id": "MF-2026-22",
+   "fecha": "2026-11-18",
+   "pagina": "22",
+   "motivo": "Cierra el proceso sancionatorio 2: gráfica de camiones al 100%",
+   "tipo": "Cierre de proceso",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Proceso 2 cerrado sin multa por cumplimiento total de la gráfica.",
+   "caso": "PS02",
+   "respaldo": null
+  },
+  {
+   "id": "MF-2026-20",
+   "fecha": "2026-11-17",
+   "pagina": "20",
+   "motivo": "Remite informe de incumplimiento por observaciones de la visita técnica a instalaciones (30-09)",
+   "tipo": "Inicio de proceso",
+   "plazoDias": 1,
+   "plazoUnidad": "hábiles",
+   "vence": "2026-11-18",
+   "estado": "Cerrado",
+   "cierre": "2026-11-19",
+   "nota": "Cosemar presentó descargos el 18-11; la ITS los acogió el 19-11 «en esta oportunidad».",
+   "caso": "PS07",
+   "respaldo": null
+  },
+  {
    "id": "MF-2026-28",
    "fecha": "2026-06-05",
    "pagina": "28",
@@ -90,36 +120,6 @@
    "nota": "Sin efecto el 02-06-2026.",
    "caso": "PS01",
    "respaldo": "https://drive.google.com/file/d/1O9q0sQ3YTdEQ0kqRHVcb5GIW9RkHJKN7/view"
-  },
-  {
-   "id": "MF-2026-22",
-   "fecha": "2026-11-18",
-   "pagina": "22",
-   "motivo": "Cierra el proceso sancionatorio 2: gráfica de camiones al 100%",
-   "tipo": "Cierre de proceso",
-   "plazoDias": null,
-   "plazoUnidad": null,
-   "vence": null,
-   "estado": "Cerrado",
-   "cierre": "2026-11-18",
-   "nota": "Proceso 2 cerrado sin multa por cumplimiento total de la gráfica.",
-   "caso": "PS02",
-   "respaldo": null
-  },
-  {
-   "id": "MF-2026-20",
-   "fecha": "2026-11-17",
-   "pagina": "20",
-   "motivo": "Remite informe de incumplimiento por observaciones de la visita técnica a instalaciones (30-09)",
-   "tipo": "Inicio de proceso",
-   "plazoDias": 1,
-   "plazoUnidad": "hábiles",
-   "vence": "2026-11-18",
-   "estado": "Cerrado",
-   "cierre": "2026-11-19",
-   "nota": "Cosemar presentó descargos el 18-11; la ITS los acogió el 19-11 «en esta oportunidad».",
-   "caso": "PS07",
-   "respaldo": null
   },
   {
    "id": "MF-2026-46",
