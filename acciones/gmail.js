@@ -69,6 +69,8 @@ function imagenRT(adj, movil) {
 
 // Clasifica un mensaje normalizado { id, hilo, fecha, de:{nombre,correo}, asunto, texto, adjuntos:[{nombre,tipo,contenido}] }.
 function clasificar(m, st, novedades) {
+  // Solo cuentan Cosemar/Grupo EBI y la municipalidad (fuera avisos automáticos, p. ej. notificaciones de GitHub).
+  if (empresaDe(m.de.correo) === 'Otro' || /noreply|no-reply|notifications@/i.test(m.de.correo)) return;
   const hoy = fechaCL(m.fecha), asunto = limpiarAsunto(m.asunto), emp = empresaDe(m.de.correo), contrato = DF.test(asunto + ' ' + m.de.correo) ? 'Disposición final' : 'Recolección';
   const enlace = 'https://mail.google.com/mail/u/0/#all/' + m.hilo;
   // 1) Revisión técnica: «Revisión Técnica M-922»

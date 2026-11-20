@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "app-cosemar"
           git config user.email "actions@users.noreply.github.com"
-          git add docs datos/auto tablero/store
+          git add -A
           git diff --cached --quiet && exit 0
           git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)"
-          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
+          for i in 1 2 3; do git pull --rebase --autostash -q && git push && break; sleep 5; done
