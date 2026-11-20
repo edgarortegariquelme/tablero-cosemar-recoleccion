@@ -118,6 +118,11 @@
     "inicioRec": "2024-07",
     "inicioDf": "2025-01"
    }
+  },
+  {
+   "clave": "vigencias",
+   "titulo": "Vigencias",
+   "texto": "Decretos, anexos, reajustes, garantías y seguros con su próxima acción según bases."
   }
  ]
 }

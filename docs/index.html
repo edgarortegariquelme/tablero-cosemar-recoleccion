@@ -95,8 +95,8 @@ body { margin: 0; padding: 16px; background: var(--color-bg); color: var(--color
 .ct-nav label { border: 1px solid var(--color-border-line); border-radius: 999px; }
 .vt-nav label:hover, .ct-nav label:hover { color: var(--color-fg); }
 .va-tab, .op-c { display: none; }
-#vt-op:checked ~ #tab-op, #vt-mu:checked ~ #tab-mu, #vt-mf:checked ~ #tab-mf, #vt-co:checked ~ #tab-co, #vt-fl:checked ~ #tab-fl, #vt-pe:checked ~ #tab-pe, #vt-su:checked ~ #tab-su, #vt-an:checked ~ #tab-an { display: block; }
-#vt-op:checked ~ .vt-nav [for=vt-op], #vt-mu:checked ~ .vt-nav [for=vt-mu], #vt-mf:checked ~ .vt-nav [for=vt-mf], #vt-co:checked ~ .vt-nav [for=vt-co], #vt-fl:checked ~ .vt-nav [for=vt-fl], #vt-pe:checked ~ .vt-nav [for=vt-pe], #vt-su:checked ~ .vt-nav [for=vt-su], #vt-an:checked ~ .vt-nav [for=vt-an] { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); box-shadow: inset 0 -2px 0 var(--color-fg); }
+#vt-op:checked ~ #tab-op, #vt-vi:checked ~ #tab-vi, #vt-mu:checked ~ #tab-mu, #vt-mf:checked ~ #tab-mf, #vt-co:checked ~ #tab-co, #vt-fl:checked ~ #tab-fl, #vt-pe:checked ~ #tab-pe, #vt-su:checked ~ #tab-su, #vt-an:checked ~ #tab-an { display: block; }
+#vt-op:checked ~ .vt-nav [for=vt-op], #vt-vi:checked ~ .vt-nav [for=vt-vi], #vt-mu:checked ~ .vt-nav [for=vt-mu], #vt-mf:checked ~ .vt-nav [for=vt-mf], #vt-co:checked ~ .vt-nav [for=vt-co], #vt-fl:checked ~ .vt-nav [for=vt-fl], #vt-pe:checked ~ .vt-nav [for=vt-pe], #vt-su:checked ~ .vt-nav [for=vt-su], #vt-an:checked ~ .vt-nav [for=vt-an] { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); box-shadow: inset 0 -2px 0 var(--color-fg); }
 #ct-rec:checked ~ .op-rec, #ct-df:checked ~ .op-df { display: block; }
 #ct-rec:checked ~ .ct-nav [for=ct-rec], #ct-df:checked ~ .ct-nav [for=ct-df] { color: var(--color-fg); border-color: var(--color-fg); }
 .vt-r:focus-visible + *, .vt-nav label:focus-visible { outline: 2px solid var(--color-fg); }
@@ -139,6 +139,7 @@ body { margin: 0; padding: 16px; background: var(--color-bg); color: var(--color
 .tl-item summary .va-muted { font-weight: 400; }
 .fl-sin { display: inline-block; margin-bottom: 4px; font-size: var(--cds-font-size-caption); }
 #tbl-flota td:last-child { min-width: 220px; }
+#tbl-vig-rec td:first-child, #tbl-vig-df td:first-child { min-width: 260px; } #tbl-vig-rec td:last-child, #tbl-vig-df td:last-child { min-width: 220px; } .vv-regla { font-size: 12px; margin-top: 4px; }
 .fl-foto { display: block; width: 96px; height: 72px; object-fit: cover; object-position: top; border-radius: 4px; border: 1px solid var(--color-border-line); margin-bottom: 4px; background: var(--color-panel); }
 @media (max-width: 640px) { .tl li, .tl-li { grid-template-columns: 1fr; gap: 0; } .op-dia { min-height: 40px; } .op-mk { display: none; } }
 </style>
@@ -155,8 +156,9 @@ body { margin: 0; padding: 16px; background: var(--color-bg); color: var(--color
   <input type="radio" name="vt" id="vt-fl" class="vt-r">
   <input type="radio" name="vt" id="vt-pe" class="vt-r">
   <input type="radio" name="vt" id="vt-su" class="vt-r">
+  <input type="radio" name="vt" id="vt-vi" class="vt-r">
   <input type="radio" name="vt" id="vt-an" class="vt-r">
-  <div class="vt-nav" role="tablist"><label for="vt-op">Operación</label><label for="vt-mu">Multas</label><label for="vt-mf">Manifolds</label><label for="vt-co">Correos</label><label for="vt-fl">Flota</label><label for="vt-pe">Personal</label><label for="vt-su">Bono SUBDERE</label><label for="vt-an">Análisis y deuda</label></div>
+  <div class="vt-nav" role="tablist"><label for="vt-op">Operación</label><label for="vt-vi">Vigencias</label><label for="vt-mu">Multas</label><label for="vt-mf">Manifolds</label><label for="vt-co">Correos</label><label for="vt-fl">Flota</label><label for="vt-pe">Personal</label><label for="vt-su">Bono SUBDERE</label><label for="vt-an">Análisis y deuda</label></div>
 
   <section class="va-tab" id="tab-op">
   <input type="radio" name="ct" id="ct-rec" class="ct-r" checked><input type="radio" name="ct" id="ct-df" class="ct-r">
@@ -207,6 +209,17 @@ body { margin: 0; padding: 16px; background: var(--color-bg); color: var(--color
   </div>
   </section>
 
+  <section class="va-tab" id="tab-vi">
+  <h2>Decretos, anexos, reajustes, garantías y seguros: qué está vigente y qué viene</h2>
+  <p class="va-muted">Según las bases: reajuste anual por IPC con informe de Cosemar (BA 9); aumento poblacional por anexo semestral y decretado con los certificados de recepción final de la DOM, a 0,065 UTM por vivienda y con solicitud formal de Cosemar cada 6 meses (BA 9 y 93, BT 64–65); garantía del 5% vigente hasta 120 días después del término (BA 200); seguro RC de UF 2.000 hasta 90 días después del término (BA 125–134). Disposición final: reajuste en enero por el IPC del año anterior (art. 40 BT).</p>
+  <div data-draw="vv_resumen" data-source="c_vigencias"></div>
+  <h3>Recolección · 3447-86-LR23</h3>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-vig-rec" data-source="c_vigencias" data-row-key="id"><thead><tr><th>Instrumento</th><th>Estado</th><th>Monto</th><th>Vigencia</th><th>Próxima acción</th></tr></thead><tbody data-draw="vv_tabla_rec"></tbody></table></div>
+  <h3>Disposición final · 3447-187-LR24</h3>
+  <div class="va-wrap"><table class="va-tbl" id="tbl-vig-df" data-source="c_vigencias" data-row-key="id"><thead><tr><th>Instrumento</th><th>Estado</th><th>Monto</th><th>Vigencia</th><th>Próxima acción</th></tr></thead><tbody data-draw="vv_tabla_df"></tbody></table></div>
+  <h3>Calendario de reajustes, renovaciones y vencimientos</h3>
+  <ul class="va-list" data-draw="vv_cal" data-source="c_vigencias"></ul>
+  </section>
   <section class="va-tab" id="tab-mu">
   <h3 id="h-multas">Procesos sancionatorios y multas, del más nuevo al más antiguo</h3>
   <p class="va-muted">Cada proceso muestra sus pasos ejecutados en orden, los documentos, los decretos de multa y el que la reafirma, el monto y el pago donde se cobra. Abiertos primero desplegados.</p>

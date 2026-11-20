@@ -118,9 +118,9 @@
   });
 
   dash.calc('c_alertas', {
-    inputs: ['c_ciclo', 'flota', 'manifolds', 'correos'], title: 'Alertas de hoy',
+    inputs: ['c_ciclo', 'flota', 'manifolds', 'correos', 'c_vigencias'], title: 'Alertas de hoy',
     description: 'OC que superan los 7 días desde el memo que la pide, facturas y pagos fuera de plazo, ventanas que vienen, revisiones técnicas vencidas o por vencer en 30 días, manifolds abiertos con plazo vencido y correos urgentes sin responder.',
-    fn: function (ciclo, flota, mf, cor) {
+    fn: function (ciclo, flota, mf, cor, vig) {
       var hoy = hoyCL(), out = [];
       function a(nivel, k, txt, fecha) { out.push({ nivel: nivel, contrato: k, texto: txt, fecha: fecha || null }); }
       ['rec', 'df'].forEach(function (k) {
@@ -140,9 +140,69 @@
         else if (d <= 30) a('media', 'rec', 'Móvil ' + f.movil + ' (' + f.patente + '): la revisión técnica vence el ' + fCL(f.rt) + (d === 0 ? ' (hoy).' : d === 1 ? ' (mañana).' : ' (en ' + d + ' días).'), f.rt); });
       mf.filter(function (m) { return m.estado === 'Abierto' && m.vence && m.vence < hoy; }).forEach(function (m) { a('alta', 'rec', 'Manifold ' + m.pagina + ' del ' + fCL(m.fecha) + ' sigue abierto con el plazo vencido el ' + fCL(m.vence) + ': ' + m.motivo + '.', m.vence); });
       cor.filter(function (c) { return c.urgencia === 'Alta' && c.estado === 'Responder'; }).forEach(function (c) { a('alta', c.contrato === 'Disposición final' ? 'df' : 'rec', 'Correo de ' + c.contacto + ' del ' + fCL(c.fecha) + ' sin responder: ' + c.tema + '.', c.fecha); });
+      (vig || []).forEach(function (v) { if (v.alerta) a(v.alerta.nivel, v.contrato, v.alerta.texto, v.alerta.fecha); });
       var ord = { alta: 0, media: 1, info: 2 };
       return out.sort(function (x, y) { return ord[x.nivel] - ord[y.nivel] || ((x.fecha || '') < (y.fecha || '') ? -1 : 1); });
     }
+  });
+
+  // ---------- Vigencias: decretos, anexos, reajustes, garantías y seguros (BA 9, 92–93, 125–134, 200 · BT 64–65) ----------
+  dash.calc('c_vigencias', {
+    inputs: ['vigencias'], title: 'Vigencias y próximas acciones',
+    description: 'Para cada decreto, anexo, reajuste, garantía y seguro: estado, días a la próxima acción o al vencimiento, y la alerta que corresponde.',
+    fn: function (v) {
+      var hoy = hoyCL();
+      return v.map(function (x) {
+        var r = Object.assign({}, x), pend = x.semaforo === 'bad' || x.semaforo === 'warn';
+        r.diasAccion = x.fechaAccion ? dc(hoy, x.fechaAccion) : null; r.diasVence = x.vence ? dc(hoy, x.vence) : null; r.pendiente = pend;
+        var al = null;
+        if (pend && x.accion) al = { nivel: x.semaforo === 'bad' ? 'alta' : 'media', texto: x.instrumento + ': ' + x.estado.toLowerCase() + '. ' + x.accion + (x.fechaAccion ? ' (pendiente desde el ' + fCL(x.fechaAccion) + ').' : '.'), fecha: x.fechaAccion };
+        else if (x.fechaAccion && r.diasAccion <= 60) {
+          var d = r.diasAccion, cuando = d < 0 ? 'venció el ' + fCL(x.fechaAccion) : 'hasta el ' + fCL(x.fechaAccion) + (d === 0 ? ' (hoy)' : d === 1 ? ' (mañana)' : ' (en ' + d + ' días)');
+          al = { nivel: d < 0 || d <= 7 ? 'alta' : d <= 30 ? 'media' : 'info', texto: x.instrumento + ': ' + x.accion + ', ' + cuando + (x.quien ? ' · ' + x.quien : '') + '.', fecha: x.fechaAccion };
+        }
+        if (!al && x.vence && r.diasVence <= 60) al = { nivel: r.diasVence < 0 ? 'alta' : 'media', texto: x.instrumento + (r.diasVence < 0 ? ' venció el ' + fCL(x.vence) : ' vence el ' + fCL(x.vence) + ' (en ' + r.diasVence + ' días)') + '.', fecha: x.vence };
+        r.alerta = al; return r;
+      });
+    }
+  });
+  var GRUPOS = ['Contrato', 'Decreto', 'Reajuste IPC', 'Aumento poblacional', 'Anexo', 'Garantía', 'Seguro'];
+  function plazoTxt(d) { return d == null ? '' : d < 0 ? 'hace ' + (-d) + ' días' : d === 0 ? 'hoy' : 'en ' + d + ' días'; }
+  dash.draw('vv_resumen', function (el) {
+    if (!listo(el, ['c_vigencias'])) return;
+    var v = filas('c_vigencias'), bad = v.filter(function (x) { return x.semaforo === 'bad'; }), warn = v.filter(function (x) { return x.semaforo === 'warn'; });
+    var prox = v.filter(function (x) { return !x.pendiente && x.fechaAccion && x.diasAccion >= 0; }).sort(function (a, b) { return a.diasAccion - b.diasAccion; })[0];
+    var gar = v.filter(function (x) { return x.id === 'V08'; })[0], seg = v.filter(function (x) { return x.id === 'V09'; })[0];
+    function card(eb, big, txt, cls) { return h('div', { cls: 'va-card' }, [h('div', { cls: 'va-eyebrow', text: eb }), h('div', { cls: 'va-big' + (cls ? ' ' + cls : ''), text: big }), h('div', { cls: 'va-muted', text: txt })]); }
+    el.replaceChildren(h('div', { cls: 'va-cards' }, [
+      card('Sin ejecutar o sin decreto', String(bad.length), bad.map(function (x) { return x.instrumento.split(' · ')[0] + (x.contrato === 'df' ? ' (DF)' : ''); }).join('; ') || 'Ninguno.', bad.length ? 'va-deuda' : ''),
+      card('En trámite', String(warn.length), warn.map(function (x) { return x.instrumento.split(' · ')[0] + (x.contrato === 'df' ? ' (DF)' : ''); }).join('; ') || 'Ninguno.'),
+      card('Próxima acción', prox ? fCL(prox.fechaAccion) : '—', prox ? prox.accion + ' (' + plazoTxt(prox.diasAccion) + ').' : 'Sin acciones programadas.'),
+      card('Garantía y seguro', gar ? fCL(gar.vence) : '—', (gar ? 'Garantía de fiel cumplimiento ' + plazoTxt(gar.diasVence) + '. ' : '') + (seg ? 'Seguro RC vence el ' + fCL(seg.vence) + ' (' + plazoTxt(seg.diasVence) + ').' : ''))]));
+  });
+  ['rec', 'df'].forEach(function (k) {
+    dash.draw('vv_tabla_' + k, function (el) {
+      if (!listo(el, ['c_vigencias'])) return;
+      var v = filas('c_vigencias').filter(function (x) { return x.contrato === k; }).sort(function (a, b) { return GRUPOS.indexOf(a.grupo) - GRUPOS.indexOf(b.grupo) || (a.desde < b.desde ? -1 : 1); });
+      el.replaceChildren.apply(el, v.map(function (x) {
+        var vig = fCL(x.desde) + (x.vence ? ' al ' + fCL(x.vence) : ' · sin término'), acc = [];
+        if (x.accion) acc.push(h('div', { text: x.accion }), h('div', { cls: 'va-muted', text: (x.fechaAccion ? (x.pendiente ? 'Pendiente desde el ' + fCL(x.fechaAccion) : fCL(x.fechaAccion) + ' · ' + plazoTxt(x.diasAccion)) : 'Sin fecha') + (x.quien ? ' · ' + x.quien : '') }));
+        else acc.push(h('span', { cls: 'va-muted', text: '—' }));
+        return h('tr', null, [h('td', null, [h('div', { cls: 'va-muted', text: x.grupo }), x.respaldo ? h('a', { href: x.respaldo, target: '_blank', rel: 'noopener', text: x.instrumento }) : h('b', { text: x.instrumento }), h('div', { cls: 'va-muted vv-regla', text: x.regla })]),
+          h('td', null, [chip(x.estado, x.semaforo === 'info' ? '' : x.semaforo)]), h('td', { text: x.monto || '—' }), h('td', null, [h('div', { text: vig }), x.vence && x.diasVence <= 60 ? h('div', { cls: 'va-muted', text: plazoTxt(x.diasVence) }) : null]),
+          h('td', null, acc)]);
+      }));
+    });
+  });
+  dash.draw('vv_cal', function (el) {
+    if (!listo(el, ['c_vigencias'])) return;
+    var ev = [];
+    filas('c_vigencias').forEach(function (x) {
+      if (x.fechaAccion && !x.pendiente && x.diasAccion >= 0) ev.push({ f: x.fechaAccion, t: x.accion, i: x.instrumento, k: x.contrato, q: x.quien });
+      if (x.vence && x.diasVence >= 0) ev.push({ f: x.vence, t: 'Vence', i: x.instrumento, k: x.contrato });
+    });
+    ev.sort(function (a, b) { return a.f < b.f ? -1 : 1; });
+    el.replaceChildren.apply(el, ev.map(function (e) { return h('li', null, [h('b', { text: fCL(e.f) }), h('span', { text: ' · ' + (e.k === 'df' ? 'Disposición final' : 'Recolección') + ' · ' + e.i + ': ' + e.t + (e.q ? ' (' + e.q + ')' : '') })]); }));
   });
 
   // ---------- dibujos de Operación (uno por contrato) ----------

@@ -9,7 +9,7 @@ fs.mkdirSync(path.join(D, 'js'), { recursive: true }); fs.mkdirSync(DATA, { recu
 
 // Datos de archivo: mismo nombre que en tablero/store
 const ARCH = { pagos_contrato: 'pagos_contrato', alzas: 'alzas_contrato', plan_pago: 'plan_pago', df_pagos: 'disposicion_final_pagos', df_alzas: 'disposicion_final_alzas', catalogo: 'catalogo',
-  manifolds: 'manifolds', correos: 'correos', flota: 'flota', personal: 'personal', subdere: 'subdere', antecedentes: 'antecedentes', ciclo_fechas: 'ciclo_fechas', resumenes: 'resumenes', imposiciones: 'imposiciones' };
+  manifolds: 'manifolds', correos: 'correos', flota: 'flota', personal: 'personal', subdere: 'subdere', antecedentes: 'antecedentes', ciclo_fechas: 'ciclo_fechas', resumenes: 'resumenes', imposiciones: 'imposiciones', vigencias: 'vigencias' };
 const mapa = {};
 // El catálogo del tablero se regenera desde datos/catalogo.js (evita copias desfasadas).
 fs.writeFileSync(path.join(__dirname, '../tablero/store/catalogo.json'), JSON.stringify(JSON.parse(JSON.stringify(require('./catalogo.js'))), null, 1));

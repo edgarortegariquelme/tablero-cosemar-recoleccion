@@ -1,6 +1,6 @@
 {
- "construido": "2026-11-20T14:41:14.226Z",
- "huella": "3312cbf5e54758948347362dbf700b06a0d16fee",
+ "construido": "2026-11-20T14:51:37.090Z",
+ "huella": "c41c6fc071a762b6d2e20be5536bf4460032b9f4",
  "libro": "Semilla del repositorio + pagos confirmados + novedades del libro",
  "archivos": {
   "corrida": "data/corrida.json",
@@ -19,6 +19,7 @@
   "ciclo_fechas": "data/ciclo_fechas.json",
   "resumenes": "data/resumenes.json",
   "imposiciones": "data/imposiciones.json",
+  "vigencias": "data/vigencias.json",
   "libro_san": "data/libro_san.json",
   "libro_pag": "data/libro_pag.json",
   "libro_ven": "data/libro_ven.json",
