@@ -21,6 +21,7 @@ function autorizado_(e) { return e && e.parameter && e.parameter.k === clave_();
  *  El enlace completo es la «URL de la aplicación web» (Implementar → Gestionar implementaciones; termina en /exec) + ?k=CLAVE. */
 function enlace() {
   Logger.log('Agrega esto al final de la URL de la aplicación web (la que termina en /exec):\n?k=' + clave_());
+  DriveApp.getRootFolder();   // pide el permiso de Drive al ejecutarla
 }
 
 /** Cambia la clave (por ejemplo, si se compartió el enlace). El enlace anterior deja de funcionar al instante. */
