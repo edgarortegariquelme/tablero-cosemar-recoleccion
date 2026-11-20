@@ -87,6 +87,30 @@
   },
   {
    "id": "C08",
+   "fecha": "2026-11-18",
+   "contacto": "Administrativo RSI",
+   "empresa": "Cosemar",
+   "tema": "Ingresos I. M. de Alto Hospicio y Ticket Noviembre 2026; Relleno Sanitario Santa Inés",
+   "contrato": "Disposición final",
+   "urgencia": "Baja",
+   "estado": "Informativo",
+   "nota": "Estimados Buenas tardes, les adjunto detalle de los ingresos a disponer residuos, por parte de la I. M. de Alto Hospicio, en el Relleno Sanitario Santa Inés, del día 18-11-2026 Saludos. [cid:image001.png@01DD7771.684EAFE",
+   "enlace": "https://mail.google.com/mail/u/0/#all/1a1a249c786ce155"
+  },
+  {
+   "id": "C09",
+   "fecha": "2026-11-18",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Requerimiento de antecedentes ambientales y diagnóstico de cumplimiento: Sistema de lavado de flota y gestión de RILes",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, y en relación con los correos enviados anteriormente respecto a la resolución sanitaria asociada a las fosas de acumulación de aguas provenientes del lavado de camiones, agradeceré info",
+   "enlace": "https://mail.google.com/mail/u/0/#all/19ed5e2ffad0d00e"
+  },
+  {
+   "id": "C10",
    "fecha": "2026-11-16",
    "contacto": "Teresa Donoso",
    "empresa": "Cosemar",
@@ -98,7 +122,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1e44a6ba4759da"
   },
   {
-   "id": "C09",
+   "id": "C11",
    "fecha": "2026-11-16",
    "contacto": "Grupo EBI (A. Concha)",
    "empresa": "Cosemar",
@@ -110,7 +134,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1e489965953f02"
   },
   {
-   "id": "C10",
+   "id": "C12",
    "fecha": "2026-11-13",
    "contacto": "Rodrigo Barril",
    "empresa": "Cosemar",
@@ -122,7 +146,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1d56b3b111e8f6"
   },
   {
-   "id": "C11",
+   "id": "C13",
    "fecha": "2026-11-12",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -134,7 +158,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a136e1f8e1a010f"
   },
   {
-   "id": "C12",
+   "id": "C14",
    "fecha": "2026-11-10",
    "contacto": "Hernán Gómez",
    "empresa": "ITS",
@@ -146,7 +170,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1b050d044449e3"
   },
   {
-   "id": "C13",
+   "id": "C15",
    "fecha": "2026-11-09",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -158,7 +182,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1c29df4f6d7d7c"
   },
   {
-   "id": "C14",
+   "id": "C16",
    "fecha": "2026-11-09",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -170,7 +194,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1c29bbb937e6e1"
   },
   {
-   "id": "C15",
+   "id": "C17",
    "fecha": "2026-11-09",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -182,7 +206,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1be39ecfdf7b2e"
   },
   {
-   "id": "C16",
+   "id": "C18",
    "fecha": "2026-11-05",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -194,7 +218,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1a68fabd3ab51b"
   },
   {
-   "id": "C17",
+   "id": "C19",
    "fecha": "2026-11-03",
    "contacto": "Alejandra Marzán",
    "empresa": "Cosemar",
@@ -206,7 +230,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a179d5a50671f7b"
   },
   {
-   "id": "C18",
+   "id": "C20",
    "fecha": "2026-11-03",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -218,7 +242,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a19e3f916ae4a71"
   },
   {
-   "id": "C19",
+   "id": "C21",
    "fecha": "2026-10-27",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -230,7 +254,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a17dd64b7ab55da"
   },
   {
-   "id": "C20",
+   "id": "C22",
    "fecha": "2026-10-21",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -242,7 +266,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a15e57e48a39228"
   },
   {
-   "id": "C21",
+   "id": "C23",
    "fecha": "2026-10-20",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -254,7 +278,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a146236dd9fba62"
   },
   {
-   "id": "C22",
+   "id": "C24",
    "fecha": "2026-10-20",
    "contacto": "Teresa Donoso",
    "empresa": "Cosemar",
@@ -266,7 +290,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a15a622ffe26575"
   },
   {
-   "id": "C23",
+   "id": "C25",
    "fecha": "2026-10-16",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -278,7 +302,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a13c43cc48e7b29"
   },
   {
-   "id": "C24",
+   "id": "C26",
    "fecha": "2026-10-14",
    "contacto": "Teresa Donoso",
    "empresa": "Cosemar",
@@ -290,7 +314,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a13bf9c3c672a53"
   },
   {
-   "id": "C25",
+   "id": "C27",
    "fecha": "2026-10-13",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -302,7 +326,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1357856a344bcb"
   },
   {
-   "id": "C26",
+   "id": "C28",
    "fecha": "2026-10-02",
    "contacto": "René Gutiérrez",
    "empresa": "Cosemar",
@@ -314,7 +338,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/19f48866369d9d37"
   },
   {
-   "id": "C27",
+   "id": "C29",
    "fecha": "2026-09-23",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -326,7 +350,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a0a60e645265c08"
   },
   {
-   "id": "C28",
+   "id": "C30",
    "fecha": "2026-09-22",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -338,7 +362,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a0a50d04ec7e152"
   },
   {
-   "id": "C29",
+   "id": "C31",
    "fecha": "2026-09-02",
    "contacto": "Edgar Ortega",
    "empresa": "DMAO",
@@ -350,7 +374,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a0624dac31e0201"
   },
   {
-   "id": "C30",
+   "id": "C32",
    "fecha": "2026-08-21",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",
@@ -362,7 +386,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a017222df8ab0c7"
   },
   {
-   "id": "C31",
+   "id": "C33",
    "fecha": "2026-08-13",
    "contacto": "Jesús Chinchayán",
    "empresa": "Cosemar",

@@ -1,11 +1,156 @@
 {
  "desde": "2026-11-18",
- "correos": {},
- "manifolds": {},
- "rt": {},
+ "correos": {
+  "19fa9a13f0792f57": {
+   "fecha": "2026-11-18",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Informe de sobre productores, comercio, instituciones, condominios",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Muchas gracias por el informe enviado y por la información proporcionada, ya que será de gran utilidad para el trabajo que estamos realizando en conjunto con otras direcciones municipales, relacionado con",
+   "hilo": "19fa9a13f0792f57"
+  },
+  "1a1d01a0ff40f93c": {
+   "fecha": "2026-11-18",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "REPORTE DE SINIESTRO MÓVIL 980",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Gracias Jesús por los registros. Atte. Hernan Gomez ITS",
+   "hilo": "1a1d01a0ff40f93c"
+  },
+  "1a1ef624cc6eece9": {
+   "fecha": "2026-11-18",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Manifold 14-04-2026 equipo no asociado a contrato. RESPUESTA A DESCARGOS – CIERRE DE OBSERVACIONES",
+   "contrato": "Recolección",
+   "urgencia": "Alta",
+   "estado": "En curso",
+   "nota": "RESPUESTA A DESCARGOS – CIERRE DE OBSERVACIONES Fecha del informe de descargos: 17 de abril de 2026. Fecha de cierre de observaciones: 17 de abril de 2026. En relación con los descargos presentados por la empresa COSEMAR",
+   "hilo": "1a1ef624cc6eece9"
+  },
+  "19e8e06e3b03ec21": {
+   "fecha": "2026-11-18",
+   "contacto": "Jesús Maria Chinchayan",
+   "empresa": "Cosemar",
+   "tema": "Solicita información según proceso sancionatorio en curso N°2.2026",
+   "contrato": "Recolección",
+   "urgencia": "Alta",
+   "estado": "Responder",
+   "nota": "Gracias por la respuesta",
+   "hilo": "19e8e06e3b03ec21"
+  },
+  "1a1a249c786ce155": {
+   "fecha": "2026-11-18",
+   "contacto": "Administrativo RSI",
+   "empresa": "Cosemar",
+   "tema": "Ingresos I. M. de Alto Hospicio y Ticket Noviembre 2026; Relleno Sanitario Santa Inés",
+   "contrato": "Disposición final",
+   "urgencia": "Baja",
+   "estado": "Informativo",
+   "nota": "Estimados Buenas tardes, les adjunto detalle de los ingresos a disponer residuos, por parte de la I. M. de Alto Hospicio, en el Relleno Sanitario Santa Inés, del día 18-11-2026 Saludos. [cid:image001.png@01DD7771.684EAFE",
+   "hilo": "1a1a249c786ce155"
+  },
+  "19ed5e2ffad0d00e": {
+   "fecha": "2026-11-18",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Requerimiento de antecedentes ambientales y diagnóstico de cumplimiento: Sistema de lavado de flota y gestión de RILes",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, y en relación con los correos enviados anteriormente respecto a la resolución sanitaria asociada a las fosas de acumulación de aguas provenientes del lavado de camiones, agradeceré info",
+   "hilo": "19ed5e2ffad0d00e"
+  },
+  "1a1f08efadff48ad": {
+   "fecha": "2026-11-18",
+   "contacto": "Jesús Maria Chinchayan",
+   "empresa": "Cosemar",
+   "tema": "Requerimiento de antecedentes ambientales y diagnóstico de cumplimiento: Sistema de lavado de flota y gestión de RILes",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "Responder",
+   "nota": "Hernan Se comenta que se presentaron los documentos para dar el paso inicial que tiene que ver con obtener la patente comercial, en el mes de Octubre se realizaron las consultas e indicaron que los documentos se encuentr",
+   "hilo": "1a1f08efadff48ad"
+  },
+  "1a1e9e4c9e56016c": {
+   "fecha": "2026-11-19",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Remite Informe de Incumplimiento Contractual – COSEMAR SpA – Solicitud de Inicio de Procedimiento Sancionatorio",
+   "contrato": "Recolección",
+   "urgencia": "Alta",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, y en relación con los descargos presentados mediante informe de fecha 18 de noviembre de 2026, se informa que estos son acogidos en esta oportunidad, considerando los antecedentes expue",
+   "hilo": "1a1e9e4c9e56016c"
+  },
+  "1a1f3dfaa55b7bdd": {
+   "fecha": "2026-11-19",
+   "contacto": "Teresa Donoso",
+   "empresa": "Cosemar",
+   "tema": "Revisión Técnica M-922",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "Revisar",
+   "nota": "Estimado: Muy buenos días, junto con saludar le adjunto actualización de Revisión Técnica M-922. Para sus registros. Mis saludos, [cid:de19d6bb-8854-4bbe-b775-acc0e22993b5]",
+   "hilo": "1a1f3dfaa55b7bdd"
+  }
+ },
+ "manifolds": {
+  "2026-21": {
+   "id": "MF-2026-21",
+   "fecha": "2026-11-18",
+   "pagina": "21",
+   "motivo": "Manifold 14-04-2026 equipo no asociado a contrato. RESPUESTA A DESCARGOS – CIERRE DE OBSERVACIONES",
+   "tipo": "Cierre",
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). RESPUESTA A DESCARGOS – CIERRE DE OBSERVACIONES Fecha del informe de descargos: 17 de abril de 2026. Fecha de cierre de observaciones: 17 de abril de 2026. En r",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a1ef624cc6eece9"
+  },
+  "2026-22": {
+   "id": "MF-2026-22",
+   "fecha": "2026-11-18",
+   "pagina": "22",
+   "motivo": "Solicita información según proceso sancionatorio en curso N°2.2026",
+   "tipo": "Proceso sancionatorio",
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y considerando los antecedentes y respaldos enviados respecto al cambio de gráfica de los camiones de recolección y del minic",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/19e8e06e3b03ec21"
+  }
+ },
+ "rt": {
+  "922": {
+   "recibido": "2026-11-19",
+   "vence": "2027-05-19",
+   "hilo": "1a1f3dfaa55b7bdd",
+   "imagen": true
+  }
+ },
  "vistos": [
   "1a1f9490f5a1b1bc",
-  "1a1f959870d7f2a9"
+  "1a1f959870d7f2a9",
+  "1a1ee1a467ddf75c",
+  "1a1ee446c243fb7c",
+  "1a1ef286f398481e",
+  "1a1ef2f4ce2a0cc1",
+  "1a1ef624cc6eece9",
+  "1a1ef81ede110381",
+  "1a1efa548ce84a75",
+  "1a1efdd7e5a32861",
+  "1a1efe8e14773d69",
+  "1a1efedf3b15a01c",
+  "1a1f0477acf8457a",
+  "1a1f08efadff48ad",
+  "1a1f0b915a644924",
+  "1a1f3dfaa55b7bdd",
+  "1a1f49604c1562fd"
  ],
- "leido": "2026-11-20T14:27:54.215Z"
+ "leido": "2026-11-20T14:32:53.224Z"
 }
