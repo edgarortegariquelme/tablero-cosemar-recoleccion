@@ -13,9 +13,21 @@ const SANCION = /sancion|multa|incumplimiento|descargo|apelaci/i;
 const PIDE = /solicit|favor|requier|consult|pide|necesit|\?/i;
 const MESES = { enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6, julio: 7, agosto: 8, septiembre: 9, setiembre: 9, octubre: 10, noviembre: 11, diciembre: 12 };
 
-const limpiarAsunto = s => (s || '(sin asunto)').replace(/^\s*((re|rv|fw|fwd|reenviar|resp)\s*:\s*)+/i, '').replace(/\s+/g, ' ').trim();
+const limpiarAsunto = s => (s || '(sin asunto)').replace(/\*{2,}\s*spam\s*\*{2,}/ig, '').replace(/^\s*((re|rv|fw|fwd|reenviar|resp)\s*:\s*)+/i, '').replace(/\s+/g, ' ').trim();
+// Nombres de quienes escriben sin nombre visible (la ITS envía solo con su dirección).
+const NOMBRES = { 'hgomez@maho.cl': 'Hernán Gómez (ITS)' };
+const nombreDe = d => d.nombre || NOMBRES[d.correo] || d.correo;
+// Cuerpo propio del mensaje, sin la conversación citada debajo.
+const propio = t => (t || '').replace(/\r/g, '').split(/\n(?:El .{5,80} escribió:|De: |-----\s*Mensaje original|On .{5,80} wrote:)/)[0];
+// Página de manifold mencionada en el cuerpo: «respaldo en manifold pagina 20», «Manifold pág. 22», «pagina 21 manifold».
+function paginaManifold(t) {
+  const m = t.match(/manifol?d?\s*(?:de\s+la\s+solicitud\s*)?p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})/i) || t.match(/p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})\s*(?:del?\s+)?manifol/i)
+    || t.match(/manifol?d?\s*(?:n[°º]\s*)?(\d{1,3})\b(?![-/.]\d)/i) || t.match(/respaldo en p[áa]g(?:ina)?\.?\s*(\d{1,3})/i);
+  return m ? m[1] : null;
+}
+const CIERRA = /se da(?:n)? por cerrad|cierre de (?:las )?observaciones|se acoge|son acogidos|dar(?:\s+por)? cerrad|cierre del proceso/i;
 const fechaCL = d => new Date(d).toLocaleDateString('sv-SE', { timeZone: 'America/Santiago' });
-const resumen = t => (t || '').replace(/\r/g, '').split(/\n(?:El .{5,80} escribió:|De: |-----\s*Mensaje original|On .{5,80} wrote:)/)[0].replace(/\s+/g, ' ').trim().slice(0, 220);
+const resumen = t => propio(t).replace(/\s+/g, ' ').trim().slice(0, 220);
 const empresaDe = c => /grupoebi\.cl$/i.test(c) ? 'Cosemar' : /maho\.cl$/i.test(c) ? 'DMAO' : /gmail\.com$/i.test(c) ? 'DMAO' : 'Otro';
 
 function leerEstado() { try { return JSON.parse(fs.readFileSync(ESTADO, 'utf8')); } catch (e) { return { desde: '2026-11-19', correos: {}, manifolds: {}, rt: {}, vistos: [] }; } }
@@ -74,14 +86,18 @@ function clasificar(m, st, novedades) {
         : { tipo: 'Flota', texto: 'Llegó la revisión técnica del móvil ' + movil + ', pero no pude leer la fecha de vigencia: confírmala en el certificado.', enlace });
     }
   }
-  // 2) Manifold: adjunto o asunto con «manifold N», enviado por la ITS o copiado a ella.
-  const textoMf = (m.adjuntos || []).map(a => a.nombre).join(' ') + ' ' + asunto;
-  const mf = textoMf.match(/manifold\D{0,6}(\d{1,3})/i) || (/hgomez@maho\.cl/i.test(m.de.correo) && textoMf.match(/p[áa]g(?:ina)?\.?\s*(\d{1,3})/i));
-  if (mf || /manifold/i.test(textoMf)) {
-    const pagina = mf ? mf[1] : null, k = hoy.slice(0, 4) + '-' + (pagina || m.hilo);
+  // 2) Manifold: adjunto o asunto «manifold N», o la ITS que deja respaldo en una página del libro manifold (en el cuerpo propio).
+  const textoMf = (m.adjuntos || []).map(a => a.nombre).join(' ') + ' ' + asunto, cuerpo = propio(m.texto);
+  // La página que la ITS declara en su propio texto manda sobre números del asunto.
+  let pagina = (/hgomez@maho\.cl/i.test(m.de.correo) && paginaManifold(cuerpo)) || paginaManifold(textoMf);
+  if (pagina || /manifold/i.test(textoMf)) {
+    const k = hoy.slice(0, 4) + '-' + (pagina || m.hilo);
     if (!st.manifolds[k]) {
-      st.manifolds[k] = { id: 'MF-' + hoy.slice(0, 4) + '-' + (pagina ? pagina.padStart(2, '0') : 'X' + m.hilo.slice(-4)), fecha: hoy, pagina: pagina || '?', motivo: asunto, tipo: SANCION.test(asunto + m.texto) ? 'Proceso sancionatorio' : 'Por clasificar', estado: 'Abierto', nota: 'Ingresado automáticamente desde Gmail (' + m.de.nombre + '). ' + resumen(m.texto).slice(0, 140), respaldo: enlace };
-      novedades.push({ tipo: 'Manifold', texto: 'Manifold ' + (pagina ? 'pág. ' + pagina + ' ' : '') + 'del ' + hoy.split('-').reverse().join('-') + ': ' + asunto + '. Revisa motivo y plazo.', enlace });
+      const cerrado = CIERRA.test(cuerpo);
+      st.manifolds[k] = { id: 'MF-' + hoy.slice(0, 4) + '-' + (pagina ? pagina.padStart(2, '0') : 'X' + m.hilo.slice(-4)), fecha: hoy, pagina: pagina || '?', motivo: asunto,
+        tipo: cerrado ? 'Cierre' : SANCION.test(asunto + ' ' + cuerpo) ? 'Proceso sancionatorio' : 'Por clasificar', estado: cerrado ? 'Cerrado' : 'Abierto', cierre: cerrado ? hoy : null,
+        nota: 'Ingresado automáticamente desde Gmail (' + nombreDe(m.de) + '). ' + resumen(m.texto).slice(0, 160), respaldo: enlace };
+      novedades.push({ tipo: 'Manifold', texto: 'Manifold ' + (pagina ? 'pág. ' + pagina + ' ' : '') + 'del ' + hoy.split('-').reverse().join('-') + (cerrado ? ' (cierre)' : '') + ': ' + asunto + (cerrado ? '.' : '. Revisa motivo y plazo.'), enlace });
     }
   }
   // 3) Correo: una fila por hilo con su último mensaje.
@@ -90,8 +106,8 @@ function clasificar(m, st, novedades) {
   const deMuni = emp === 'DMAO', rutina = RUTINA.test(asunto);
   const estado = rutina ? 'Informativo' : deMuni ? 'En curso' : PIDE.test(asunto + ' ' + resumen(m.texto)) ? 'Responder' : 'Revisar';
   const urgencia = rutina ? 'Baja' : SANCION.test(asunto) || /orden de compra|\bOC\b|factura|pago/i.test(asunto) ? 'Alta' : 'Media';
-  st.correos[m.hilo] = { fecha: hoy, contacto: m.de.nombre || m.de.correo, empresa: emp, tema: asunto, contrato, urgencia, estado, nota: resumen(m.texto), hilo: m.hilo };
-  if (!rutina && !deMuni && (!prev || prev.fecha < hoy || prev.estado !== estado)) novedades.push({ tipo: 'Correo', texto: (m.de.nombre || m.de.correo) + ' (' + emp + '): ' + asunto + ' — ' + resumen(m.texto).slice(0, 140), enlace });
+  st.correos[m.hilo] = { fecha: hoy, contacto: nombreDe(m.de), empresa: emp, tema: asunto, contrato, urgencia, estado, nota: resumen(m.texto), hilo: m.hilo };
+  if (!rutina && !deMuni && (!prev || prev.fecha < hoy || prev.estado !== estado)) novedades.push({ tipo: 'Correo', texto: nombreDe(m.de) + ' (' + emp + '): ' + asunto + ' — ' + resumen(m.texto).slice(0, 140), enlace });
 }
 
 async function mensajesIMAP(desde) {

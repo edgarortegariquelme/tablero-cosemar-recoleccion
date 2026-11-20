@@ -2,6 +2,21 @@
  "corte": "2026-11-20",
  "rows": [
   {
+   "id": "MF-2026-21",
+   "fecha": "2026-11-18",
+   "pagina": "21",
+   "motivo": "Responde descargos del móvil 1473 y cierra las observaciones del 14-04 (proceso 6)",
+   "tipo": "Cierre de proceso",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Descargos acogidos; cierre con fecha 17-04-2026. Exige autorización previa de la Unidad Técnica para vehículos de apoyo o cambios de ruta.",
+   "caso": "PS06",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a1ef624cc6eece9"
+  },
+  {
    "id": "MF-2026-22",
    "fecha": "2026-11-18",
    "pagina": "22",
@@ -15,6 +30,21 @@
    "nota": "Proceso 2 cerrado sin multa por cumplimiento total de la gráfica.",
    "caso": "PS02",
    "respaldo": null
+  },
+  {
+   "id": "MF-2026-19",
+   "fecha": "2026-11-17",
+   "pagina": "19",
+   "motivo": "Da por recibido y cerrado el informe del siniestro del móvil 980; pide charla de conducción defensiva",
+   "tipo": "Requerimiento",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Cosemar envió el 18-11 el registro de charlas y el denuncio al seguro (siniestro 2620034289).",
+   "caso": null,
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a1d01a0ff40f93c"
   },
   {
    "id": "MF-2026-20",
@@ -42,7 +72,7 @@
    "vence": "2026-06-12",
    "estado": "Abierto",
    "cierre": null,
-   "nota": "No consta respuesta. Las visitas técnicas del 30-09 y 06-11 siguen con observaciones a las instalaciones.",
+   "nota": "La ITS reiteró el 18-11. Cosemar respondió el 18-11 que inició el trámite (primero la patente comercial; documentos en revisión desde octubre) y que informará la próxima semana. Sigue sin resolución sanitaria.",
    "caso": "REQ07",
    "respaldo": "https://drive.google.com/file/d/1O6-c-ris6npxcUe7fRiRz6F1OO7imFxb/view"
   },
@@ -70,9 +100,9 @@
    "plazoDias": 5,
    "plazoUnidad": "hábiles",
    "vence": "2026-04-21",
-   "estado": "Abierto",
-   "cierre": null,
-   "nota": "Descargos del 20-04 evaluados el 22-04; falta el cierre o el memo para decretar.",
+   "estado": "Cerrado",
+   "cierre": "2026-11-18",
+   "nota": "Descargos acogidos: la ITS cerró las observaciones con fecha 17-04-2026 (manifold pág. 21, 18-11). Advierte que todo vehículo de apoyo o cambio de ruta debe autorizarse antes.",
    "caso": "PS06",
    "respaldo": "https://drive.google.com/file/d/1tohZD6GZ6Qrn8gNdRIqjZrik8ba9ioTH/view"
   },

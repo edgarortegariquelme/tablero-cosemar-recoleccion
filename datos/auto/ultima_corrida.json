@@ -1,10 +1,10 @@
 {
- "corrida": "2026-11-20T13:36:48.847Z",
+ "corrida": "2026-11-20T13:58:43.704Z",
  "gmail": "omitido: falta el secreto GMAIL_PUENTE_URL (o GMAIL_USUARIO y GMAIL_CLAVE_APP)",
  "novedades": 0,
  "alertas": {
-  "total": 10,
-  "nuevas": 10
+  "total": 9,
+  "nuevas": 9
  },
  "correo": "no enviado: falta el secreto GMAIL_PUENTE_URL"
 }

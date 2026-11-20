@@ -121,5 +121,39 @@
   "version": 2,
   "rectificaA": "VEN|M-922|revision_tecnica|2026-11-19 v1",
   "huella": "2520086b"
+ },
+ {
+  "verificacion": "Acreditado",
+  "fechaTipo": "Acto acreditado",
+  "clave": "SAN|PS06|manifold|71edd29b",
+  "modulo": "Sanción",
+  "entidad": "PS06",
+  "hito": "manifold",
+  "fecha": "2026-11-18",
+  "documento": "Manifold 21 · respuesta a descargos y cierre de observaciones (móvil 1473)",
+  "respaldo": "https://mail.google.com/mail/u/0/#all/1a1ef624cc6eece9",
+  "origen": "Correo ITS 18-11-2026",
+  "detalle": "Descargos acogidos; cierre con fecha 17-04-2026.",
+  "obligacion": "OB-25",
+  "vigente": true,
+  "version": 1,
+  "huella": "a49356d0"
+ },
+ {
+  "verificacion": "Acreditado",
+  "fechaTipo": "Acto acreditado",
+  "clave": "SAN|PS06|cierre_sin_multa|a4bd049a",
+  "modulo": "Sanción",
+  "entidad": "PS06",
+  "hito": "cierre_sin_multa",
+  "fecha": "2026-11-18",
+  "documento": "Correo ITS: respuesta a descargos – cierre de observaciones",
+  "respaldo": "https://mail.google.com/mail/u/0/#all/1a1ef624cc6eece9",
+  "origen": "Correo ITS 18-11-2026",
+  "detalle": "Proceso cerrado sin multa (cierre de observaciones al 17-04-2026); exige autorización previa para vehículos de apoyo.",
+  "obligacion": "OB-25",
+  "vigente": true,
+  "version": 1,
+  "huella": "44f34b08"
  }
 ]
