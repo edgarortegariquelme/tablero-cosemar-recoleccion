@@ -99,6 +99,28 @@
    "estado": "Revisar",
    "nota": "Estimado: Muy buenos días, junto con saludar le adjunto actualización de Revisión Técnica M-922. Para sus registros. Mis saludos, [cid:de19d6bb-8854-4bbe-b775-acc0e22993b5]",
    "hilo": "1a1f3dfaa55b7bdd"
+  },
+  "1a20931ad4242f09": {
+   "fecha": "2026-11-23",
+   "contacto": "edgar ortega riquelme",
+   "empresa": "DMAO",
+   "tema": "Solicitud de documentación técnica y accesos API GPS – Contrato ID 3447-86-LR23",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimado Jesús: Muchas gracias por el tiempo dedicado a la reunión técnica de hoy, y por la disposición de COSEMAR para revisar la factibilidad de la API del sistema GPS de la flota. Como conversamos, nuestro interés es ",
+   "hilo": "1a20931ad4242f09"
+  },
+  "1a20941754a80338": {
+   "fecha": "2026-11-23",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Solicitud de respuesta Providencia 10492",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, respecto a deficiencias en el servicio de recolección de res",
+   "hilo": "1a20941754a80338"
   }
  },
  "manifolds": {
@@ -123,6 +145,17 @@
    "cierre": null,
    "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y considerando los antecedentes y respaldos enviados respecto al cambio de gráfica de los camiones de recolección y del minic",
    "respaldo": "https://mail.google.com/mail/u/0/#all/19e8e06e3b03ec21"
+  },
+  "2026-24": {
+   "id": "MF-2026-24",
+   "fecha": "2026-11-23",
+   "pagina": "24",
+   "motivo": "Solicitud de respuesta Providencia 10492",
+   "tipo": "Por clasificar",
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, ",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
   }
  },
  "rt": {
@@ -156,7 +189,11 @@
   "1a1f98312e0083d7",
   "1a1f9ebac4b160f4",
   "1a1fd84a8fcccfa5",
-  "1a1fee8bbe5fa08c"
+  "1a1fee8bbe5fa08c",
+  "1a208d01c45a1df8",
+  "1a209098b3653f6c",
+  "1a20931ad4242f09",
+  "1a20941754a80338"
  ],
- "leido": "2026-11-23T09:03:47.335Z"
+ "leido": "2026-11-23T21:23:16.979Z"
 }

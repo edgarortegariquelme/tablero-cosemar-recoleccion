@@ -2,6 +2,21 @@
  "corte": "2026-11-20",
  "rows": [
   {
+   "id": "MF-2026-24",
+   "fecha": "2026-11-23",
+   "pagina": "24",
+   "motivo": "Solicitud de respuesta Providencia 10492",
+   "tipo": "Por clasificar",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, ",
+   "caso": null,
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
+  },
+  {
    "id": "MF-2026-21",
    "fecha": "2026-11-18",
    "pagina": "21",
