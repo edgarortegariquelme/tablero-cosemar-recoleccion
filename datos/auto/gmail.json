@@ -121,6 +121,17 @@
    "estado": "En curso",
    "nota": "Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, respecto a deficiencias en el servicio de recolección de res",
    "hilo": "1a20941754a80338"
+  },
+  "1a20e4a7bb56813a": {
+   "fecha": "2026-11-24",
+   "contacto": "Jesús Maria Chinchayan",
+   "empresa": "Cosemar",
+   "tema": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "Responder",
+   "nota": "Recibido",
+   "hilo": "1a20e4a7bb56813a"
   }
  },
  "manifolds": {
@@ -156,6 +167,17 @@
    "cierre": null,
    "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, ",
    "respaldo": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
+  },
+  "2026-25": {
+   "id": "MF-2026-25",
+   "fecha": "2026-11-24",
+   "pagina": "25",
+   "motivo": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
+   "tipo": "Por clasificar",
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N.º 12010, recepcionada con fecha 23 de noviembre de 2026, mediante la cual la administración ",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
   }
  },
  "rt": {
@@ -194,7 +216,11 @@
   "1a209098b3653f6c",
   "1a20931ad4242f09",
   "1a20941754a80338",
-  "1a20a4b0c6ec98fd"
+  "1a20a4b0c6ec98fd",
+  "1a20c262d9f3bd36",
+  "1a20dfa2610621b2",
+  "1a20e4a7bb56813a",
+  "1a20e5ce66e6ad77"
  ],
- "leido": "2026-11-24T06:02:02.496Z"
+ "leido": "2026-11-24T17:43:18.129Z"
 }

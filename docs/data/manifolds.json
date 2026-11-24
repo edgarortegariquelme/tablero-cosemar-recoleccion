@@ -2,6 +2,21 @@
  "corte": "2026-11-20",
  "rows": [
   {
+   "id": "MF-2026-25",
+   "fecha": "2026-11-24",
+   "pagina": "25",
+   "motivo": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
+   "tipo": "Por clasificar",
+   "plazoDias": null,
+   "plazoUnidad": null,
+   "vence": null,
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N.º 12010, recepcionada con fecha 23 de noviembre de 2026, mediante la cual la administración ",
+   "caso": null,
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
+  },
+  {
    "id": "MF-2026-24",
    "fecha": "2026-11-23",
    "pagina": "24",
