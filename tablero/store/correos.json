@@ -4,6 +4,18 @@
   {
    "id": "C01",
    "fecha": "2026-11-24",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Solicitud de respuesta Providencia 10492",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesus, con fecha 24 de noviembre de 2026, se recepciona informe técnico por parte de COSEMAR SpA, en respuesta a lo solicitado mediante Providencia N° 010492/2026, registrada en libro Manifold, página 24. De acu",
+   "enlace": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
+  },
+  {
+   "id": "C02",
+   "fecha": "2026-11-24",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
    "tema": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
@@ -14,7 +26,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
   },
   {
-   "id": "C02",
+   "id": "C03",
    "fecha": "2026-11-23",
    "contacto": "edgar ortega riquelme",
    "empresa": "DMAO",
@@ -24,18 +36,6 @@
    "estado": "En curso",
    "nota": "Estimado Jesús: Muchas gracias por el tiempo dedicado a la reunión técnica de hoy, y por la disposición de COSEMAR para revisar la factibilidad de la API del sistema GPS de la flota. Como conversamos, nuestro interés es ",
    "enlace": "https://mail.google.com/mail/u/0/#all/1a20931ad4242f09"
-  },
-  {
-   "id": "C03",
-   "fecha": "2026-11-23",
-   "contacto": "Hernán Gómez (ITS)",
-   "empresa": "DMAO",
-   "tema": "Solicitud de respuesta Providencia 10492",
-   "contrato": "Recolección",
-   "urgencia": "Media",
-   "estado": "En curso",
-   "nota": "Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, respecto a deficiencias en el servicio de recolección de res",
-   "enlace": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
   },
   {
    "id": "C04",
