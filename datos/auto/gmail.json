@@ -134,26 +134,37 @@
    "hilo": "1a20e4a7bb56813a"
   },
   "1a21368042d42f0c": {
-   "fecha": "2026-11-25",
-   "contacto": "Rodrigo Barril",
-   "empresa": "Cosemar",
+   "fecha": "2026-11-26",
+   "contacto": "edgar ortega riquelme",
+   "empresa": "DMAO",
    "tema": "Solicitud de O.C. Ingresos de Octubre 2026",
-   "contrato": "Disposición final",
+   "contrato": "Recolección",
    "urgencia": "Media",
-   "estado": "Responder",
-   "nota": "Buenas tardes Edgar, por favor gestionar el envío de la O.C. de los ingresos a disponer residuos en el mes de Octubre 2026, para poder cerrar nuestro proceso de facturación, muchas gracias. Saludos. [cid:image001.png@01D",
+   "estado": "En curso",
+   "nota": "Estimado Rodrigo: Junto con saludar, te informo que actualmente no contamos con disponibilidad presupuestaria para emitir la orden de compra correspondiente al servicio de disposición final de residuos de octubre de 2026",
    "hilo": "1a21368042d42f0c"
   },
   "1a2139ceb630ac08": {
-   "fecha": "2026-11-25",
+   "fecha": "2026-11-26",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
    "tema": "operativo de rucos jeves 26-11-2026",
    "contrato": "Recolección",
    "urgencia": "Media",
    "estado": "Revisar",
-   "nota": "Hernan Se revisa e informaremos para programar. Saludos",
+   "nota": "Hernan Robert envió la información en el grupo MAHO, a primera hora. Detalle 1.- Av. America con Continental 2.- Av. C con Ricardo Lagos 3.- Costanera, ladera del cerro haca la bajas del a Ruta A-16 Saludos",
    "hilo": "1a2139ceb630ac08"
+  },
+  "1a2182f9df39f044": {
+   "fecha": "2026-11-26",
+   "contacto": "Jesús Maria Chinchayan",
+   "empresa": "Cosemar",
+   "tema": "SERVICIO DE AMPLIROLL DÍA VIERNES",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "Revisar",
+   "nota": "Hernan Junto con saludar, se informa que el día de mañana 27-11-2026 el móvil 940, tiene que ingresar a Revisión Técnica, por l que le recorrido de este servicio será realizado por un camión tolva. Saludos cordiales [cid",
+   "hilo": "1a2182f9df39f044"
   }
  },
  "manifolds": {
@@ -251,7 +262,11 @@
   "1a2137c80e1083ee",
   "1a2139ceb630ac08",
   "1a213e1ee5521411",
-  "1a214d6bdb02d76b"
+  "1a214d6bdb02d76b",
+  "1a217a88824c698c",
+  "1a217da2198ed36c",
+  "1a217fecbde50e39",
+  "1a2182f9df39f044"
  ],
- "leido": "2026-11-26T05:02:34.062Z"
+ "leido": "2026-11-26T15:14:52.429Z"
 }
