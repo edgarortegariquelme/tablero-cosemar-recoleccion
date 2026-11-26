@@ -46,14 +46,14 @@
    "hilo": "19e8e06e3b03ec21"
   },
   "1a1a249c786ce155": {
-   "fecha": "2026-11-25",
-   "contacto": "Jesús Maria Chinchayan",
+   "fecha": "2026-11-26",
+   "contacto": "Administrativo RSI",
    "empresa": "Cosemar",
    "tema": "Ingresos I. M. de Alto Hospicio y Ticket Noviembre 2026; Relleno Sanitario Santa Inés",
    "contrato": "Disposición final",
    "urgencia": "Baja",
    "estado": "Informativo",
-   "nota": "Quedan pendientes los tickets del día 24-11-2026, ya que no vienen adjunto [cid:image006.png@01DD7CDE.D30A6280]",
+   "nota": "Estimados Buenas tardes, les adjunto detalle de los ingresos a disponer residuos, por parte de la I. M. de Alto Hospicio, en el Relleno Sanitario Santa Inés, del día 24 y 25-11-2026 Saludos. [cid:image001.png@01DD7DA0.8A",
    "hilo": "1a1a249c786ce155"
   },
   "19ed5e2ffad0d00e": {
@@ -123,14 +123,14 @@
    "hilo": "1a20941754a80338"
   },
   "1a20e4a7bb56813a": {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-26",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
    "tema": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
    "contrato": "Recolección",
    "urgencia": "Media",
    "estado": "Responder",
-   "nota": "Recibido",
+   "nota": "Hernan Junto con saludar, en relación con el requerimiento asociado al daño del contenedor de residuos domiciliarios de 660 litros del Condominio Doña Olga, informo que se han realizado las siguientes gestiones para escl",
    "hilo": "1a20e4a7bb56813a"
   },
   "1a21368042d42f0c": {
@@ -165,6 +165,17 @@
    "estado": "Revisar",
    "nota": "Hernan Junto con saludar, se informa que el día de mañana 27-11-2026 el móvil 940, tiene que ingresar a Revisión Técnica, por l que le recorrido de este servicio será realizado por un camión tolva. Saludos cordiales [cid",
    "hilo": "1a2182f9df39f044"
+  },
+  "1a2191c0de08a2d3": {
+   "fecha": "2026-11-26",
+   "contacto": "Jesús Maria Chinchayan",
+   "empresa": "Cosemar",
+   "tema": "CONSTANCIA OPERACIONAL POR RETIRO DE ESCOMBROS Y VOLUMINOSOS",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "Revisar",
+   "nota": "Hernan Junto con saludar, en relación con los requerimientos efectuados por la Inspección Técnica del Servicio (ITS) respecto al retiro de escombros de construcción, áridos y residuos voluminosos dispuestos en la vía púb",
+   "hilo": "1a2191c0de08a2d3"
   }
  },
  "manifolds": {
@@ -266,7 +277,11 @@
   "1a217a88824c698c",
   "1a217da2198ed36c",
   "1a217fecbde50e39",
-  "1a2182f9df39f044"
+  "1a2182f9df39f044",
+  "1a2186d9404da4d2",
+  "1a218fbb91955675",
+  "1a2191c0de08a2d3",
+  "1a219510914a37d4"
  ],
- "leido": "2026-11-26T15:14:52.429Z"
+ "leido": "2026-11-26T23:52:30.333Z"
 }
