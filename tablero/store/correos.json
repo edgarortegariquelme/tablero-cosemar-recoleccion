@@ -3,6 +3,18 @@
  "rows": [
   {
    "id": "C01",
+   "fecha": "2026-11-27",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "CONSTANCIA OPERACIONAL POR RETIRO DE ESCOMBROS Y VOLUMINOSOS",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Jesus Respecto a las observaciones presentadas por Cosemar, se aclara que el retiro de escombros y residuos voluminosos depositados en la vía pública se encuentra contemplado en los artículos 5° y 6° de las Bases Técnica",
+   "enlace": "https://mail.google.com/mail/u/0/#all/1a2191c0de08a2d3"
+  },
+  {
+   "id": "C02",
    "fecha": "2026-11-26",
    "contacto": "Administrativo RSI",
    "empresa": "Cosemar",
@@ -14,7 +26,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1a249c786ce155"
   },
   {
-   "id": "C02",
+   "id": "C03",
    "fecha": "2026-11-26",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
@@ -26,7 +38,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
   },
   {
-   "id": "C03",
+   "id": "C04",
    "fecha": "2026-11-26",
    "contacto": "edgar ortega riquelme",
    "empresa": "DMAO",
@@ -38,7 +50,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a21368042d42f0c"
   },
   {
-   "id": "C04",
+   "id": "C05",
    "fecha": "2026-11-26",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
@@ -50,7 +62,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a2139ceb630ac08"
   },
   {
-   "id": "C05",
+   "id": "C06",
    "fecha": "2026-11-26",
    "contacto": "Jesús Maria Chinchayan",
    "empresa": "Cosemar",
@@ -60,18 +72,6 @@
    "estado": "Revisar",
    "nota": "Hernan Junto con saludar, se informa que el día de mañana 27-11-2026 el móvil 940, tiene que ingresar a Revisión Técnica, por l que le recorrido de este servicio será realizado por un camión tolva. Saludos cordiales [cid",
    "enlace": "https://mail.google.com/mail/u/0/#all/1a2182f9df39f044"
-  },
-  {
-   "id": "C06",
-   "fecha": "2026-11-26",
-   "contacto": "Jesús Maria Chinchayan",
-   "empresa": "Cosemar",
-   "tema": "CONSTANCIA OPERACIONAL POR RETIRO DE ESCOMBROS Y VOLUMINOSOS",
-   "contrato": "Recolección",
-   "urgencia": "Media",
-   "estado": "Revisar",
-   "nota": "Hernan Junto con saludar, en relación con los requerimientos efectuados por la Inspección Técnica del Servicio (ITS) respecto al retiro de escombros de construcción, áridos y residuos voluminosos dispuestos en la vía púb",
-   "enlace": "https://mail.google.com/mail/u/0/#all/1a2191c0de08a2d3"
   },
   {
    "id": "C07",
