@@ -35,6 +35,9 @@ async function enviar(asunto, html) {
 
 (async () => {
   const informe = {};
+  // Vigía: si la corrida anterior fue hace más de 6 horas, la sincronización estuvo detenida; se informa en el correo.
+  let pausa = null;
+  try { const prev = JSON.parse(fs.readFileSync(path.join(RAIZ, 'datos/auto/ultima_corrida.json'), 'utf8')); const h = (Date.now() - new Date(prev.corrida)) / 36e5; if (h > 6) pausa = { horas: Math.round(h), desde: prev.corrida }; } catch (e) {}
   try { informe.gmail = await require('./gmail').ingestar(); }
   catch (e) { informe.gmail = { error: e.message, novedades: [] }; console.error('Gmail:', e.message); }   // si Gmail falla, la app igual se reconstruye
   try { informe.drive = await require('./drive').ingestarDrive(); }
@@ -43,7 +46,7 @@ async function enviar(asunto, html) {
   const { alertas, clave } = require('./alertas'), hoyCL = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(new Date());
   const todas = alertas().concat(require('./drive').avisosPlazos(hoyCL));
   let av = {}; try { av = JSON.parse(fs.readFileSync(AVISADOS, 'utf8')); } catch (e) {}
-  const nuevas = todas.filter(a => !av[clave(a)]), novedades = (informe.gmail.novedades || []).concat(informe.drive.novedades || []);
+  const nuevas = todas.filter(a => !av[clave(a)]), novedades = (pausa ? [{ tipo: 'Sistema', texto: 'La sincronización estuvo detenida ' + pausa.horas + ' horas (última corrida anterior: ' + new Date(pausa.desde).toLocaleString('es-CL', { timeZone: 'America/Santiago' }) + '). Ya se reanudó y se revisó todo lo pendiente.' }] : []).concat(informe.gmail.novedades || [], informe.drive.novedades || []);
   informe.alertas = { total: todas.length, nuevas: nuevas.length }; informe.novedades = novedades.length;
   if (nuevas.length || novedades.length) {
     const asunto = 'Cosemar · ' + [novedades.length && novedades.length + (novedades.length === 1 ? ' novedad' : ' novedades'), nuevas.length && nuevas.length + (nuevas.length === 1 ? ' alerta nueva' : ' alertas nuevas')].filter(Boolean).join(' y ');

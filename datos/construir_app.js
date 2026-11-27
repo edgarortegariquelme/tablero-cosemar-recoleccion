@@ -24,6 +24,18 @@ if (Object.keys(G).every(k => fs.existsSync(path.join(NOT, k + '.json')))) {
   Object.keys(G).forEach(k => { mapa[k] = 'data/notion/' + k + '.json'; }); origen = 'Notion (datos/exportar_notion.js)';
 } else {
   const libro = require('./semilla.js').concat(require('../pruebas/pagos_confirmados.json'), require('./libro_novedades.json'));
+  // Marca de sincronización (fila «Sistema» del libro): la escribe cada corrida del vigilante. La leen los paneles de salud
+  // de la app y del tablero de Claude; sin ella, muestran la sincronización como detenida.
+  try {
+    const c = JSON.parse(fs.readFileSync(path.join(__dirname, 'auto/ultima_corrida.json'), 'utf8'));
+    const t = new Date(c.corrida), dia = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago' }).format(t);
+    const hora = t.toLocaleTimeString('es-CL', { timeZone: 'America/Santiago', hour: '2-digit', minute: '2-digit' });
+    const ok = /^ok/.test(c.gmail || ''), drv = /^ok/.test(c.drive || '');
+    libro.push({ clave: ok ? 'SIS|vigilante' : 'ERR|vigilante', modulo: ok ? 'Sistema' : 'Error', entidad: 'sincronizacion', hito: ok ? 'ultima_exitosa' : 'falla_lectura', fecha: dia,
+      fechaTipo: 'Acto acreditado', verificacion: 'Acreditado', documento: ok ? 'Revisión automática (GitHub Actions)' : 'La última revisión automática no pudo leer Gmail',
+      detalle: 'Corrida ' + dia + ' ' + hora + ' · Gmail: ' + (ok ? 'ok' : c.gmail) + ' · Drive: ' + (drv ? 'ok' : (c.drive || 'sin dato')) + ' · alertas abiertas: ' + ((c.alertas || {}).total ?? '—'),
+      origen: 'GitHub Actions · vigilante', vigente: true, version: 1 });
+  } catch (e) {}
   const esc = s => typeof s === 'string' ? s.replace(/([_|$.\\])/g, '\\$1') : s;
   const fila = e => { const r = { 'Clave': esc(e.clave), 'Módulo': e.modulo, 'Entidad': e.entidad || '', 'Hito': esc(e.hito || ''), 'Tipo de fecha': e.fechaTipo, 'Verificación': e.verificacion,
     'Documento': esc(e.documento || ''), 'Respaldo': e.respaldo || '', 'Obligación': e.obligacion || '', 'Detalle': esc(e.detalle || ''), 'Origen': e.origen || '', 'N°': e.numero || '',
@@ -34,7 +46,7 @@ if (Object.keys(G).every(k => fs.existsSync(path.join(NOT, k + '.json')))) {
 }
 // La fecha de construcción solo cambia si cambian los datos (evita commits vacíos cada hora)
 const crypto = require('crypto'), huella = crypto.createHash('sha1');
-Object.values(mapa).sort().forEach(f => huella.update(fs.readFileSync(path.join(D, f), 'utf8').replace(/"exportado":"[^"]*"/, '')));
+Object.values(mapa).filter(f => !/corrida\.json$/.test(f)).sort().forEach(f => huella.update(fs.readFileSync(path.join(D, f), 'utf8').replace(/"exportado":"[^"]*"/, '')));
 const h = huella.digest('hex'), MAN = path.join(DATA, 'manifiesto.json'), prev = fs.existsSync(MAN) ? JSON.parse(fs.readFileSync(MAN, 'utf8')) : {};
 fs.writeFileSync(MAN, JSON.stringify({ construido: prev.huella === h ? prev.construido : new Date().toISOString(), huella: h, libro: origen, archivos: mapa }, null, 1));
 

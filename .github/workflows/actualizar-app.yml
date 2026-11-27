@@ -1,17 +1,22 @@
-# Cada hora: lee Gmail (correos, manifolds y revisiones técnicas de Cosemar/ITS), regenera la app y avisa por correo SOLO si hay algo nuevo.
+# Cada ~25 minutos (cadena propia + horarios de respaldo): lee Gmail (correos, manifolds y revisiones técnicas de Cosemar/ITS), regenera la app y avisa por correo SOLO si hay algo nuevo.
 # Secretos (Settings → Secrets and variables → Actions): GMAIL_PUENTE_URL (enlace del puente de Apps Script, acciones/puente_gmail.gs),
 # AVISOS_CC (opcional, @maho.cl). Alternativa con contraseña de aplicación: GMAIL_USUARIO, GMAIL_CLAVE_APP, AVISOS_PARA, NOTION_TOKEN (opcional: si está, el libro de control se toma de Notion).
 # Sin secretos la app igual se reconstruye; solo se omiten la lectura de Gmail y el correo.
 name: Actualizar app Cosemar
 on:
+  # Tres capas para no depender del horario de GitHub, que en la práctica descarta muchas corridas programadas:
+  # 1) cadena propia: cada corrida programa la siguiente (job «siguiente»); 2) horarios de respaldo, que reinician la cadena
+  # si se corta; 3) el mantenimiento automático de Claude (dos veces al día) revisa la frescura y la dispara si hace falta.
   schedule:
-    - cron: '17 * * * *'   # cada hora
+    - cron: '17 * * * *'
+    - cron: '47 * * * *'
   workflow_dispatch: {}
   push:
     branches: [main]
     paths: ['datos/**', 'tablero/draft/**', 'tablero/store/*.json', 'acciones/**']
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: app-cosemar
   cancel-in-progress: false
@@ -42,7 +47,23 @@ jobs:
         run: |
           git config user.name "app-cosemar"
           git config user.email "actions@users.noreply.github.com"
+          git checkout -- entregables 2>/dev/null || true   # el archivo descargable (2,9 MB) no se guarda en cada corrida
           git add -A
           git diff --cached --quiet && exit 0
           git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)"
           for i in 1 2 3; do git pull --rebase --autostash -q && git push && break; sleep 5; done
+  # Cadena propia: espera y dispara la siguiente corrida. La concurrencia del grupo deja a lo más una en espera,
+  # así que la cadena no se duplica aunque también lleguen corridas por horario o a mano.
+  siguiente:
+    needs: construir
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Esperar y programar la próxima corrida
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          sleep 1200
+          gh workflow run actualizar-app.yml --repo "$REPO" --ref main
