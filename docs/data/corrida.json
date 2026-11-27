@@ -1,11 +1,11 @@
 {
- "corrida": "2026-11-27T21:02:13.697Z",
+ "corrida": "2026-11-27T21:23:57.128Z",
  "gmail": "ok: 33 mensajes leídos",
  "drive": "ok: {\"leidos\":0,\"crear\":0,\"rectificar\":0,\"revision\":0,\"duplicado\":0,\"omitidos\":0,\"errores\":0}",
  "novedades": 0,
  "alertas": {
-  "total": 19,
-  "nuevas": 0
+  "total": 21,
+  "nuevas": 2
  },
- "correo": "sin novedades: no se envía nada"
+ "correo": "enviado: Cosemar · 2 alertas nuevas"
 }
