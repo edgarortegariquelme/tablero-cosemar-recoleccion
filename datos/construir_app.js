@@ -53,7 +53,7 @@ fs.writeFileSync(MAN, JSON.stringify({ construido: prev.huella === h ? prev.cons
 // Página: index del tablero con cabecera propia, tokens de color y scripts locales
 let cuerpo = fs.readFileSync(path.join(T, 'index.html'), 'utf8').replace('<meta name="dash-one-writer">', '').replace(/<script src="[^"]+"><\/script>\s*/g, '');
 const head = fs.readFileSync(path.join(__dirname, 'app_head.html'), 'utf8');
-fs.writeFileSync(path.join(D, 'index.html'), head + cuerpo + '\n<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>\n<script src="js/runtime.js"></script>\n<script src="js/motor.js"></script>\n<script src="js/app.js"></script>\n<script src="js/operacion.js"></script>\n<script>Tablero.iniciar();</script>\n</body>\n</html>\n');
+fs.writeFileSync(path.join(D, 'index.html'), head + cuerpo + '\n<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>\n<script src="js/runtime.js"></script>\n<script src="js/motor.js"></script>\n<script src="js/app.js"></script>\n<script src="js/operacion.js"></script>\n<script>Tablero.iniciar();</script>\n<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});</script>\n</body>\n</html>\n');
 fs.writeFileSync(path.join(D, '.nojekyll'), '');
 
 // Versión de un solo archivo (sin publicar): datos y scripts incrustados; se abre con doble clic.
