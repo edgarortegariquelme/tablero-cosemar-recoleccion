@@ -26,6 +26,10 @@ function paginaManifold(t) {
   return m ? m[1] : null;
 }
 const CIERRA = /se da(?:n)? por cerrad|cierre de (?:las )?observaciones|se acoge|son acogidos|dar(?:\s+por)? cerrad|cierre del proceso|estado\s*:\s*cerrad|v[°º.]?\s*b[°º.]?\s*(?:al|para el)\s+cierre|fecha de cierre|se cierra (?:la|el) (?:solicitud|requerimiento|manifold)/i;
+// Plazo que fija la ITS en su texto: «plazo máximo de 5 días», «no superior a 5 días hábiles». Sin «hábiles» son corridos (BA 7).
+const plazoEn = t => { const x = (t || '').match(/plazo[^.]{0,40}?(\d{1,3})\s*d[ií]as(\s+h[aá]biles)?/i); return x ? { dias: +x[1], unidad: x[2] ? 'hábiles' : 'corridos' } : null; };
+// Constancia en el libro manifold sin número de página («Se deja constancia … en el libro Manifold»).
+const CONSTANCIA_MF = /(constancia|respaldo)[^.]{0,80}manifold|libro\s+manifold/i;
 // Fecha de cierre declarada por la ITS («Fecha de cierre: 24/11/2026»); si no, la del correo.
 const fechaCierre = (t, def) => { const x = (t || '').match(/fecha de cierre\s*:?\s*(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/i); return x ? x[3] + '-' + x[2].padStart(2, '0') + '-' + x[1].padStart(2, '0') : def; };
 const fechaCL = d => new Date(d).toLocaleDateString('sv-SE', { timeZone: 'America/Santiago' });
@@ -97,7 +101,8 @@ function clasificar(m, st, novedades) {
   let pagina = (/hgomez@maho\.cl/i.test(m.de.correo) && paginaManifold(cuerpo)) || paginaManifold(textoMf);
   // Un manifold ya registrado en este mismo hilo (la ITS suele cerrar respondiendo en el hilo de la solicitud).
   const kHilo = Object.keys(st.manifolds).find(x => (st.manifolds[x].respaldo || '').endsWith('/' + m.hilo));
-  if (pagina || /manifold/i.test(textoMf) || kHilo) {
+  const esITS = /hgomez@maho\.cl/i.test(m.de.correo);
+  if (pagina || /manifold/i.test(textoMf) || kHilo || (esITS && CONSTANCIA_MF.test(cuerpo))) {
     const k = pagina ? hoy.slice(0, 4) + '-' + pagina : kHilo || hoy.slice(0, 4) + '-' + m.hilo;
     const mf = st.manifolds[k] || (kHilo && st.manifolds[kHilo]);
     if (mf && mf.estado !== 'Cerrado' && emp === 'DMAO' && CIERRA.test(cuerpo)) {
@@ -106,7 +111,9 @@ function clasificar(m, st, novedades) {
     }
     if (!mf) {
       const cerrado = CIERRA.test(cuerpo);
+      const pl = esITS ? plazoEn(cuerpo) : null;
       st.manifolds[k] = { id: 'MF-' + hoy.slice(0, 4) + '-' + (pagina ? pagina.padStart(2, '0') : 'X' + m.hilo.slice(-4)), fecha: hoy, pagina: pagina || '?', motivo: asunto,
+        plazoDias: pl ? pl.dias : null, plazoUnidad: pl ? pl.unidad : null,
         tipo: cerrado ? 'Cierre' : SANCION.test(asunto + ' ' + cuerpo) ? 'Proceso sancionatorio' : 'Por clasificar', estado: cerrado ? 'Cerrado' : 'Abierto', cierre: cerrado ? hoy : null,
         nota: 'Ingresado automáticamente desde Gmail (' + nombreDe(m.de) + '). ' + resumen(m.texto).slice(0, 160), respaldo: enlace };
       novedades.push({ tipo: 'Manifold', texto: 'Manifold ' + (pagina ? 'pág. ' + pagina + ' ' : '') + 'del ' + hoy.split('-').reverse().join('-') + (cerrado ? ' (cierre)' : '') + ': ' + asunto + (cerrado ? '.' : '. Revisa motivo y plazo.'), enlace });

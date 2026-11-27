@@ -149,6 +149,8 @@
       flota.forEach(function (f) { if (!f.rt) return; var d = dc(hoy, f.rt);
         if (d < 0) a('alta', 'rec', 'Móvil ' + f.movil + ' (' + f.patente + '): la revisión técnica de la planilla venció el ' + fCL(f.rt) + '.' + (f.nota ? ' ' + f.nota : ''), f.rt);
         else if (d <= 30) a('media', 'rec', 'Móvil ' + f.movil + ' (' + f.patente + '): la revisión técnica vence el ' + fCL(f.rt) + (d === 0 ? ' (hoy).' : d === 1 ? ' (mañana).' : ' (en ' + d + ' días).'), f.rt); });
+      mf.filter(function (m) { return m.estado === 'Abierto' && m.vence && m.vence >= hoy; }).forEach(function (m) { var d = dc(hoy, m.vence);
+        a('media', 'rec', 'Manifold ' + (m.pagina && m.pagina !== '?' ? m.pagina : 'sin página') + ' del ' + fCL(m.fecha) + ': Cosemar debe responder a más tardar el ' + fCL(m.vence) + (d === 0 ? ' (hoy)' : d === 1 ? ' (mañana)' : ' (en ' + d + ' días)') + '. ' + m.motivo + '.', m.vence); });
       mf.filter(function (m) { return m.estado === 'Abierto' && m.vence && m.vence < hoy; }).forEach(function (m) { a('alta', 'rec', 'Manifold ' + m.pagina + ' del ' + fCL(m.fecha) + ' sigue abierto con el plazo vencido el ' + fCL(m.vence) + ': ' + m.motivo + '.', m.vence); });
       cor.filter(function (c) { return c.urgencia === 'Alta' && c.estado === 'Responder'; }).forEach(function (c) { a('alta', c.contrato === 'Disposición final' ? 'df' : 'rec', 'Correo de ' + c.contacto + ' del ' + fCL(c.fecha) + ' sin responder: ' + c.tema + '.', c.fecha); });
       (vig || []).forEach(function (v) { if (v.alerta) a(v.alerta.nivel, v.contrato, v.alerta.texto, v.alerta.fecha); });

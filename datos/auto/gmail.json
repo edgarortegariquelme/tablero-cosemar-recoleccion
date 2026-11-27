@@ -283,11 +283,13 @@
    "fecha": "2026-11-24",
    "pagina": "25",
    "motivo": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
-   "tipo": "Por clasificar",
+   "tipo": "Requerimiento",
    "estado": "Abierto",
    "cierre": null,
-   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N.º 12010, recepcionada con fecha 23 de noviembre de 2026, mediante la cual la administración ",
-   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N.º 12010, recepcionada con fecha 23 de noviembre de 2026, mediante la cual la administración  · 26-11: avance de Cosemar (las tripulaciones dicen que el contenedor ya estaba dañado). 27-11: la ITS mantiene el plazo al 01-12 y deja la observación abierta; Cosemar envió su informe técnico el 27-11, pendiente de revisión de la ITS.",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a",
+   "plazoDias": 5,
+   "plazoUnidad": "hábiles"
   },
   "2026-28": {
    "id": "MF-2026-28",
@@ -299,6 +301,19 @@
    "cierre": null,
    "nota": "Ingresado automáticamente desde Gmail (edgar ortega riquelme). Estimada Andrea: Junto con saludar, y en mi calidad de encargado del contrato de recolección de residuos sólidos domiciliarios con COSEMAR SpA (P.P. N° 060/2023",
    "respaldo": "https://mail.google.com/mail/u/0/#all/1a21eb0e71e71a89"
+  },
+  "2026-1a21d16679be1e12": {
+   "id": "MF-2026-X1e12",
+   "fecha": "2026-11-27",
+   "pagina": "?",
+   "motivo": "Solicitud de investigación – Camión compactador PPU TCXV-47 (móvil 938): velocidad, residuos dispersos, puntos omitidos y seguridad de los peonetas",
+   "plazoDias": 5,
+   "plazoUnidad": "corridos",
+   "tipo": "Requerimiento",
+   "estado": "Abierto",
+   "cierre": null,
+   "nota": "Ingresado desde Gmail (Hernán Gómez, ITS). Constancia en el libro Manifold sin número de página. Plazo de 5 días sin indicar hábiles: corridos (BA 7), vence el 02-12-2026. Cosemar respondió el 27-11 que investigará e informará.",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a21d16679be1e12"
   }
  },
  "rt": {

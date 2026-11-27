@@ -40,7 +40,7 @@ const MF = [
   ['MF-2024-05', '2024-07-17', '5', 'Pide a Cosemar los planes de trabajo', 'Requerimiento', null, null, 'Cerrado', '2024-10-02', 'Cosemar adjuntó los planes el 02-10-2024.', null, D + '1t3T4Tu8G4EPk1B1Hl2N-QaIvkQKtlO5h/view']
 ];
 // Manifolds nuevos desde Gmail: se agregan si la página del año no está ya en la lista curada.
-Object.values(AUTO.manifolds || {}).forEach(m => { if (!MF.some(r => r[2] === m.pagina && r[1].slice(0, 4) === m.fecha.slice(0, 4))) MF.unshift([m.id, m.fecha, m.pagina, m.motivo, m.tipo, null, null, m.estado, m.cierre || null, m.nota, null, m.respaldo, null]); });
+Object.values(AUTO.manifolds || {}).forEach(m => { if (!MF.some(r => (m.pagina !== '?' ? r[2] === m.pagina && r[1].slice(0, 4) === m.fecha.slice(0, 4) : r[0] === m.id))) MF.unshift([m.id, m.fecha, m.pagina, m.motivo, m.tipo, m.plazoDias || null, m.plazoUnidad || null, m.estado, m.cierre || null, m.nota, null, m.respaldo, null]); });
 MF.sort((x, y) => (y[1] > x[1] ? 1 : y[1] < x[1] ? -1 : 0));
 w('manifolds.json', MF.map(r => {
   const [id, fecha, pagina, motivo, tipo, dias, unidad, estado, cierre, nota, caso, respaldo, venceFijo] = r;
