@@ -1,4 +1,17 @@
-# Traspaso de sesión — Tablero Cosemar (P.P. 060/2023 · ID 3447-86-LR23)
+# Traspaso — Control contractual Cosemar (actualizado 27-11-2026)
+
+> **Lee esto primero.** Desde el 20-11-2026 el sistema ya NO usa n8n ni Notion como fuente. Lo que sigue en la sección «Histórico (17-11-2026)» queda solo como antecedente.
+
+## Estado vigente
+- **Fuente de verdad:** este repositorio. Libro de control: `datos/semilla.js` + `pruebas/pagos_confirmados.json` + `datos/libro_novedades.json`. Datos curados: `datos/operacion.js`. Datos publicados: `docs/data/*.json`. El libro de Notion quedó congelado el 16-11-2026.
+- **Sincronización automática:** `acciones/vigilante.js` en GitHub Actions (`.github/workflows/actualizar-app.yml`), en cadena cada ~25 minutos con horarios de respaldo. Lee Gmail y Drive por el puente de Apps Script (secreto `GMAIL_PUENTE_URL`), regenera la app y avisa por correo solo lo nuevo. Estado de la última corrida: `datos/auto/ultima_corrida.json`. Detalle completo: `AUTOMATIZACION.md`.
+- **App pública:** https://edgarortegariquelme.github.io/tablero-cosemar-recoleccion/
+- **Tablero de Claude:** https://claude.ai/artifact/FqSZ9xCaUeVFhjHQPZhtMG. Sus fuentes son archivos subidos desde `docs/data/` (ya no Notion). Lo resincroniza el «Agente contrato Cosemar».
+- **Tareas programadas de Claude:** «Agente contrato Cosemar» (lunes a sábado 07:23 y 17:23, con Gmail, Drive y Notion); «Actualizar deuda Cosemar» (día 28); «Borradores ciclo de pago Cosemar» (día 7); «Deuda disposición final Cosemar» (día 8); «Reajuste IPC anual Cosemar» (10 de julio y agosto); «Resumen semanal tablero Cosemar» (lunes).
+- **Página de Notion vigente:** «Sistema automático Cosemar · estado y traspaso al 20-11-2026» (bajo «COSEMAR · Recolección RSD (P.P. 060/2023)»): pendientes, prompt para retomar y bitácora del agente.
+- **Regla de carga:** cifras solo desde documentos verificables; sin nombres ni RUT de trabajadores en lo publicado.
+
+## Histórico (17-11-2026, ya no vigente)
 
 Fecha de corte: 2026-11-17. Rama `main`.
 
