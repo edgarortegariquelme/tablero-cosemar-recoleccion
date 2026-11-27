@@ -176,28 +176,6 @@
    "estado": "En curso",
    "nota": "*Estimados:* Complementando lo señalado por la ITS, cabe precisar que los servicios de retiro de escombros y residuos voluminosos se encuentran expresamente contemplados en los ítems N°2 y N°3 de la Propuesta Pública N°0",
    "hilo": "1a2191c0de08a2d3"
-  },
-  "1a1357856a344bcb": {
-   "fecha": "2026-11-27",
-   "contacto": "edgar ortega riquelme",
-   "empresa": "DMAO",
-   "tema": "RESPUESTA A INFORME DE VARIACIÓN DE COMBUSTIBLE",
-   "contrato": "Recolección",
-   "urgencia": "Media",
-   "estado": "En curso",
-   "nota": "[BORRADOR PREPARADO POR EL AGENTE · REVISAR ANTES DE ENVIAR] Estimada Jesús: Junto con saludar, y en respuesta a tu correo del 13 de octubre de 2026 sobre el informe de variación en el consumo de combustible entregado el",
-   "hilo": "1a1357856a344bcb"
-  },
-  "1a21ce2bc3b493c6": {
-   "fecha": "2026-11-27",
-   "contacto": "edgar ortega riquelme",
-   "empresa": "DMAO",
-   "tema": "Reitera requerimiento: resolución sanitaria de instalaciones y fosas de lavado (Manifold pág. 28) · Contrato ID 3447-86-LR23",
-   "contrato": "Recolección",
-   "urgencia": "Media",
-   "estado": "En curso",
-   "nota": "[BORRADOR PREPARADO POR EL AGENTE · REVISAR ANTES DE ENVIAR] Estimada Jesús: Junto con saludar, y en relación con el requerimiento formulado el 5 de junio de 2026 (Manifold pág. 28), reiterado por la Inspección Técnica d",
-   "hilo": "1a21ce2bc3b493c6"
   }
  },
  "manifolds": {
@@ -244,17 +222,6 @@
    "cierre": null,
    "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N.º 12010, recepcionada con fecha 23 de noviembre de 2026, mediante la cual la administración ",
    "respaldo": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
-  },
-  "2026-28": {
-   "id": "MF-2026-28",
-   "fecha": "2026-11-27",
-   "pagina": "28",
-   "motivo": "Reitera requerimiento: resolución sanitaria de instalaciones y fosas de lavado (Manifold pág. 28) · Contrato ID 3447-86-LR23",
-   "tipo": "Proceso sancionatorio",
-   "estado": "Abierto",
-   "cierre": null,
-   "nota": "Ingresado automáticamente desde Gmail (edgar ortega riquelme). [BORRADOR PREPARADO POR EL AGENTE · REVISAR ANTES DE ENVIAR] Estimada Jesús: Junto con saludar, y en relación con el requerimiento formulado el 5 de junio de 20",
-   "respaldo": "https://mail.google.com/mail/u/0/#all/1a21ce2bc3b493c6"
   }
  },
  "rt": {

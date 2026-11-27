@@ -37,7 +37,7 @@ function doGet(e) {
   var limite = new Date(desde + 'T00:00:00-04:00'), out = [];
   GmailApp.search('after:' + desde.replace(/-/g, '/') + ' ' + BUSQUEDA, 0, 100).forEach(function (t) {
     t.getMessages().forEach(function (m) {
-      if (m.getDate() < limite || m.isInTrash()) return;
+      if (m.getDate() < limite || m.isInTrash() || m.isDraft()) return;   // los borradores no son correos enviados
       var de = m.getFrom(), mm = de.match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>/), asunto = m.getSubject() || '';
       var adj = [];
       if (CON_ADJUNTOS.test(asunto) || m.getAttachments({ includeInlineImages: false }).some(function (a) { return /manifold/i.test(a.getName()); })) {

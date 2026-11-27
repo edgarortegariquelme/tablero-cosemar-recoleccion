@@ -159,7 +159,9 @@ async function ingestar() {
   else if (process.env.GMAIL_USUARIO && process.env.GMAIL_CLAVE_APP) msgs = await mensajesIMAP(st.desde);
   else return { omitido: 'falta el secreto GMAIL_PUENTE_URL (o GMAIL_USUARIO y GMAIL_CLAVE_APP)', novedades };
   const vistos = new Set(st.vistos);
-  msgs.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).forEach(m => { if (vistos.has(m.id)) return; vistos.add(m.id); clasificar(m, st, novedades); });
+  // Los borradores (los que prepara el agente o Edgar) no son correos enviados: no se registran ni se marcan como vistos.
+  const esBorrador = m => m.borrador === true || /^\s*\[BORRADOR\b/i.test(m.texto || '') || /^\s*BORRADOR\s*-/i.test(m.asunto || '');
+  msgs.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).forEach(m => { if (esBorrador(m) || vistos.has(m.id)) return; vistos.add(m.id); clasificar(m, st, novedades); });
   // La próxima lectura parte dos días antes de hoy (Gmail busca por día); los ya vistos se descartan por id.
   const hoy = fechaCL(Date.now()), d = new Date(hoy + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 2);
   st.desde = d.toISOString().slice(0, 10); st.vistos = [...vistos].slice(-3000); st.leido = new Date().toISOString();
