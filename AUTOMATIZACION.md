@@ -30,6 +30,18 @@ Alternativa si algún día tienes contraseña de aplicación de Google: secretos
 
 Sin secretos la app igual se reconstruye cada hora; solo se omiten la lectura de Gmail y el correo.
 
+## Autonomía: cómo se evita que la sincronización se detenga (27-11-2026)
+- **Cadena propia de corridas:** cada corrida programa la siguiente unos 20 minutos después (job `siguiente` en `actualizar-app.yml`). No depende del horario de GitHub, que en la práctica descartaba la mayoría de las corridas programadas (solo 2 a 4 por día).
+- **Horarios de respaldo** (minutos 17 y 47 de cada hora): reinician la cadena si algo la corta. La concurrencia del grupo `app-cosemar` evita corridas duplicadas.
+- **Vigía de pausas:** si entre dos corridas pasan más de 6 horas, el correo siguiente lo informa. La lectura de Gmail y Drive retoma desde la última corrida, así que no se pierde nada del período detenido.
+- **Marca de sincronización:** cada corrida escribe una fila «Sistema» en el libro de control. Los paneles de salud la leen; sin ella mostraban «detenida» aunque el sistema funcionara.
+- **Mantenimiento automático de Claude** (tarea programada «Mantenimiento tablero Cosemar», 07:23 y 19:23 hora de Chile):
+  - revisa la frescura y las fallas de GitHub, reactiva la cadena y repara el código si hace falta;
+  - sincroniza el tablero de Claude (https://claude.ai/artifact/FqSZ9xCaUeVFhjHQPZhtMG) con `docs/data/`;
+  - si un problema solo lo puede resolver Edgar, abre un issue «Mantenimiento: requiere tu atención», y GitHub lo avisa por correo.
+- **El descargable `entregables/Control_Cosemar.html` (2,9 MB) ya no se guarda en cada corrida**, para que el repositorio no crezca sin control. Se regenera a mano cuando se necesita (`node datos/construir_app.js`).
+- **Dos tableros, una sola fuente:** la app pública (GitHub Pages) y el tablero de Claude leen los mismos datos de `docs/data/`. Las fuentes del libro del tablero de Claude ya no leen Notion.
+
 ## n8n quedó archivado
 Lo que hacían los flujos de n8n vive ahora en GitHub:
 | Flujo n8n | Ahora |
