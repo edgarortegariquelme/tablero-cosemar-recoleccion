@@ -187,6 +187,17 @@
    "estado": "En curso",
    "nota": "Estimada Jesús: Junto con saludar, se informa que se ha recepcionado un reporte respecto al camión compactador PPU TCXV-47, el cual presuntamente circula a velocidad excesiva por avenida Las Américas, dejando residuos di",
    "hilo": "1a21d16679be1e12"
+  },
+  "1a1357856a344bcb": {
+   "fecha": "2026-11-27",
+   "contacto": "edgar ortega riquelme",
+   "empresa": "DMAO",
+   "tema": "RESPUESTA A INFORME DE VARIACIÓN DE COMBUSTIBLE",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimado Jesús: Acuso recibo de tu correo del 13 de octubre y de la carta adjunta sobre la variación de precios de combustible. Saludos cordiales, Edgar Ortega Riquelme",
+   "hilo": "1a1357856a344bcb"
   }
  },
  "manifolds": {
@@ -300,7 +311,9 @@
   "1a21cf041ba64796",
   "1a21d02b25376f2f",
   "1a21d0390fad8b8e",
-  "1a21d16679be1e12"
+  "1a21d16679be1e12",
+  "1a21d17fbd170bc2",
+  "1a21d1d483854a60"
  ],
- "leido": "2026-11-27T12:59:22.242Z"
+ "leido": "2026-11-27T13:21:22.256Z"
 }
