@@ -1019,6 +1019,11 @@
    "obligacion": "OB-20",
    "sector": "Flota",
    "patente": "TPPW41-0",
+   "cobroEn": {
+    "contrato": "rec",
+    "periodo": "2026-10",
+    "nota": "Indicada por el encargado el 27-11-2026 (próxima factura por pagar)"
+   },
    "carpeta": "3. FEB 2026 CAMION CON DOCUMENTACION VENCIDA (confirmada)"
   },
   "PS04": {

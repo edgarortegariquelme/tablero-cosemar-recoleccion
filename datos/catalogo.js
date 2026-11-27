@@ -100,7 +100,9 @@
     sanciones: {
       PS01: { titulo: 'Apoyo en rutas con equipos de escombros y voluminosos', obligacion: 'OB-27', sector: 'Rutas de recolección', carpeta: '1. FEB 2026 APOYO RUTAS EQUIPOS ESCOM Y VOL (sin efecto)' },
       PS02: { titulo: 'Gráfica e identificación de camiones recolectores', obligacion: 'OB-23', sector: 'Flota', carpeta: '2. FEB 2026 GRAFICA CAMIONES RECOLECTORES (en evaluacion)' },
-      PS03: { titulo: 'Camión con documentación vencida (móvil 980)', obligacion: 'OB-20', sector: 'Flota', patente: 'TPPW41-0', carpeta: '3. FEB 2026 CAMION CON DOCUMENTACION VENCIDA (confirmada)' },
+      PS03: { titulo: 'Camión con documentación vencida (móvil 980)', obligacion: 'OB-20', sector: 'Flota', patente: 'TPPW41-0',
+        // Factura en que se descuenta la multa (BA 188 a), según el encargado (27-11-2026): la próxima por pagar, recolección de octubre de 2026.
+        cobroEn: { contrato: 'rec', periodo: '2026-10', nota: 'Indicada por el encargado el 27-11-2026 (próxima factura por pagar)' }, carpeta: '3. FEB 2026 CAMION CON DOCUMENTACION VENCIDA (confirmada)' },
       PS04: { titulo: 'Lavado deficiente de equipos', obligacion: 'OB-30', sector: 'Instalaciones', carpeta: '4. FEB LAVADO DEFICIENTE EQUIPOS (sin efecto)' },
       PS05: { titulo: 'Modificación unilateral del plan de trabajo (inicio domingo 5 de abril)', obligacion: 'OB-28', sector: 'Rutas de recolección', carpeta: '5. MODIFICACION UNILATERAL DE PLAN DE TRABAJO (decretando)' },
       PS06: { titulo: 'Camión no informado en el plan de trabajo (móvil 1473)', obligacion: 'OB-25', sector: 'Flota', carpeta: '6. CAMION NO INFORMADO EN PLAN TRABAJO' },

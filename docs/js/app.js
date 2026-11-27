@@ -62,7 +62,8 @@
           propuesto: s.montos.propuesto ? s.montos.propuesto.valor : null, propuestoUnidad: s.montos.propuesto ? s.montos.propuesto.unidad : null,
           decretado: s.montos.decretado ? s.montos.decretado.valor : null, decretadoUnidad: s.montos.decretado ? s.montos.decretado.unidad : null,
           derivado: s.montos.derivado ? s.montos.derivado.valor : null, cobrado: s.montos.cobrado ? s.montos.cobrado.valor : null, cobradoUnidad: s.montos.cobrado ? s.montos.cobrado.unidad : null,
-          cobradoRespaldo: s.montos.cobrado ? s.montos.cobrado.respaldo : null, hitos: s.eventos.length, sinRespaldo: s.pendientesDeRespaldo.length };
+          cobradoRespaldo: s.montos.cobrado ? s.montos.cobrado.respaldo : null, hitos: s.eventos.length, sinRespaldo: s.pendientesDeRespaldo.length,
+          firme: !!s.firme, reposicionVencida: !!s.reposicionVencida, cobroEn: s.cobroEn, plazoNota: s.plazo.nota || null, quien: s.plazo.quien || null };
       }).sort(function (a, b) { var r = function (x) { return x.cerrada ? 3 : x.plazoEstado === 'vencido' ? 0 : x.plazoEstado === 'en plazo' ? 1 : 2; }; return (r(a) - r(b)) || ((a.vence || '9') < (b.vence || '9') ? -1 : (a.vence || '9') > (b.vence || '9') ? 1 : 0); });
     }
   });

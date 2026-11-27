@@ -32,9 +32,9 @@
 
   // ---------- cálculos ----------
   dash.calc('c_ciclo', {
-    inputs: ['c_eventos', 'pagos_contrato', 'df_pagos', 'ciclo_fechas'], title: 'Ciclo de pago de cada mes de servicio',
+    inputs: ['c_eventos', 'pagos_contrato', 'df_pagos', 'ciclo_fechas', 'c_sanciones'], title: 'Ciclo de pago de cada mes de servicio',
     description: 'Para cada contrato y mes de servicio desde enero de 2026: documentos de los 11 pasos con su fecha, y las ventanas del ciclo (informe de Cosemar del 1 al 5, OC hasta 7 días después del memo, factura del 15 al 20, pago a 30 días de la factura) con su estado frente a hoy.',
-    fn: function (eventos, rec, df, extra) {
+    fn: function (eventos, rec, df, extra, san) {
       var hoy = hoyCL(), out = [];
       function base(k, p, monto, estado, pagado) {
         var m1 = sig(p.periodo); return { clave: k + '|' + p.periodo, contrato: k, periodo: p.periodo, monto: monto, estado: estado, pagado: !!pagado, pasos: {}, infoDesde: m1 + '-01', infoHasta: m1 + '-0' + R.infoHasta, facDesde: m1 + '-' + R.facDesde, facHasta: m1 + '-' + R.facHasta };
@@ -66,6 +66,10 @@
         var esp = P.espera_presupuesto;
         if (esp && (!esp.fecha || hoy <= esp.fecha)) { o.espera = { hasta: esp.fecha, nota: esp.documento, respaldo: esp.respaldo || null };
           ['ocEstado', 'facEstado', 'pagoEstado'].forEach(function (k) { if (o[k] !== 'listo') o[k] = 'en espera'; }); }
+        // Requisito del memo de pago (BA 187–188): las multas firmes imputadas a esta factura deben tener el descuento determinado y acreditado antes del OK del memo.
+        o.requisitos = (san || []).filter(function (s) { return s.firme && s.cobroEn && s.cobroEn.contrato === o.contrato && s.cobroEn.periodo === o.periodo; }).map(function (s) {
+          return { proceso: s.id, titulo: s.titulo, monto: s.decretado, unidad: s.decretadoUnidad || 'UTM', cobrado: s.cobrado != null, estado: s.cobrado != null ? 'listo' : 'pendiente', siguiente: s.siguiente }; });
+        o.memoPagoBloqueado = o.requisitos.some(function (r) { return r.estado !== 'listo'; }) && !P.memo_pago;
         o.pasosListos = M.HITOS_PAGO.filter(function (hh) { return P[hh.id]; }).length;
         o.ultimoPaso = M.HITOS_PAGO.filter(function (hh) { return P[hh.id]; }).map(function (hh) { return hh.nombre; }).pop() || null;
         return o;
@@ -122,9 +126,9 @@
   });
 
   dash.calc('c_alertas', {
-    inputs: ['c_ciclo', 'flota', 'manifolds', 'correos', 'c_vigencias'], title: 'Alertas de hoy',
+    inputs: ['c_ciclo', 'flota', 'manifolds', 'correos', 'c_vigencias', 'c_sanciones'], title: 'Alertas de hoy',
     description: 'OC que superan los 7 días desde el memo que la pide, facturas y pagos fuera de plazo, ventanas que vienen, revisiones técnicas vencidas o por vencer en 30 días, manifolds abiertos con plazo vencido y correos urgentes sin responder.',
-    fn: function (ciclo, flota, mf, cor, vig) {
+    fn: function (ciclo, flota, mf, cor, vig, san) {
       var hoy = hoyCL(), out = [];
       function a(nivel, k, txt, fecha) { out.push({ nivel: nivel, contrato: k, texto: txt, fecha: fecha || null }); }
       ['rec', 'df'].forEach(function (k) {
@@ -136,6 +140,8 @@
           if (c.facEstado === 'atrasado') a('media', k, 'Falta la factura de ' + n + ' (ventana del ' + fCL(c.facDesde) + ' al ' + fCL(c.facHasta) + ').', c.facHasta);
           if (c.pagoEstado === 'atrasado') a('media', k, 'El pago de ' + n + ' superó los 30 días desde la factura (' + fCL(c.pagoLimite) + ').', c.pagoLimite);
           if (c.espera) a('info', k, 'OC, factura y pago de ' + n + ' en espera presupuestaria hasta ' + fCL(c.espera.hasta) + '.', c.espera.hasta);
+          (c.requisitos || []).filter(function (r) { return r.estado !== 'listo'; }).forEach(function (r) {
+            a(c.pasos.factura ? 'alta' : 'media', k, 'Requisito del memo de pago de ' + n + ': descontar la multa del proceso ' + r.proceso.replace(/^PS0?/, '') + ' (' + r.monto + ' ' + r.unidad + ', en pesos a la UTM del mes en que se cursó, BA 171). El monto y la instrucción de descuento deben estar antes del OK del memo (BA 188 a).', c.facHasta); });
         });
         var u = ciclo.filter(function (c) { return c.contrato === k; }).map(function (c) { return c.periodo; }).sort().pop();
         if (u) { var prox = sig(u), m1 = sig(prox); a('info', k, 'Del ' + fCL(m1 + '-01') + ' al ' + fCL(m1 + '-05') + ' Cosemar debe entregar el informe de ' + mesL(prox) + ' para pedir la OC.', m1 + '-05'); }
@@ -146,6 +152,10 @@
       mf.filter(function (m) { return m.estado === 'Abierto' && m.vence && m.vence < hoy; }).forEach(function (m) { a('alta', 'rec', 'Manifold ' + m.pagina + ' del ' + fCL(m.fecha) + ' sigue abierto con el plazo vencido el ' + fCL(m.vence) + ': ' + m.motivo + '.', m.vence); });
       cor.filter(function (c) { return c.urgencia === 'Alta' && c.estado === 'Responder'; }).forEach(function (c) { a('alta', c.contrato === 'Disposición final' ? 'df' : 'rec', 'Correo de ' + c.contacto + ' del ' + fCL(c.fecha) + ' sin responder: ' + c.tema + '.', c.fecha); });
       (vig || []).forEach(function (v) { if (v.alerta) a(v.alerta.nivel, v.contrato, v.alerta.texto, v.alerta.fecha); });
+      // Procesos sancionatorios con plazo de Cosemar vencido: la acción pasa a la Unidad Técnica.
+      // (Los descargos vencidos ya avisan por su manifold; aquí van los decretos notificados sin reposición, que pasan a cobro.)
+      (san || []).filter(function (s) { return !s.cerrada && s.reposicionVencida; }).forEach(function (s) {
+        a('alta', 'rec', 'Proceso ' + s.id.replace(/^PS0?/, '') + ' · ' + s.titulo + ': el plazo de reposición de Cosemar venció el ' + fCL(s.vence) + ' sin recurso. ' + s.siguiente.replace(/^[^:]+:\s*/, '').replace(/^./, function (x) { return x.toUpperCase(); }) + '.' + (s.cobroEn ? ' Se imputa a la factura de ' + mesL(s.cobroEn.periodo) + '.' : ' Falta definir la factura de imputación.'), s.vence); });
       var ord = { alta: 0, media: 1, info: 2 };
       return out.sort(function (x, y) { return ord[x.nivel] - ord[y.nivel] || ((x.fecha || '') < (y.fecha || '') ? -1 : 1); });
     }
@@ -228,8 +238,9 @@
       function pintar(per) {
         var c = cs.filter(function (x) { return x.periodo === per; })[0];
         var pasos = M.HITOS_PAGO.map(function (hh, i) {
-          var p = c.pasos[hh.id], ok = !!p, sigue = !ok && M.HITOS_PAGO.slice(0, i).every(function (z) { return c.pasos[z.id] || z.id === 'vb_daf' || z.id === 'oc_aceptada' || z.id === 'informe_gps' || z.id === 'revision_sanciones'; });
-          return h('li', { cls: 'op-paso' + (ok ? ' op-ok' : sigue ? ' op-sig' : '') }, [h('span', { cls: 'op-pt', 'aria-hidden': 'true' }), h('div', null, [h('b', { text: hh.nombre }), h('div', { cls: 'va-muted' }, [ok ? (p.documento || 'Consta') + (p.fecha ? ' · ' + fCL(p.fecha) : '') : sigue ? 'Pendiente · a cargo de ' + hh.unidad : 'Sin antecedente', ok && p.respaldo ? h('span', null, [' · ', h('a', { href: p.respaldo, target: '_blank', rel: 'noopener', text: 'abrir' })]) : null])])]);
+          var p = c.pasos[hh.id], ok = !!p, bloq = hh.id === 'memo_pago' && c.memoPagoBloqueado, sigue = !ok && !bloq && M.HITOS_PAGO.slice(0, i).every(function (z) { return c.pasos[z.id] || z.id === 'vb_daf' || z.id === 'oc_aceptada' || z.id === 'informe_gps' || z.id === 'revision_sanciones'; });
+          var req = bloq ? 'Bloqueado hasta acreditar el descuento de ' + c.requisitos.filter(function (r) { return r.estado !== 'listo'; }).map(function (r) { return 'la multa del proceso ' + r.proceso.replace(/^PS0?/, '') + ' (' + r.monto + ' ' + r.unidad + ')'; }).join(' y ') + ' (BA 188 a)' : null;
+          return h('li', { cls: 'op-paso' + (ok ? ' op-ok' : bloq ? ' op-bloq' : sigue ? ' op-sig' : '') }, [h('span', { cls: 'op-pt', 'aria-hidden': 'true' }), h('div', null, [h('b', { text: hh.nombre }), h('div', { cls: 'va-muted' }, [ok ? (p.documento || 'Consta') + (p.fecha ? ' · ' + fCL(p.fecha) : '') : bloq ? req : sigue ? 'Pendiente · a cargo de ' + hh.unidad : 'Sin antecedente', ok && p.respaldo ? h('span', null, [' · ', h('a', { href: p.respaldo, target: '_blank', rel: 'noopener', text: 'abrir' })]) : null])])]);
         });
         cuerpo.replaceChildren(h('div', { cls: 'op-mon' }, [h('span', { cls: 'va-big', text: clp(c.monto) }), ' ', chip(c.pagado ? 'Pagado' : c.estado, c.pagado ? 'ok' : 'warn')]),
           h('p', { cls: 'va-muted', text: c.pasosListos + ' de 11 pasos con antecedente. Último: ' + (c.ultimoPaso || 'ninguno') + '.' }), h('ol', { cls: 'op-pasos' }, pasos));
@@ -322,8 +333,8 @@
       var monto = s.decretado != null ? 'Multa decretada: ' + M.fmt(s.decretado) + ' ' + (s.decretadoUnidad || '') : s.propuesto != null ? 'Multa propuesta: ' + M.fmt(s.propuesto) + ' ' + (s.propuestoUnidad || '') : 'Sin monto';
       var mesCobro = cobro ? (cobro.periodo || (((cobro.documento || '') + ' ' + (cobro.detalle || '')).match(/pago de ([a-záéíóú]+)/i) || [])[1] || null) : null;
       return h('details', { cls: 'tl-item', open: !s.cerrada ? '' : null }, [
-        h('summary', null, [h('b', { text: s.id + ' · ' + s.titulo }), ' ', chip(s.cerrada ? 'Cerrado' : 'En curso', s.cerrada ? null : 'warn'), h('div', { cls: 'va-muted', text: 'Inició el ' + fCL(inicio(s.id)) + ' · etapa: ' + s.estado + (s.vence && !s.cerrada ? ' · vence ' + fCL(s.vence) : '') + ' · ' + monto + (dec.length ? ' · decretos: ' + dec.map(function (e) { return 'D.A. ' + (e.numero ? M.fmt(+e.numero) : '?'); }).join(', ') : '') + (mesCobro ? ' · se cobra en el pago de ' + mesCobro : cobro ? ' · cobro derivado' : '') })]),
-        h('p', { cls: 'va-muted', text: 'Siguiente paso: ' + (s.siguiente || '—') + '.' }),
+        h('summary', null, [h('b', { text: s.id + ' · ' + s.titulo }), ' ', chip(s.cerrada ? 'Cerrado' : s.plazoEstado === 'vencido' ? 'Plazo vencido · ' + (s.quien === 'Empresa' ? 'Cosemar' : (s.quien || 'Unidad Técnica')) : 'En curso', s.cerrada ? null : s.plazoEstado === 'vencido' ? 'bad' : 'warn'), h('div', { cls: 'va-muted', text: 'Inició el ' + fCL(inicio(s.id)) + ' · etapa: ' + s.estado + (s.vence && !s.cerrada ? (s.plazoEstado === 'vencido' ? ' · venció el ' : ' · vence ') + fCL(s.vence) : '') + (s.cobroEn && !s.cerrada ? ' · se descuenta en la factura de ' + mesL(s.cobroEn.periodo) + ' (requisito del memo de pago)' : '') + ' · ' + monto + (dec.length ? ' · decretos: ' + dec.map(function (e) { return 'D.A. ' + (e.numero ? M.fmt(+e.numero) : '?'); }).join(', ') : '') + (mesCobro ? ' · se cobra en el pago de ' + mesCobro : cobro ? ' · cobro derivado' : '') })]),
+        h('p', { cls: s.plazoEstado === 'vencido' && !s.cerrada ? 'mu-venc' : 'va-muted', text: 'Siguiente paso: ' + (s.siguiente || '—') + '.' + (s.plazoNota ? ' ' + s.plazoNota + '.' : '') }),
         h('ol', { cls: 'tl' }, es.map(function (e) { var hh = M.H_SAN[e.hito]; return h('li', { cls: e.verificacion === 'Por verificar' ? 'tl-warn' : '' }, [h('span', { cls: 'tl-f', text: e.fecha ? fCL(e.fecha) : 's/f' }), h('div', null, [h('b', { text: hh ? hh.nombre : e.hito }), h('div', { cls: 'va-muted' }, [e.documento || '', e.monto ? ' · ' + M.fmt(e.monto) + ' ' + (e.unidadMonto || '') : '', e.respaldo ? h('span', null, [' · ', h('a', { href: e.respaldo, target: '_blank', rel: 'noopener', text: 'abrir' })]) : null])])]); }))
       ]);
     }));

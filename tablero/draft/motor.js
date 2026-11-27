@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
   var M = {};
-  M.VERSION = '1.0.0';
+  M.VERSION = '1.2.0';
 
   // ---------- Fechas y días hábiles (BA art. 7: inhábiles sábado, domingo y festivos) ----------
   M.FERIADOS = ['2026-01-01','2026-04-03','2026-04-04','2026-05-01','2026-05-21','2026-06-21','2026-06-29','2026-07-16',
@@ -57,7 +57,8 @@
     ['decreto_final', 'Decreto final del proceso', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],
     ['rectificacion_decreto', 'Decreto que rectifica', 'Secretaría Municipal', 'Comunicar a Cosemar y derivar a cobro', true],
     ['comunicacion_final', 'Comunicación de la decisión final', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro en el estado de pago más próximo (BA 188)', true],
-    ['sin_reposicion', 'Constancia de que no hubo reposición', 'Unidad Técnica (Edgar Ortega)', 'Derivar a cobro (multa firme, BA 187)', true],
+    ['sin_reposicion', 'Constancia de que no hubo reposición', 'Unidad Técnica (Edgar Ortega)', 'Solicitar el decreto que deja firme la multa (BA 187)', true],
+    ['decreto_firme', 'Decreto que deja firme la multa', 'Secretaría Municipal', 'Derivar a cobro en la factura más próxima (BA 188 a): el descuento es requisito del memo de pago de ese mes', true],
     ['derivacion_cobro', 'Derivación a cobro (instrucción de descuento)', 'Unidad Técnica (Edgar Ortega)', 'Verificar descuento efectivo en el estado de pago', true],
     ['cobro_efectivo', 'Cobro o descuento efectivo', 'DAF', 'Sin acción: multa cobrada', true]
   ].map(function (a, i) { return { id: a[0], nombre: a[1], unidad: a[2], siguiente: a[3], formal: a[4], orden: i }; });
@@ -141,6 +142,7 @@
       e.modulo = 'Sanción'; e.entidad = ps ? 'PS' + ('0' + ps).slice(-2) : null;
       var utm = n.match(/(\d{1,3})\s*UTM/); if (utm) { e.monto = +utm[1]; e.unidadMonto = 'UTM'; }
       if (/MANTENGASE FIRME|MANTIENE FIRME|RESUELVE REPOSICION/.test(n) && /DECRETO|D\.?A\.?/.test(n)) e.hito = 'decreto_final';
+      else if (/DEJA FIRME|DEJESE FIRME|QUEDA FIRME|FIRME LA MULTA|MULTA FIRME/.test(n) && /DECRETO|D\.?A\.?/.test(n)) e.hito = 'decreto_firme';
       else if (/RECTIFI/.test(n)) e.hito = 'rectificacion_decreto';
       else if (/DECRETO|^\d{4} - MULTA/.test(n)) e.hito = 'decreto_multa';
       else if (/REPOSICION|APELACION|DESCARGOS/.test(n) && !/INFORME|MEMO/.test(n)) e.hito = /REPOSICION/.test(n) ? 'reposicion_recibida' : 'respuesta_empresa';
@@ -199,9 +201,21 @@
       s.cerrada = !!ult && (ult.hito === 'cierre_sin_multa' || ult.hito === 'cobro_efectivo');
       s.siguiente = ult ? M.H_SAN[ult.hito].siguiente : 'Acreditar el hallazgo (folio de manifold)';
       s.unidad = ult ? unidadSiguiente(ult.hito) : 'ITS (Hernán Gómez)';
-      s.montos = { propuesto: monto(['informe_tecnico', 'memo_secmun']), decretado: monto(['decreto_multa', 'decreto_final', 'rectificacion_decreto']), cobrado: monto(['cobro_efectivo']), derivado: monto(['derivacion_cobro']) };
+      s.montos = { propuesto: monto(['informe_tecnico', 'memo_secmun']), decretado: monto(['decreto_multa', 'decreto_final', 'rectificacion_decreto', 'decreto_firme']), cobrado: monto(['cobro_efectivo']), derivado: monto(['derivacion_cobro']) };
       var notif = ultimo('notificacion') || ultimo('publicacion_mp'); s.notificacion = notif ? { fecha: notif.fecha, fechaTipo: notif.fechaTipo, documento: notif.documento, respaldo: notif.respaldo } : null;
       s.plazo = plazoSancion(s, ult, ultimo, hoy);
+      // BA 184 vencido sin recurso: la multa queda firme (BA 187). Siguiente: decreto que la deja firme y cobro en la factura más próxima (BA 188 a).
+      if (ult && (ult.hito === 'notificacion' || ult.hito === 'publicacion_mp') && s.plazo.estado === 'vencido') {
+        s.plazo.quien = 'Empresa'; s.reposicionVencida = true;
+        s.siguiente = 'Plazo de reposición vencido sin recurso (BA 184): solicitar el decreto que deja firme la multa (BA 187) y derivar a cobro en la factura más próxima (BA 188 a)';
+        s.unidad = 'Unidad Técnica (Edgar Ortega) → Secretaría Municipal';
+      }
+      if (ult && ult.hito === 'comunicacion_empresa' && s.plazo.estado === 'vencido') {
+        s.siguiente = 'Plazo de descargos vencido (BA 177): proponer la multa y solicitar el decreto que la aplica (BA 178)'; s.unidad = 'Unidad Técnica (Edgar Ortega)';
+      }
+      // Multa firme sin cobro acreditado: el descuento es requisito del memo de pago de la factura en que se imputa.
+      s.firme = !s.cerrada && !!s.montos.decretado && (s.reposicionVencida || ['decreto_final', 'rectificacion_decreto', 'comunicacion_final', 'sin_reposicion', 'decreto_firme', 'derivacion_cobro'].indexOf(ult && ult.hito) >= 0);
+      s.cobroEn = (meta[id] && meta[id].cobroEn) || null;
       return s;
     });
   };
@@ -211,14 +225,22 @@
     if (h === 'respuesta_empresa') return 'ITS (Hernán Gómez) / Unidad Técnica';
     if (h === 'informe_evaluacion') return 'Unidad Técnica (Edgar Ortega)';
     if (h === 'notificacion') return 'Empresa (plazo de reposición) → Unidad Técnica';
-    if (h === 'decreto_final' || h === 'rectificacion_decreto' || h === 'comunicacion_final' || h === 'sin_reposicion') return 'Unidad Técnica (Edgar Ortega) → DAF';
+    if (h === 'sin_reposicion') return 'Unidad Técnica (Edgar Ortega) → Secretaría Municipal';
+    if (h === 'decreto_final' || h === 'rectificacion_decreto' || h === 'comunicacion_final' || h === 'decreto_firme') return 'Unidad Técnica (Edgar Ortega) → DAF';
     if (h === 'derivacion_cobro') return 'DAF';
     return nx ? nx.unidad : '—';
   }
+  function cl(x) { return x ? x.slice(8, 10) + '-' + x.slice(5, 7) + '-' + x.slice(0, 4) : ''; }
   function plazoSancion(s, ult, ultimo, hoy) {
     function p(regla, base, n, quien) {
       if (!base || !base.fecha) return { estado: 'por verificar', regla: regla, falta: 'Falta la fecha de ' + (base ? M.H_SAN[base.hito].nombre.toLowerCase() : 'inicio del cómputo') };
-      if (base.fechaTipo !== 'Acto acreditado') return { estado: 'por verificar', regla: regla, falta: 'La fecha disponible (' + base.fecha + ') es ' + (base.fechaTipo || 'no acreditada').toLowerCase() + ': falta la constancia de ' + M.H_SAN[base.hito].nombre.toLowerCase() + ' con fecha cierta', referencia: base.fecha };
+      if (base.fechaTipo !== 'Acto acreditado') {
+        // Con fecha de archivo, el acto no puede ser posterior al archivo que lo contiene: si el plazo ya venció contado desde esa fecha, venció de todos modos.
+        if (base.fechaTipo === 'Fecha de archivo') { var vc = M.sumarHabiles(M.sumarDias(base.fecha, 1), n);
+          if (M.diasHabilesEntre(hoy, vc) < 0) return { estado: 'vencido', regla: regla, vence: vc, diasHabiles: M.diasHabilesEntre(hoy, vc), quien: quien, base: base.clave, cota: true,
+            nota: 'Vencido a más tardar el ' + cl(vc) + ' (contado desde la fecha del archivo, ' + cl(base.fecha) + '; la notificación real no puede ser posterior)' }; }
+        return { estado: 'por verificar', regla: regla, falta: 'La fecha disponible (' + base.fecha + ') es ' + (base.fechaTipo || 'no acreditada').toLowerCase() + ': falta la constancia de ' + M.H_SAN[base.hito].nombre.toLowerCase() + ' con fecha cierta', referencia: base.fecha };
+      }
       var ini = M.sumarDias(base.fecha, 1); // BA 180 y 182: se entiende practicada 24 horas después
       var vence = M.sumarHabiles(ini, n), dias = M.diasHabilesEntre(hoy, vence);
       return { estado: dias < 0 ? 'vencido' : 'en plazo', regla: regla, inicio: ini, vence: vence, diasHabiles: dias, quien: quien, base: base.clave };
@@ -235,7 +257,7 @@
       case 'publicacion_mp': case 'notificacion': return p('BA 184 · 5 días hábiles para reposición', ult, 5, 'Empresa');
       case 'reposicion_recibida': case 'analisis_reposicion': case 'memo_reposicion': case 'visado_juridico': case 'visado_alcaldia_rep':
         return p('BA 186 · 20 días hábiles para resolver la reposición', ultimo('reposicion_recibida') || { hito: 'reposicion_recibida' }, 20, 'Unidad Técnica / Secretaría Municipal');
-      case 'decreto_final': case 'rectificacion_decreto': case 'comunicacion_final': case 'sin_reposicion':
+      case 'decreto_final': case 'rectificacion_decreto': case 'comunicacion_final': case 'sin_reposicion': case 'decreto_firme':
         return { estado: 'por verificar', regla: 'BA 187–188 · descuento en el estado de pago más próximo', falta: 'Falta la instrucción de descuento (derivación a cobro) con el estado de pago al que se imputa' };
       case 'derivacion_cobro': return { estado: 'por verificar', regla: 'BA 188 a)', falta: 'Falta el comprobante del estado de pago que acredite el descuento efectivo' };
     }
@@ -327,7 +349,7 @@
   M.cobertura = function (catalogo, eventos) {
     var conDato = {};
     var HO = { manifold: 'OB-35', comunicacion_empresa: 'OB-35', respuesta_empresa: 'OB-36', informe_evaluacion: 'OB-37', cierre_sin_multa: 'OB-37', decreto_multa: 'OB-37', publicacion_mp: 'OB-37', notificacion: 'OB-37',
-      reposicion_recibida: 'OB-38', sin_reposicion: 'OB-38', analisis_reposicion: 'OB-39', memo_reposicion: 'OB-39', decreto_final: 'OB-39', rectificacion_decreto: 'OB-39', derivacion_cobro: 'OB-40', cobro_efectivo: 'OB-40',
+      reposicion_recibida: 'OB-38', sin_reposicion: 'OB-38', decreto_firme: 'OB-38', analisis_reposicion: 'OB-39', memo_reposicion: 'OB-39', decreto_final: 'OB-39', rectificacion_decreto: 'OB-39', derivacion_cobro: 'OB-40', cobro_efectivo: 'OB-40',
       oc_aceptada: 'OB-02', revision_sanciones: 'OB-11', descuento_multa: 'OB-11' };
     eventos.forEach(function (e) {
       if (e.vigente === false) return;
