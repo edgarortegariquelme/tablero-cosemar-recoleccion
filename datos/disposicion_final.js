@@ -53,7 +53,9 @@ const rows = P.map(([periodo, ton, tram, estado0, oc, factura, memoOC, memoPago,
   const t = tarifa(periodo), neto = Math.round(ton * t.tarifaNeta), debido = Math.round(neto * 1.19);
   const pagado = periodo <= PAGADO_HASTA, estado = pagado ? 'Pagado' : estado0, nota = pagado ? [nota0, CONFIRMA].filter(Boolean).join(' ') : nota0;
   return { periodo, anio: +periodo.slice(0, 4), mesServicio: i + 1, toneladas: ton, tarifaNeta: t.tarifaNeta, actoTarifa: t.acto, debidoNeto: neto, debido, tramitado: tram, diferencia: tram - debido,
-    estado, pagado, oc, factura, memoOC, memoPago, fechaMemoPago, respaldo: u(did) || RESUMEN, nota: nota || null };
+    estado, pagado, oc, factura, memoOC, memoPago, fechaMemoPago, respaldo: u(did) || RESUMEN, nota: nota || null,
+    // DAF confirmó el 27-11-2026 que los comprobantes de egreso de los meses pagados están conformes (sin fecha de egreso informada).
+    comprobante: pagado ? 'Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)' : null, fechaComprobante: null, comprobanteRespaldo: pagado ? (u(did) || RESUMEN) : null };
 });
 const meta = f => [{ label: 'Fuente', value: f }, { label: 'Leído', value: '18-11-2026, desde Google Drive' }, { label: 'Generado por', value: 'datos/disposicion_final.js (repositorio tablero-cosemar-recoleccion)' }];
 const out = path.join(__dirname, '..', 'tablero', 'store');

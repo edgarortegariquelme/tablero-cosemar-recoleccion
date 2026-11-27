@@ -19,7 +19,10 @@
    "memoPago": "Memo 1303/2025",
    "fechaMemoPago": "2025-07-23",
    "respaldo": "https://drive.google.com/file/d/1jIzQUeBjP9OlLT_r-OOsYplD9e4z8HZC/view",
-   "nota": "El memo cita por error la licitación 3447-186-LR24 y el D.A. 9431. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "El memo cita por error la licitación 3447-186-LR24 y el D.A. 9431. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1jIzQUeBjP9OlLT_r-OOsYplD9e4z8HZC/view"
   },
   {
    "periodo": "2025-02",
@@ -40,7 +43,10 @@
    "memoPago": "Memo 1259/2025",
    "fechaMemoPago": "2025-07-15",
    "respaldo": "https://drive.google.com/file/d/1yiubOBqgzNZJXUbXMTK8ubAuBz9ntwSe/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1yiubOBqgzNZJXUbXMTK8ubAuBz9ntwSe/view"
   },
   {
    "periodo": "2025-03",
@@ -61,7 +67,10 @@
    "memoPago": "Memo 1259/2025",
    "fechaMemoPago": "2025-07-15",
    "respaldo": "https://drive.google.com/file/d/1yiubOBqgzNZJXUbXMTK8ubAuBz9ntwSe/view",
-   "nota": "El memo cita también la OC 3447-2105-SE25: confirmar cuál corresponde a marzo. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "El memo cita también la OC 3447-2105-SE25: confirmar cuál corresponde a marzo. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1yiubOBqgzNZJXUbXMTK8ubAuBz9ntwSe/view"
   },
   {
    "periodo": "2025-04",
@@ -82,7 +91,10 @@
    "memoPago": "Memo 1486/2025",
    "fechaMemoPago": "2025-08-20",
    "respaldo": "https://drive.google.com/file/d/1NMj6WNDUvATiaaPseAWtiiOt2zp8t4rT/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1NMj6WNDUvATiaaPseAWtiiOt2zp8t4rT/view"
   },
   {
    "periodo": "2025-05",
@@ -103,7 +115,10 @@
    "memoPago": "Memo 1843/2025",
    "fechaMemoPago": "2025-10-15",
    "respaldo": "https://drive.google.com/file/d/1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n/view"
   },
   {
    "periodo": "2025-06",
@@ -124,7 +139,10 @@
    "memoPago": "Memo 1843/2025",
    "fechaMemoPago": "2025-10-15",
    "respaldo": "https://drive.google.com/file/d/1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1YhOiFJaJSBA7nGZM8_QDcps2g_chOb5n/view"
   },
   {
    "periodo": "2025-07",
@@ -145,7 +163,10 @@
    "memoPago": null,
    "fechaMemoPago": null,
    "respaldo": "https://drive.google.com/file/d/1IUy1VShrEYU8NctStna9_nPB-1U-VVlt/view",
-   "nota": "En Drive solo se halló el memo que pide la OC (09-10-2025). Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "En Drive solo se halló el memo que pide la OC (09-10-2025). Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1IUy1VShrEYU8NctStna9_nPB-1U-VVlt/view"
   },
   {
    "periodo": "2025-08",
@@ -166,7 +187,10 @@
    "memoPago": null,
    "fechaMemoPago": null,
    "respaldo": "https://drive.google.com/file/d/1IUy1VShrEYU8NctStna9_nPB-1U-VVlt/view",
-   "nota": "En Drive solo se halló el memo que pide la OC (09-10-2025). Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "En Drive solo se halló el memo que pide la OC (09-10-2025). Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1IUy1VShrEYU8NctStna9_nPB-1U-VVlt/view"
   },
   {
    "periodo": "2025-09",
@@ -187,7 +211,10 @@
    "memoPago": "Memo 297-A/2026",
    "fechaMemoPago": "2026-02-26",
    "respaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view",
-   "nota": "Pagado junto con oct–dic 2025 como deuda por falta de presupuesto 2025. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pagado junto con oct–dic 2025 como deuda por falta de presupuesto 2025. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view"
   },
   {
    "periodo": "2025-10",
@@ -208,7 +235,10 @@
    "memoPago": "Memo 297-A/2026",
    "fechaMemoPago": "2026-02-26",
    "respaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view"
   },
   {
    "periodo": "2025-11",
@@ -229,7 +259,10 @@
    "memoPago": "Memo 297-A/2026",
    "fechaMemoPago": "2026-02-26",
    "respaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view"
   },
   {
    "periodo": "2025-12",
@@ -250,7 +283,10 @@
    "memoPago": "Memo 297-A/2026",
    "fechaMemoPago": "2026-02-26",
    "respaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1B-IrskA3gbUaGvHJ06b8yIGcYEX0Owne/view"
   },
   {
    "periodo": "2026-01",
@@ -271,7 +307,10 @@
    "memoPago": "Memo 1110/2026",
    "fechaMemoPago": "2026-05-29",
    "respaldo": "https://drive.google.com/file/d/10bgVso1tqqtkMxxBj_bICcTmKP36QKmF/view",
-   "nota": "Factura por $85.589.617; el memo 1045 y la planilla dicen $85.589.618 (redondeo). Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Factura por $85.589.617; el memo 1045 y la planilla dicen $85.589.618 (redondeo). Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/10bgVso1tqqtkMxxBj_bICcTmKP36QKmF/view"
   },
   {
    "periodo": "2026-02",
@@ -292,7 +331,10 @@
    "memoPago": "Memo 1113/2026",
    "fechaMemoPago": "2026-05-29",
    "respaldo": "https://drive.google.com/file/d/1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ/view"
   },
   {
    "periodo": "2026-03",
@@ -313,7 +355,10 @@
    "memoPago": "Memo 1114/2026",
    "fechaMemoPago": "2026-05-29",
    "respaldo": "https://drive.google.com/file/d/1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ/view",
-   "nota": "Existe además un borrador de memo de pago de marzo del 08-11-2026 (factura 50.351). Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Existe además un borrador de memo de pago de marzo del 08-11-2026 (factura 50.351). Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1EeF6VtV5BjEdLrA3CGvckJCOOWv3fuvJ/view"
   },
   {
    "periodo": "2026-04",
@@ -334,7 +379,10 @@
    "memoPago": "Memo 1115/2026",
    "fechaMemoPago": "2026-05-29",
    "respaldo": "https://drive.google.com/file/d/1wbDVDzpnxBpEhNN7tIHeCLzGqJPdbfxr/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1wbDVDzpnxBpEhNN7tIHeCLzGqJPdbfxr/view"
   },
   {
    "periodo": "2026-05",
@@ -355,7 +403,10 @@
    "memoPago": "Memo 1261/2026",
    "fechaMemoPago": "2026-06-15",
    "respaldo": "https://drive.google.com/file/d/1LOmmR2QiGO6TuTZqRYg69yH-tlYPopJK/view",
-   "nota": "La planilla de control anota el memo 1.115 como memo de pago de mayo; el memo de pago es el 1261/2026. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "La planilla de control anota el memo 1.115 como memo de pago de mayo; el memo de pago es el 1261/2026. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1LOmmR2QiGO6TuTZqRYg69yH-tlYPopJK/view"
   },
   {
    "periodo": "2026-06",
@@ -376,7 +427,10 @@
    "memoPago": "Memo 1523/2026",
    "fechaMemoPago": "2026-07-22",
    "respaldo": "https://drive.google.com/file/d/1xGVU9AukyeUTHOHH1Fx3KrzjYiB2pTIp/view",
-   "nota": "La planilla de control dice $82.558.401 (redondeo). Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "La planilla de control dice $82.558.401 (redondeo). Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1xGVU9AukyeUTHOHH1Fx3KrzjYiB2pTIp/view"
   },
   {
    "periodo": "2026-07",
@@ -397,7 +451,10 @@
    "memoPago": "Memo 1767/2026",
    "fechaMemoPago": "2026-08-26",
    "respaldo": "https://drive.google.com/file/d/1ZIUH2xC9Hkog3TwMYmi_3dpETbpjISKj/view",
-   "nota": "El archivo «1767.2026 … FACTURA 52719 JULIO» contiene otro memo (prevención de riesgos); la planilla y la matriz citan la factura 52729. La matriz dice $79.907.252. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "El archivo «1767.2026 … FACTURA 52719 JULIO» contiene otro memo (prevención de riesgos); la planilla y la matriz citan la factura 52729. La matriz dice $79.907.252. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1ZIUH2xC9Hkog3TwMYmi_3dpETbpjISKj/view"
   },
   {
    "periodo": "2026-08",
@@ -418,7 +475,10 @@
    "memoPago": "Memo 1982/2026",
    "fechaMemoPago": "2026-09-30",
    "respaldo": "https://drive.google.com/file/d/1LwoH-A7V8X7PcMKq1xHL44QAoDYc3EPw/view",
-   "nota": "El memo dice «el servicio para el mes de junio»: error de redacción, la tabla es de agosto. Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "El memo dice «el servicio para el mes de junio»: error de redacción, la tabla es de agosto. Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1LwoH-A7V8X7PcMKq1xHL44QAoDYc3EPw/view"
   },
   {
    "periodo": "2026-09",
@@ -439,7 +499,10 @@
    "memoPago": "Memo 2118/2026",
    "fechaMemoPago": "2026-10-21",
    "respaldo": "https://drive.google.com/file/d/1_-VtKy7wzamAElHQ7phi8R1T6bVP3_gm/view",
-   "nota": "Pago confirmado por el encargado del contrato (18-11-2026)."
+   "nota": "Pago confirmado por el encargado del contrato (18-11-2026).",
+   "comprobante": "Comprobante de egreso conforme (confirmado por DAF el 27-11-2026)",
+   "fechaComprobante": null,
+   "comprobanteRespaldo": "https://drive.google.com/file/d/1_-VtKy7wzamAElHQ7phi8R1T6bVP3_gm/view"
   },
   {
    "periodo": "2026-10",
@@ -460,7 +523,10 @@
    "memoPago": null,
    "fechaMemoPago": null,
    "respaldo": "https://drive.google.com/file/d/1LAdb5LTmxfs3Nm-wmvVjBEiPgM0HgNcB/view",
-   "nota": "OC pedida el 05-11-2026; sin factura ni memo de pago aún."
+   "nota": "OC pedida el 05-11-2026; sin factura ni memo de pago aún.",
+   "comprobante": null,
+   "fechaComprobante": null,
+   "comprobanteRespaldo": null
   }
  ],
  "meta": [

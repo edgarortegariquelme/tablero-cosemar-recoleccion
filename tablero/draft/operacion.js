@@ -62,6 +62,10 @@
         o.ocEstado = oc ? 'listo' : o.pagado ? 'listo' : hoy > o.ocLimite ? 'atrasado' : 'en plazo';
         o.facEstado = fac ? 'listo' : o.pagado ? 'listo' : hoy > o.facHasta ? 'atrasado' : 'en plazo';
         o.pagoEstado = pago || o.pagado ? 'listo' : hoy > o.pagoLimite ? 'atrasado' : 'en plazo';
+        // Espera presupuestaria registrada (hito «espera_presupuesto»): lo pendiente no se trata como atraso hasta la fecha indicada.
+        var esp = P.espera_presupuesto;
+        if (esp && (!esp.fecha || hoy <= esp.fecha)) { o.espera = { hasta: esp.fecha, nota: esp.documento, respaldo: esp.respaldo || null };
+          ['ocEstado', 'facEstado', 'pagoEstado'].forEach(function (k) { if (o[k] !== 'listo') o[k] = 'en espera'; }); }
         o.pasosListos = M.HITOS_PAGO.filter(function (hh) { return P[hh.id]; }).length;
         o.ultimoPaso = M.HITOS_PAGO.filter(function (hh) { return P[hh.id]; }).map(function (hh) { return hh.nombre; }).pop() || null;
         return o;
@@ -131,6 +135,7 @@
           else if (c.ocEstado === 'en plazo') a('media', k, 'La OC de ' + n + ' debe estar lista a más tardar el ' + fCL(c.ocLimite) + '.', c.ocLimite);
           if (c.facEstado === 'atrasado') a('media', k, 'Falta la factura de ' + n + ' (ventana del ' + fCL(c.facDesde) + ' al ' + fCL(c.facHasta) + ').', c.facHasta);
           if (c.pagoEstado === 'atrasado') a('media', k, 'El pago de ' + n + ' superó los 30 días desde la factura (' + fCL(c.pagoLimite) + ').', c.pagoLimite);
+          if (c.espera) a('info', k, 'OC, factura y pago de ' + n + ' en espera presupuestaria hasta ' + fCL(c.espera.hasta) + '.', c.espera.hasta);
         });
         var u = ciclo.filter(function (c) { return c.contrato === k; }).map(function (c) { return c.periodo; }).sort().pop();
         if (u) { var prox = sig(u), m1 = sig(prox); a('info', k, 'Del ' + fCL(m1 + '-01') + ' al ' + fCL(m1 + '-05') + ' Cosemar debe entregar el informe de ' + mesL(prox) + ' para pedir la OC.', m1 + '-05'); }

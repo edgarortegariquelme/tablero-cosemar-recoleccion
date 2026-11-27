@@ -6,8 +6,8 @@
    "contrato": "rec",
    "fecha": "2026-11-18",
    "tipo": "Hecho por subsanar",
-   "texto": "Los pagos de diciembre de 2025 a septiembre de 2026 constan solo por tu confirmación: pedir a DAF los comprobantes de egreso.",
-   "estado": "Abierto"
+   "texto": "Comprobantes de egreso de los 48 meses pagados (27 de recolección y 21 de disposición final): DAF confirmó el 27-11-2026 que están conformes.",
+   "estado": "Cerrado"
   },
   {
    "id": "AN02",
@@ -46,11 +46,27 @@
    "contrato": "rec",
    "fecha": "2026-09-16",
    "tipo": "Comentario",
-   "texto": "Cosemar espera respuesta al informe de variación de combustible desde el 16-09.",
-   "estado": "Abierto"
+   "texto": "Informe de variación de combustible (16-09): se acepta el alza, pero no hay disponibilidad presupuestaria para pagarla hasta enero de 2027 (cerrado el 27-11-2026).",
+   "estado": "Cerrado"
   },
   {
    "id": "AN07",
+   "contrato": "rec",
+   "fecha": "2026-11-27",
+   "tipo": "Antecedente",
+   "texto": "Revisión de sanciones antes del memo de pago: sigue pendiente porque aún no se paga la factura en la que debe descontarse la multa del proceso 3 (camión con documentación vencida, 5 UTM, D.A. 3.307).",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN08",
+   "contrato": "rec",
+   "fecha": "2026-11-27",
+   "tipo": "Antecedente",
+   "texto": "Factura de octubre y OC y factura de noviembre y diciembre de 2026: en espera de disponibilidad presupuestaria hasta enero de 2027 (instrucción del encargado).",
+   "estado": "Abierto"
+  },
+  {
+   "id": "AN09",
    "contrato": "rec",
    "fecha": "2026-01-01",
    "tipo": "Hecho por subsanar",
@@ -58,7 +74,7 @@
    "estado": "Abierto"
   },
   {
-   "id": "AN08",
+   "id": "AN10",
    "contrato": "rec",
    "fecha": "2026-10-29",
    "tipo": "Antecedente",
@@ -66,7 +82,7 @@
    "estado": "Cerrado"
   },
   {
-   "id": "AN09",
+   "id": "AN11",
    "contrato": "df",
    "fecha": "2026-11-13",
    "tipo": "Antecedente",
@@ -74,7 +90,7 @@
    "estado": "Abierto"
   },
   {
-   "id": "AN10",
+   "id": "AN12",
    "contrato": "df",
    "fecha": "2026-11-13",
    "tipo": "Antecedente",
@@ -82,7 +98,7 @@
    "estado": "Abierto"
   },
   {
-   "id": "AN11",
+   "id": "AN13",
    "contrato": "df",
    "fecha": "2026-10-21",
    "tipo": "Comentario",
@@ -90,7 +106,7 @@
    "estado": "Abierto"
   },
   {
-   "id": "AN12",
+   "id": "AN14",
    "contrato": "df",
    "fecha": "2026-09-02",
    "tipo": "Hecho por subsanar",
@@ -98,7 +114,7 @@
    "estado": "Abierto"
   },
   {
-   "id": "AN13",
+   "id": "AN15",
    "contrato": "df",
    "fecha": "2026-01-01",
    "tipo": "Comentario",

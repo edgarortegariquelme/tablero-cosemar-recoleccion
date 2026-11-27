@@ -59,7 +59,7 @@ const C = [
   ['2026-11-18', 'Jesús Chinchayán', 'Cosemar', 'Siniestro del móvil 980 (colisión del 10-11)', 'Recolección', 'Baja', 'Cerrado', 'Hernán recibió el 18-11 el registro de charlas y la denuncia; caso cerrado.', '1a1d01a0ff40f93c'],
   ['2026-11-16', 'Teresa Donoso', 'Cosemar', 'Revisión técnica del M-921 actualizada', 'Recolección', 'Media', 'Actualizar', 'La revisión vencía el 16-11: cargar la nueva fecha en la planilla de vencimientos.', '1a1e44a6ba4759da'],
   ['2026-11-16', 'Grupo EBI (A. Concha)', 'Cosemar', 'Reunión por la API del GPS de la flota', 'Recolección', 'Baja', 'En curso', 'Coordinación técnica de la integración GPS.', '1a1e489965953f02'],
-  ['2026-11-13', 'Rodrigo Barril', 'Cosemar', 'Pide la OC de octubre de disposición final', 'Disposición final', 'Alta', 'Responder', 'Memo de OC del 05-11: los 7 días para generar la OC vencieron el 12-11. Preguntar a DAF.', '1a1d56b3b111e8f6'],
+  ['2026-11-13', 'Rodrigo Barril', 'Cosemar', 'Pide la OC de octubre de disposición final', 'Disposición final', 'Baja', 'Cerrado', 'Respondido el 26-11-2026: sin disponibilidad presupuestaria para la OC de octubre; en espera hasta enero de 2027.', '1a1d56b3b111e8f6'],
   ['2026-11-12', 'Jesús Chinchayán', 'Cosemar', 'Respuesta a la visita técnica de instalaciones (septiembre)', 'Recolección', 'Media', 'Revisar', 'Cosemar envió su informe de respuesta a las observaciones del 06-11.', '1a136e1f8e1a010f'],
   ['2026-11-10', 'Hernán Gómez', 'ITS', 'Siniestro del móvil 938', 'Recolección', 'Baja', 'Cerrado', 'La ITS dio por bueno el informe.', '1a1b050d044449e3'],
   ['2026-11-09', 'Jesús Chinchayán', 'Cosemar', 'Estado de operatividad de los equipos al 09-11', 'Recolección', 'Media', 'Revisar', 'Dos camiones en taller (939 y 973).', '1a1c29df4f6d7d7c'],
@@ -74,7 +74,7 @@ const C = [
   ['2026-10-20', 'Teresa Donoso', 'Cosemar', 'Licencia de conducir pendiente (chofer)', 'Recolección', 'Baja', 'Cerrado', '', '1a15a622ffe26575'],
   ['2026-10-16', 'Edgar Ortega', 'DMAO', 'Informe comparativo de sueldos base', 'Recolección', 'Media', 'Revisar', 'Edgar quedó de revisarlo: reajuste de 2,8% entre enero y julio de 2026.', '1a13c43cc48e7b29'],
   ['2026-10-14', 'Teresa Donoso', 'Cosemar', 'Informe de estado de pago de septiembre', 'Recolección', 'Media', 'Revisar', 'La carta interior dice «agosto de 2026»: pedir que corrijan el mes.', '1a13bf9c3c672a53'],
-  ['2026-10-13', 'Jesús Chinchayán', 'Cosemar', 'Pide respuesta al informe de variación de combustible (16-09)', 'Recolección', 'Alta', 'Responder', 'Más de dos meses sin respuesta municipal.', '1a1357856a344bcb'],
+  ['2026-10-13', 'Jesús Chinchayán', 'Cosemar', 'Pide respuesta al informe de variación de combustible (16-09)', 'Recolección', 'Baja', 'Cerrado', 'Cerrado el 27-11-2026: se acepta el alza, pero no hay disponibilidad presupuestaria para pagarla hasta enero de 2027.', '1a1357856a344bcb'],
   ['2026-10-02', 'René Gutiérrez', 'Cosemar', 'Cálculo del reajuste IPC julio 2025 a julio 2026', 'Recolección', 'Media', 'Esperando a Administración', 'Cosemar ofrece apoyo para resolver; ligado al anexo suspendido.', '19f48866369d9d37'],
   ['2026-09-23', 'Jesús Chinchayán', 'Cosemar', 'Siniestro del móvil 972 (calle Canadá)', 'Recolección', 'Baja', 'Cerrado', 'La aseguradora está en contacto con el afectado.', '1a0a60e645265c08'],
   ['2026-09-22', 'Edgar Ortega', 'DMAO', 'Actualización de identidad corporativa', 'Recolección', 'Baja', 'Cerrado', 'Visto bueno conforme a bases.', '1a0a50d04ec7e152'],
@@ -168,12 +168,14 @@ w('subdere.json', [
 
 // ---------- Antecedentes, comentarios y hechos por subsanar ----------
 const A = [
-  ['rec', '2026-11-18', 'Hecho por subsanar', 'Los pagos de diciembre de 2025 a septiembre de 2026 constan solo por tu confirmación: pedir a DAF los comprobantes de egreso.', 'Abierto'],
+  ['rec', '2026-11-18', 'Hecho por subsanar', 'Comprobantes de egreso de los 48 meses pagados (27 de recolección y 21 de disposición final): DAF confirmó el 27-11-2026 que están conformes.', 'Cerrado'],
   ['rec', '2026-11-13', 'Antecedente', 'DAF no emite certificado presupuestario (saldo negativo): el anexo del reajuste IPC 4,3% queda suspendido.', 'Abierto'],
   ['rec', '2026-11-05', 'Antecedente', 'Memo 2211/2026 pide la OC de octubre al valor del D.A. 2.459. Sin presupuesto para octubre a diciembre: se pagan en 2027 según el plan de pago.', 'Abierto'],
   ['rec', '2026-07-01', 'Hecho por subsanar', 'Desde julio rige el D.A. 3.957 (aumento poblacional), pero las OC y facturas siguen al valor del D.A. 2.459.', 'Abierto'],
   ['rec', '2026-06-05', 'Hecho por subsanar', 'Resolución sanitaria de las instalaciones (manifold 28): la ITS reiteró el 18-11; Cosemar respondió que el trámite está iniciado (patente comercial en revisión) y aún no presenta la resolución.', 'Abierto'],
-  ['rec', '2026-09-16', 'Comentario', 'Cosemar espera respuesta al informe de variación de combustible desde el 16-09.', 'Abierto'],
+  ['rec', '2026-09-16', 'Comentario', 'Informe de variación de combustible (16-09): se acepta el alza, pero no hay disponibilidad presupuestaria para pagarla hasta enero de 2027 (cerrado el 27-11-2026).', 'Cerrado'],
+  ['rec', '2026-11-27', 'Antecedente', 'Revisión de sanciones antes del memo de pago: sigue pendiente porque aún no se paga la factura en la que debe descontarse la multa del proceso 3 (camión con documentación vencida, 5 UTM, D.A. 3.307).', 'Abierto'],
+  ['rec', '2026-11-27', 'Antecedente', 'Factura de octubre y OC y factura de noviembre y diciembre de 2026: en espera de disponibilidad presupuestaria hasta enero de 2027 (instrucción del encargado).', 'Abierto'],
   ['rec', '2026-01-01', 'Hecho por subsanar', 'La revisión de sanciones antes del memo de pago no consta en ningún mes.', 'Abierto'],
   ['rec', '2026-10-29', 'Antecedente', 'Endoso de la garantía por 419,57 UF entregado; la póliza vence el 28-10-2029.', 'Cerrado'],
   ['df', '2026-11-13', 'Antecedente', 'Cosemar pide la OC de octubre; el memo 2214/2026 la pidió el 05-11 y el plazo de 7 días ya venció.', 'Abierto'],
@@ -188,7 +190,12 @@ w('antecedentes.json', A.map((r, i) => ({ id: 'AN' + String(i + 1).padStart(2, '
 w('ciclo_fechas.json', [
   { contrato: 'df', periodo: '2026-10', hito: 'memo_oc', fecha: '2026-11-05', documento: 'Memo 2214/2026 · pide OC de octubre' },
   { contrato: 'df', periodo: '2026-10', hito: 'informe_trabajos', fecha: '2026-11-02', documento: 'Ingresos y tickets de octubre (relleno Santa Inés)' },
-  { contrato: 'rec', periodo: '2026-10', hito: 'informe_trabajos', fecha: '2026-11-05', documento: 'Informe por los servicios de octubre 2026' }
+  { contrato: 'rec', periodo: '2026-10', hito: 'informe_trabajos', fecha: '2026-11-05', documento: 'Informe por los servicios de octubre 2026' },
+  // Espera presupuestaria (instrucción del encargado, 27-11-2026): no se alerta como atraso; se informa como espera hasta la fecha indicada.
+  { contrato: 'rec', periodo: '2026-10', hito: 'espera_presupuesto', fecha: '2027-01-31', documento: 'Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026).' },
+  { contrato: 'rec', periodo: '2026-11', hito: 'espera_presupuesto', fecha: '2027-01-31', documento: 'Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026).' },
+  { contrato: 'rec', periodo: '2026-12', hito: 'espera_presupuesto', fecha: '2027-01-31', documento: 'Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026).' },
+  { contrato: 'df', periodo: '2026-10', hito: 'espera_presupuesto', fecha: '2027-01-31', documento: 'Sin disponibilidad presupuestaria para emitir la OC de octubre (correo del encargado a Cosemar, 26-11-2026); en espera hasta enero de 2027.', respaldo: G + '1a21368042d42f0c' }
 ], { reglas: { infoDesde: 1, infoHasta: 5, ocDias: 7, facturaDesde: 15, facturaHasta: 20, pagoDias: 30 },
   presupuesto: { cuenta: '215.22.08.001.001', basesRecMensualMin: 250000000, basesRecMensualMax: 260000000, basesRecMeses: 60, basesDf: 5200000000, basesDfMeses: 60, inicioRec: '2024-07', inicioDf: '2025-01' } });
 // ---------- Vigencias: decretos, anexos, reajustes (IPC y aumento poblacional), garantías y seguros, según bases ----------

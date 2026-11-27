@@ -21,6 +21,35 @@
    "hito": "informe_trabajos",
    "fecha": "2026-11-05",
    "documento": "Informe por los servicios de octubre 2026"
+  },
+  {
+   "contrato": "rec",
+   "periodo": "2026-10",
+   "hito": "espera_presupuesto",
+   "fecha": "2027-01-31",
+   "documento": "Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026)."
+  },
+  {
+   "contrato": "rec",
+   "periodo": "2026-11",
+   "hito": "espera_presupuesto",
+   "fecha": "2027-01-31",
+   "documento": "Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026)."
+  },
+  {
+   "contrato": "rec",
+   "periodo": "2026-12",
+   "hito": "espera_presupuesto",
+   "fecha": "2027-01-31",
+   "documento": "Sin disponibilidad presupuestaria: la OC, la factura y el pago quedan en espera hasta enero de 2027 (instrucción del encargado, 27-11-2026)."
+  },
+  {
+   "contrato": "df",
+   "periodo": "2026-10",
+   "hito": "espera_presupuesto",
+   "fecha": "2027-01-31",
+   "documento": "Sin disponibilidad presupuestaria para emitir la OC de octubre (correo del encargado a Cosemar, 26-11-2026); en espera hasta enero de 2027.",
+   "respaldo": "https://mail.google.com/mail/u/0/#all/1a21368042d42f0c"
   }
  ]
 }
