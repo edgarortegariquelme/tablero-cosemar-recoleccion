@@ -51,7 +51,17 @@ jobs:
           git add -A
           git diff --cached --quiet && exit 0
           git commit -m "app: datos actualizados $(date -u +%Y-%m-%dT%H:%MZ)"
-          for i in 1 2 3; do git pull --rebase --autostash -q && git push && break; sleep 5; done
+          for i in 1 2 3 4; do
+            if git pull --rebase --autostash -q; then git push && break; fi
+            # Choque con otro commit (por ejemplo, un cambio de código simultáneo). Si solo hay archivos generados en conflicto,
+            # se toma la versión de esta corrida, se regenera la app y se guarda; si hay código en conflicto, se aborta sin forzar.
+            C=$(git diff --name-only --diff-filter=U)
+            if echo "$C" | grep -qvE '^(docs/|tablero/store/|datos/auto/|entregables/)'; then git rebase --abort; echo "Conflicto en código: se deja para revisión"; exit 1; fi
+            git checkout --theirs -- $C && git add -A && GIT_EDITOR=true git rebase --continue
+            node datos/operacion.js >/dev/null && node datos/construir_app.js && git checkout -- entregables 2>/dev/null || true
+            git add -A && (git diff --cached --quiet || git commit -q -m "app: regenerada tras integrar cambios") && git push && break
+            sleep 5
+          done
   # Cadena propia: espera y dispara la siguiente corrida. La concurrencia del grupo deja a lo más una en espera,
   # así que la cadena no se duplica aunque también lleguen corridas por horario o a mano.
   siguiente:
