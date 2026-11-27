@@ -17,5 +17,7 @@
  "alta|rec|Proceso 3 · Camión con documentación vencida (móvil 980): el plazo de reposición de Cosemar venció el 21-08-2026 sin recurso. Solicitar el decreto que deja firme la multa (BA 187) y derivar a cobro en la factura más próxima (BA 188 a). Se imputa a la factura de octubre de 2026.": "2026-11-27",
  "media|rec|Requisito del memo de pago de octubre de 2026: descontar la multa del proceso 3 (5 UTM, en pesos a la UTM del mes en que se cursó, BA 171). El monto y la instrucción de descuento deben estar antes del OK del memo (BA 188 a).": "2026-11-27",
  "AVI|PLAZO|PS03|SAN|PS03|notificacion|f8f0d474|2026-08-21": "2026-11-27",
- "AVI|PLAZO|REQ07|SAN|REQ07|comunicacion_empresa|acfa6a16|2026-06-12": "2026-11-27"
+ "AVI|PLAZO|REQ07|SAN|REQ07|comunicacion_empresa|acfa6a16|2026-06-12": "2026-11-27",
+ "media|rec|Manifold 25 del 24-11-2026: Cosemar debe responder a más tardar el 01-12-2026. Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga.": "2026-11-27",
+ "media|rec|Manifold sin página del 27-11-2026: Cosemar debe responder a más tardar el 02-12-2026. Solicitud de investigación – Camión compactador PPU TCXV-47 (móvil 938): velocidad, residuos dispersos, puntos omitidos y seguridad de los peonetas.": "2026-11-27"
 }
