@@ -118,7 +118,7 @@
    "tema": "Solicitud de respuesta Providencia 10492",
    "contrato": "Recolección",
    "urgencia": "Media",
-   "estado": "En curso",
+   "estado": "Cerrado",
    "nota": "Estimada Jesus, con fecha 24 de noviembre de 2026, se recepciona informe técnico por parte de COSEMAR SpA, en respuesta a lo solicitado mediante Providencia N° 010492/2026, registrada en libro Manifold, página 24. De acu",
    "hilo": "1a20941754a80338"
   },
@@ -228,10 +228,10 @@
    "fecha": "2026-11-23",
    "pagina": "24",
    "motivo": "Solicitud de respuesta Providencia 10492",
-   "tipo": "Por clasificar",
-   "estado": "Abierto",
-   "cierre": null,
-   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende, ",
+   "tipo": "Requerimiento",
+   "estado": "Cerrado",
+   "cierre": "2026-11-24",
+   "nota": "Ingresado automáticamente desde Gmail (Hernán Gómez (ITS)). Estimada Jesús: Junto con saludar, y en atención a la Providencia N° 010492/2026, relacionada con el reclamo presentado por la Junta de Vecinos Isabel Allende,  · Cerrado por Hernán Gómez (ITS) el 24-11-2026: Cosemar entregó informe técnico con fotos y GPS; se reubicó el punto de acopio de Av. Parque Dos. V°B° al cierre de la solicitud.",
    "respaldo": "https://mail.google.com/mail/u/0/#all/1a20941754a80338"
   },
   "2026-25": {

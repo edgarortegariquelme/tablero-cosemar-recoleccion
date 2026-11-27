@@ -21,11 +21,13 @@ const nombreDe = d => d.nombre || NOMBRES[d.correo] || d.correo;
 const propio = t => (t || '').replace(/\r/g, '').split(/\n(?:El .{5,80} escribió:|De: |-----\s*Mensaje original|On .{5,80} wrote:)/)[0];
 // Página de manifold mencionada en el cuerpo: «respaldo en manifold pagina 20», «Manifold pág. 22», «pagina 21 manifold».
 function paginaManifold(t) {
-  const m = t.match(/manifol?d?\s*(?:de\s+la\s+solicitud\s*)?p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})/i) || t.match(/p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})\s*(?:del?\s+)?manifol/i)
+  const m = t.match(/manifol?d?[\s,;:]*(?:de\s+la\s+solicitud\s*)?p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})/i) || t.match(/p[áa]g(?:ina)?\.?\s*(?:n[°º]\s*)?(\d{1,3})\s*(?:del?\s+)?manifol/i)
     || t.match(/manifol?d?\s*(?:n[°º]\s*)?(\d{1,3})\b(?![-/.]\d)/i) || t.match(/respaldo en p[áa]g(?:ina)?\.?\s*(\d{1,3})/i);
   return m ? m[1] : null;
 }
-const CIERRA = /se da(?:n)? por cerrad|cierre de (?:las )?observaciones|se acoge|son acogidos|dar(?:\s+por)? cerrad|cierre del proceso/i;
+const CIERRA = /se da(?:n)? por cerrad|cierre de (?:las )?observaciones|se acoge|son acogidos|dar(?:\s+por)? cerrad|cierre del proceso|estado\s*:\s*cerrad|v[°º.]?\s*b[°º.]?\s*(?:al|para el)\s+cierre|fecha de cierre|se cierra (?:la|el) (?:solicitud|requerimiento|manifold)/i;
+// Fecha de cierre declarada por la ITS («Fecha de cierre: 24/11/2026»); si no, la del correo.
+const fechaCierre = (t, def) => { const x = (t || '').match(/fecha de cierre\s*:?\s*(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/i); return x ? x[3] + '-' + x[2].padStart(2, '0') + '-' + x[1].padStart(2, '0') : def; };
 const fechaCL = d => new Date(d).toLocaleDateString('sv-SE', { timeZone: 'America/Santiago' });
 const resumen = t => propio(t).replace(/\s+/g, ' ').trim().slice(0, 220);
 const empresaDe = c => /grupoebi\.cl$/i.test(c) ? 'Cosemar' : /maho\.cl$/i.test(c) ? 'DMAO' : /gmail\.com$/i.test(c) ? 'DMAO' : 'Otro';
@@ -93,9 +95,16 @@ function clasificar(m, st, novedades) {
   const textoMf = (m.adjuntos || []).map(a => a.nombre).join(' ') + ' ' + asunto, cuerpo = propio(m.texto);
   // La página que la ITS declara en su propio texto manda sobre números del asunto.
   let pagina = (/hgomez@maho\.cl/i.test(m.de.correo) && paginaManifold(cuerpo)) || paginaManifold(textoMf);
-  if (pagina || /manifold/i.test(textoMf)) {
-    const k = hoy.slice(0, 4) + '-' + (pagina || m.hilo);
-    if (!st.manifolds[k]) {
+  // Un manifold ya registrado en este mismo hilo (la ITS suele cerrar respondiendo en el hilo de la solicitud).
+  const kHilo = Object.keys(st.manifolds).find(x => (st.manifolds[x].respaldo || '').endsWith('/' + m.hilo));
+  if (pagina || /manifold/i.test(textoMf) || kHilo) {
+    const k = pagina ? hoy.slice(0, 4) + '-' + pagina : kHilo || hoy.slice(0, 4) + '-' + m.hilo;
+    const mf = st.manifolds[k] || (kHilo && st.manifolds[kHilo]);
+    if (mf && mf.estado !== 'Cerrado' && emp === 'DMAO' && CIERRA.test(cuerpo)) {
+      mf.estado = 'Cerrado'; mf.cierre = fechaCierre(cuerpo, hoy); mf.nota = (mf.nota || '') + ' · Cerrado por ' + nombreDe(m.de) + ' el ' + mf.cierre.split('-').reverse().join('-') + ': ' + resumen(m.texto).slice(0, 160);
+      novedades.push({ tipo: 'Manifold', texto: 'Manifold ' + (mf.pagina && mf.pagina !== '?' ? 'pág. ' + mf.pagina + ' ' : '') + 'cerrado el ' + mf.cierre.split('-').reverse().join('-') + ': ' + mf.motivo + '.', enlace });
+    }
+    if (!mf) {
       const cerrado = CIERRA.test(cuerpo);
       st.manifolds[k] = { id: 'MF-' + hoy.slice(0, 4) + '-' + (pagina ? pagina.padStart(2, '0') : 'X' + m.hilo.slice(-4)), fecha: hoy, pagina: pagina || '?', motivo: asunto,
         tipo: cerrado ? 'Cierre' : SANCION.test(asunto + ' ' + cuerpo) ? 'Proceso sancionatorio' : 'Por clasificar', estado: cerrado ? 'Cerrado' : 'Abierto', cierre: cerrado ? hoy : null,
@@ -107,7 +116,7 @@ function clasificar(m, st, novedades) {
   const prev = st.correos[m.hilo];
   if (prev && prev.fecha > hoy) return;
   const deMuni = emp === 'DMAO', rutina = RUTINA.test(asunto);
-  const estado = rutina ? 'Informativo' : deMuni ? 'En curso' : PIDE.test(asunto + ' ' + resumen(m.texto)) ? 'Responder' : 'Revisar';
+  const estado = rutina ? 'Informativo' : deMuni ? (CIERRA.test(cuerpo) ? 'Cerrado' : 'En curso') : PIDE.test(asunto + ' ' + resumen(m.texto)) ? 'Responder' : 'Revisar';
   const urgencia = rutina ? 'Baja' : SANCION.test(asunto) || /orden de compra|\bOC\b|factura|pago/i.test(asunto) ? 'Alta' : 'Media';
   st.correos[m.hilo] = { fecha: hoy, contacto: nombreDe(m.de), empresa: emp, tema: asunto, contrato, urgencia, estado, nota: resumen(m.texto), hilo: m.hilo };
   if (!rutina && !deMuni && (!prev || prev.fecha < hoy || prev.estado !== estado)) novedades.push({ tipo: 'Correo', texto: nombreDe(m.de) + ' (' + emp + '): ' + asunto + ' — ' + resumen(m.texto).slice(0, 140), enlace });

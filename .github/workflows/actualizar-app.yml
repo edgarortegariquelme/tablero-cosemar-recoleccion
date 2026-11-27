@@ -35,6 +35,8 @@ jobs:
       - name: Exportar libro de control desde Notion (si hay token)
         env: { NOTION_TOKEN: '${{ secrets.NOTION_TOKEN }}' }
         run: node datos/exportar_notion.js
+      - name: Pruebas del lector de Gmail (cierres de manifold, borradores)
+        run: node pruebas/t1_gmail_manifold.js
       - name: Gmail → datos → app → avisos
         env:
           GMAIL_PUENTE_URL: ${{ secrets.GMAIL_PUENTE_URL }}

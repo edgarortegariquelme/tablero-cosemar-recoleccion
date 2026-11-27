@@ -6,6 +6,7 @@
   "scripts": {
     "build:n8n": "node n8n/build.js",
     "test:motor": "node pruebas/t0_motor.js",
+    "test:gmail": "node pruebas/t1_gmail_manifold.js",
     "test:tablero": "node pruebas/harness_borrador.js",
     "mock": "node pruebas/mock.js",
     "test:e2e": "node pruebas/e2e.js",
