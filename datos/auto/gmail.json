@@ -176,6 +176,17 @@
    "estado": "En curso",
    "nota": "*Estimados:* Complementando lo señalado por la ITS, cabe precisar que los servicios de retiro de escombros y residuos voluminosos se encuentran expresamente contemplados en los ítems N°2 y N°3 de la Propuesta Pública N°0",
    "hilo": "1a2191c0de08a2d3"
+  },
+  "1a21d16679be1e12": {
+   "fecha": "2026-11-27",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Solicitud de investigación – Camión compactador PPU TCXV-47",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, se informa que se ha recepcionado un reporte respecto al camión compactador PPU TCXV-47, el cual presuntamente circula a velocidad excesiva por avenida Las Américas, dejando residuos di",
+   "hilo": "1a21d16679be1e12"
   }
  },
  "manifolds": {
@@ -287,7 +298,9 @@
   "1a21ce2ba225c12e",
   "1a21ce2bc3b493c6",
   "1a21cf041ba64796",
-  "1a21d02b25376f2f"
+  "1a21d02b25376f2f",
+  "1a21d0390fad8b8e",
+  "1a21d16679be1e12"
  ],
- "leido": "2026-11-27T12:37:45.692Z"
+ "leido": "2026-11-27T12:59:22.242Z"
 }
