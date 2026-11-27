@@ -16,6 +16,18 @@
   {
    "id": "C02",
    "fecha": "2026-11-27",
+   "contacto": "Hernán Gómez (ITS)",
+   "empresa": "DMAO",
+   "tema": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
+   "contrato": "Recolección",
+   "urgencia": "Media",
+   "estado": "En curso",
+   "nota": "Estimada Jesús: Junto con saludar, se acusa recibo de los antecedentes informados, los cuales corresponden a un avance de la investigación solicitada. Sin embargo, se mantienen pendientes los respaldos y la determinación",
+   "enlace": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
+  },
+  {
+   "id": "C03",
+   "fecha": "2026-11-27",
    "contacto": "edgar ortega riquelme",
    "empresa": "DMAO",
    "tema": "CONSTANCIA OPERACIONAL POR RETIRO DE ESCOMBROS Y VOLUMINOSOS",
@@ -26,7 +38,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a2191c0de08a2d3"
   },
   {
-   "id": "C03",
+   "id": "C04",
    "fecha": "2026-11-27",
    "contacto": "Hernán Gómez (ITS)",
    "empresa": "DMAO",
@@ -38,7 +50,7 @@
    "enlace": "https://mail.google.com/mail/u/0/#all/1a21d16679be1e12"
   },
   {
-   "id": "C04",
+   "id": "C05",
    "fecha": "2026-11-26",
    "contacto": "Administrativo RSI",
    "empresa": "Cosemar",
@@ -48,18 +60,6 @@
    "estado": "Informativo",
    "nota": "Estimados Buenas tardes, les adjunto detalle de los ingresos a disponer residuos, por parte de la I. M. de Alto Hospicio, en el Relleno Sanitario Santa Inés, del día 24 y 25-11-2026 Saludos. [cid:image001.png@01DD7DA0.8A",
    "enlace": "https://mail.google.com/mail/u/0/#all/1a1a249c786ce155"
-  },
-  {
-   "id": "C05",
-   "fecha": "2026-11-26",
-   "contacto": "Jesús Maria Chinchayan",
-   "empresa": "Cosemar",
-   "tema": "Solicitud de investigación y determinación de responsabilidades – Providencia N.º 12010 – Condominio Doña Olga",
-   "contrato": "Recolección",
-   "urgencia": "Media",
-   "estado": "Responder",
-   "nota": "Hernan Junto con saludar, en relación con el requerimiento asociado al daño del contenedor de residuos domiciliarios de 660 litros del Condominio Doña Olga, informo que se han realizado las siguientes gestiones para escl",
-   "enlace": "https://mail.google.com/mail/u/0/#all/1a20e4a7bb56813a"
   },
   {
    "id": "C06",
